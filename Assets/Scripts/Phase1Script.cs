@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class Phase1Script : MonoBehaviour
@@ -32,6 +31,13 @@ public class Phase1Script : MonoBehaviour
         }
     }
 
+    public float GetCurrentTime() { return timer; }
+
+    public int GetCurrentPhase()
+    {
+        return CurrentPhase;
+    }
+
     void OnPhaseComplete()
     {
         Debug.Log("Phase 1 Complete!");
@@ -55,13 +61,10 @@ public class Phase1Script : MonoBehaviour
     {
         //wait 20 seconds before switching scenes
         yield return new WaitForSeconds(20f);
-
-        //call dummy function to carry over player data
-        TransferPlayerDataToNextScene();
+        TransferPlayerDataToNextScene (); 
 
         //Load Phase 2 scene
         currentPhase = 2;
         CurrentPhase = 2;
-        SceneManager.LoadScene(1);
     }
 }

@@ -2,13 +2,13 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
-using UnityEngine.TextCore.Text;
+
 
 public class PlayerStats : MonoBehaviour
 {
     private List<string> collectedPickups = new List<string>();
-    private Phase1Script em;
+    private Phase1Script p1s;
+    private Phase2Script p2s;
 
     [Header("Base Stats")]
     public float health = 100f;
@@ -17,9 +17,10 @@ public class PlayerStats : MonoBehaviour
 
     void Start()
     {
-        em = FindFirstObjectByType<Phase1Script>();
+        p1s = FindFirstObjectByType<Phase1Script>();
+        p2s = FindFirstObjectByType<Phase2Script>();
 
-        if (em == null)
+        if (p1s == null)
         {
             Debug.LogError("EventManager (Phase1Script) not found in scene!");
         }
@@ -49,7 +50,7 @@ public class PlayerStats : MonoBehaviour
 
         if (health <= 0)
         {
-            //Die();
+            Die();
         }
     }
 
@@ -60,6 +61,8 @@ public class PlayerStats : MonoBehaviour
 
         Debug.Log(gameObject.name + " healed. Health: " + health);
     }
+
+    public float CurrentHealth() { return health; }
 
     // =====================
     // SPEED FUNCTIONS
@@ -85,6 +88,8 @@ public class PlayerStats : MonoBehaviour
         StartCoroutine(SpeedBoostCoroutine(amount, duration));
     }
 
+    public float CurrentSpeed() { return speed; }
+
     // =====================
     // STRENGTH FUNCTIONS
     // =====================
@@ -102,6 +107,8 @@ public class PlayerStats : MonoBehaviour
 
         Debug.Log(gameObject.name + " strength decreased to: " + strength);
     }
+
+    public float CurrentStrength() { return strength; }
 
     // =====================
     // GENERIC MODIFIER (not really needed entirely but useful)
@@ -133,6 +140,42 @@ public class PlayerStats : MonoBehaviour
     void Die()
     {
         Debug.Log(gameObject.name + " has died.");
+
+        if (p1s.GetCurrentPhase() == 1)
+        {
+            DropRandomPickups();
+        }
+
+        if (p2s.GetCurrentMinigame() == "Arena")
+        {
+            //add arena death logic here
+
+
+
+        }
+    }
+
+    void DropRandomPickups()
+    {
+        if (collectedPickups.Count == 0)
+        {
+            Debug.Log("No pickups to drop.");
+            return;
+        }
+
+        int dropCount = Random.Range(2, 4);
+
+        for (int i = 0; i < dropCount; i++)
+        {
+            if (collectedPickups.Count == 0) break;
+
+            int index = Random.Range(0, collectedPickups.Count);
+            string droppedPickup = collectedPickups[index];
+
+            collectedPickups.RemoveAt(index);
+
+            Debug.Log(gameObject.name + " dropped: " + droppedPickup);
+        }
     }
 
     // =====================
