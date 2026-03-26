@@ -17,6 +17,7 @@ public class Phase1Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentPhase != 1) return;
         if (timerRunning)
         {
             timer -= Time.deltaTime;
@@ -57,6 +58,7 @@ public class Phase1Script : MonoBehaviour
         TransferPlayerDataToNextScene();
 
         //Load Phase 2 scene
+        currentPhase = 2;
         SceneManager.LoadScene(1);
     }
 }
