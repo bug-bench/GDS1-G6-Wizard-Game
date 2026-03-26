@@ -1,13 +1,40 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
+using UnityEngine.TextCore.Text;
 
 public class PlayerStats : MonoBehaviour
 {
+    private List<string> collectedPickups = new List<string>();
+    private Phase1Script em;
+
     [Header("Base Stats")]
     public float health = 100f;
     public float speed = 5f;
     public float strength = 10f;
+
+    void Start()
+    {
+        em = FindFirstObjectByType<Phase1Script>();
+
+        if (em == null)
+        {
+            Debug.LogError("EventManager (Phase1Script) not found in scene!");
+        }
+    }
+    
+
+    // =====================
+    // PICKUP HANDLING
+    // =====================
+
+    public void RegisterPickup(string pickupID)
+    {
+        collectedPickups.Add(pickupID);
+        Debug.Log(gameObject.name + " picked up: " + pickupID);
+    }
 
     // =====================
     // HEALTH FUNCTIONS

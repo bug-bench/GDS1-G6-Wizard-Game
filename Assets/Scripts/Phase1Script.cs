@@ -7,11 +7,13 @@ public class Phase1Script : MonoBehaviour
     private float timer;
     public float phaseDuration = 300f;
     private bool timerRunning = true;
+    public static int CurrentPhase { get; private set; } = 1;
     private int currentPhase = 1;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         timer = phaseDuration;
+        CurrentPhase = 1;
     }
 
     // Update is called once per frame
@@ -59,6 +61,7 @@ public class Phase1Script : MonoBehaviour
 
         //Load Phase 2 scene
         currentPhase = 2;
+        CurrentPhase = 2;
         SceneManager.LoadScene(1);
     }
 }
