@@ -142,4 +142,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatPickUp
   name: Speed
-  amount: 5
+  amount: 1

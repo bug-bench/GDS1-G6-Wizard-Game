@@ -10713,6 +10713,7 @@ GameObject:
   - component: {fileID: 554012569}
   - component: {fileID: 554012571}
   - component: {fileID: 554012570}
+  - component: {fileID: 554012572}
   m_Layer: 0
   m_Name: test
   m_TagString: Player
@@ -10806,7 +10807,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e74905ef62469498208f11e6f90678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::testmovement
-  movementspeed: 5
 --- !u!50 &554012570
 Rigidbody2D:
   serializedVersion: 5
@@ -10832,7 +10832,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!70 &554012571
 CapsuleCollider2D:
@@ -10871,6 +10871,21 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
+--- !u!114 &554012572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554012566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43519ea8279634a43b0d000e800a6916, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  health: 100
+  speed: 5
+  strength: 10
 --- !u!1 &690436385
 GameObject:
   m_ObjectHideFlags: 0

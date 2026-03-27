@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class testmovement : MonoBehaviour
 {
-    public float movementspeed = 5F;
+    //public float movementspeed = 5F;
     private Rigidbody2D rb;
     private Vector2 movement;
+
+   private  PlayerStats stats;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        stats = GetComponent<PlayerStats>();
     }
 
    
@@ -21,6 +25,6 @@ public class testmovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.linearVelocity = movement * movementspeed;
+        rb.linearVelocity = movement * stats.speed;
     }
 }
