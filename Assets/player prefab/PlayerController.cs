@@ -29,10 +29,11 @@ public class PlayerController : MonoBehaviour
             // 俯视角平滑移动
             rb.linearVelocity = moveInput * moveSpeed;
             
-            // 简单的面朝向转向 (可选，用于发射法术时的方向)
+            // 纯正 2D 转向：只改 Z，避免向下走时 Quaternion 把 X 翻到 -180（摄像机子物体被甩飞）
             if (moveInput != Vector2.zero)
             {
-                transform.up = moveInput; 
+                float angle = Mathf.Atan2(moveInput.y, moveInput.x) * Mathf.Rad2Deg - 90f;
+                transform.rotation = Quaternion.Euler(0, 0, angle);
             }
         }
         else

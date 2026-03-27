@@ -13,10 +13,16 @@ public class PlayerCombat : MonoBehaviour
     public Transform firePoint;        // 在玩家子物体建一个空物体作为发射点
 
     private PlayerController controller;
+    private Color originalColor;
 
     void Awake()
     {
         controller = GetComponent<PlayerController>();
+    }
+
+    void Start()
+    {
+        originalColor = GetComponent<SpriteRenderer>().color;
     }
 
     // Input System 自动调用的主法术方法 (对应 CastMain Action)
@@ -30,8 +36,13 @@ public class PlayerCombat : MonoBehaviour
 
     void CastSpell(GameObject spellPrefab)
     {
-        // 实例化法术，方向为当前玩家的面朝向
-        Instantiate(spellPrefab, firePoint.position, firePoint.rotation);
+        GameObject spell = Instantiate(spellPrefab, firePoint.position, firePoint.rotation);
+
+        SpellProjectile projScript = spell.GetComponent<SpellProjectile>();
+        if (projScript != null)
+        {
+            projScript.caster = gameObject;
+        }
         // TODO: 这里可以加一个简单的 float cooldownTimer 限制连续发射
     }
 
@@ -64,7 +75,7 @@ public class PlayerCombat : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f); // 硬直时间
 
-        GetComponent<SpriteRenderer>().color = Color.white;
+        GetComponent<SpriteRenderer>().color = originalColor;
         controller.canMove = true;
         isKnockedDown = false;
     }
