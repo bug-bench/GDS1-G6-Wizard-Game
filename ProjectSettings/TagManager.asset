@@ -44,5 +44,8 @@ TagManager:
   - name: stats
     uniqueID: 2154880603
     locked: 0
+  - name: player
+    uniqueID: 918881291
+    locked: 0
   m_RenderingLayers:
   - Default
