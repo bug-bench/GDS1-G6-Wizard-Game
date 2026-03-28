@@ -1,0 +1,975 @@
+fileFormatVersion: 2
+guid: 508b8b1101df7d84b9bd872e29766d37
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2926668795112226564
+    second: Magic Book Sheet_0
+  - first:
+      213: 5379533302603439736
+    second: Magic Book Sheet_1
+  - first:
+      213: 5091628751817535927
+    second: Magic Book Sheet_2
+  - first:
+      213: -6517609326837950612
+    second: Magic Book Sheet_3
+  - first:
+      213: -8987622073568031362
+    second: Magic Book Sheet_4
+  - first:
+      213: 1949583994444897704
+    second: Magic Book Sheet_5
+  - first:
+      213: 4047790061780935138
+    second: Magic Book Sheet_6
+  - first:
+      213: -1981973268637272945
+    second: Magic Book Sheet_7
+  - first:
+      213: 5551687447841271906
+    second: Magic Book Sheet_8
+  - first:
+      213: 2841712980317480178
+    second: Magic Book Sheet_9
+  - first:
+      213: -8003681921843637737
+    second: Magic Book Sheet_10
+  - first:
+      213: 3478002974028579361
+    second: Magic Book Sheet_11
+  - first:
+      213: -6324233332126841778
+    second: Magic Book Sheet_12
+  - first:
+      213: -6182711809090640597
+    second: Magic Book Sheet_13
+  - first:
+      213: -986318500794371932
+    second: Magic Book Sheet_14
+  - first:
+      213: 7046053380948366580
+    second: Magic Book Sheet_15
+  - first:
+      213: 1154178922554521597
+    second: Magic Book Sheet_16
+  - first:
+      213: 7196524995529652886
+    second: Magic Book Sheet_17
+  - first:
+      213: -8889804528883780524
+    second: Magic Book Sheet_18
+  - first:
+      213: 50079298055634354
+    second: Magic Book Sheet_19
+  - first:
+      213: -3364567640376191801
+    second: Magic Book Sheet_20
+  - first:
+      213: 7228519795637543123
+    second: Magic Book Sheet_21
+  - first:
+      213: -1960372102189743796
+    second: Magic Book Sheet_22
+  - first:
+      213: -5355403236412171203
+    second: Magic Book Sheet_23
+  - first:
+      213: -8068588105714410446
+    second: Magic Book Sheet_24
+  - first:
+      213: -3860477284998893607
+    second: Magic Book Sheet_25
+  - first:
+      213: -373195034087531305
+    second: Magic Book Sheet_26
+  - first:
+      213: 3911434389016401558
+    second: Magic Book Sheet_27
+  - first:
+      213: -7051549299922238646
+    second: Magic Book Sheet_28
+  - first:
+      213: -2609786763327120056
+    second: Magic Book Sheet_29
+  - first:
+      213: 6298945136445580781
+    second: Magic Book Sheet_30
+  - first:
+      213: 8792624851504060649
+    second: Magic Book Sheet_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Magic Book Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 454
+        width: 53
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf08d1cac326267d0800000000000000
+      internalID: -2926668795112226564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 456
+        width: 56
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87edf076901f7aa40800000000000000
+      internalID: 5379533302603439736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 455
+        width: 47
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b1ff388f5919a640800000000000000
+      internalID: 5091628751817535927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 455
+        width: 60
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c671d0959dccc85a0800000000000000
+      internalID: -6517609326837950612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 392
+        width: 54
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7d8481b75d854380800000000000000
+      internalID: -8987622073568031362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 388
+        width: 59
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8addca840505e0b10800000000000000
+      internalID: 1949583994444897704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 386
+        width: 62
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e12fc57d93ac2830800000000000000
+      internalID: 4047790061780935138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 388
+        width: 58
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f843e8820dd9e74e0800000000000000
+      internalID: -1981973268637272945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 327
+        width: 58
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 260f298d15e8b0d40800000000000000
+      internalID: 5551687447841271906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 328
+        width: 46
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f4a07946eacf6720800000000000000
+      internalID: 2841712980317480178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 326
+        width: 49
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7125b4982b53de090800000000000000
+      internalID: -8003681921843637737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 327
+        width: 62
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 122c9b21749544030800000000000000
+      internalID: 3478002974028579361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 268
+        width: 52
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4405e9aa4fcb38a0800000000000000
+      internalID: -6324233332126841778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 266
+        width: 49
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b252a86fd58923aa0800000000000000
+      internalID: -6182711809090640597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 269
+        width: 46
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a071cc9c84ef42f0800000000000000
+      internalID: -986318500794371932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_15
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 265
+        width: 58
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f41ed7e73c98c160800000000000000
+      internalID: 7046053380948366580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_16
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 203
+        width: 48
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df7fa1e6d97740010800000000000000
+      internalID: 1154178922554521597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_17
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 202
+        width: 51
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69ab3c7ca513fd360800000000000000
+      internalID: 7196524995529652886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_18
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 197
+        width: 45
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 454393591e111a480800000000000000
+      internalID: -8889804528883780524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_19
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 195
+        width: 52
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bdf4333bdae1b000800000000000000
+      internalID: 50079298055634354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_20
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 138
+        width: 54
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c45a9cae87ae41d0800000000000000
+      internalID: -3364567640376191801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_21
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 138
+        width: 52
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d0eadea47cd05460800000000000000
+      internalID: 7228519795637543123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_22
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 136
+        width: 61
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c410565a5fb5bc4e0800000000000000
+      internalID: -1960372102189743796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_23
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 134
+        width: 57
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3cdca07129cda5b0800000000000000
+      internalID: -5355403236412171203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_24
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 71
+        width: 60
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23c53f7fddd960090800000000000000
+      internalID: -8068588105714410446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_25
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 74
+        width: 58
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9df2d2cec54dc6ac0800000000000000
+      internalID: -3860477284998893607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_26
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 71
+        width: 49
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dcd541081522daf0800000000000000
+      internalID: -373195034087531305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_27
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 77
+        width: 46
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 696d1976ad4384630800000000000000
+      internalID: 3911434389016401558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_28
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 8
+        width: 56
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a430bfdb54dd32e90800000000000000
+      internalID: -7051549299922238646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_29
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 3
+        width: 60
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84dde5814cc28cbd0800000000000000
+      internalID: -2609786763327120056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_30
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 7
+        width: 57
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de563857a395a6750800000000000000
+      internalID: 6298945136445580781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Magic Book Sheet_31
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 2
+        width: 54
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e8db2597bda50a70800000000000000
+      internalID: 8792624851504060649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Magic Book Sheet_0: -2926668795112226564
+      Magic Book Sheet_1: 5379533302603439736
+      Magic Book Sheet_10: -8003681921843637737
+      Magic Book Sheet_11: 3478002974028579361
+      Magic Book Sheet_12: -6324233332126841778
+      Magic Book Sheet_13: -6182711809090640597
+      Magic Book Sheet_14: -986318500794371932
+      Magic Book Sheet_15: 7046053380948366580
+      Magic Book Sheet_16: 1154178922554521597
+      Magic Book Sheet_17: 7196524995529652886
+      Magic Book Sheet_18: -8889804528883780524
+      Magic Book Sheet_19: 50079298055634354
+      Magic Book Sheet_2: 5091628751817535927
+      Magic Book Sheet_20: -3364567640376191801
+      Magic Book Sheet_21: 7228519795637543123
+      Magic Book Sheet_22: -1960372102189743796
+      Magic Book Sheet_23: -5355403236412171203
+      Magic Book Sheet_24: -8068588105714410446
+      Magic Book Sheet_25: -3860477284998893607
+      Magic Book Sheet_26: -373195034087531305
+      Magic Book Sheet_27: 3911434389016401558
+      Magic Book Sheet_28: -7051549299922238646
+      Magic Book Sheet_29: -2609786763327120056
+      Magic Book Sheet_3: -6517609326837950612
+      Magic Book Sheet_30: 6298945136445580781
+      Magic Book Sheet_31: 8792624851504060649
+      Magic Book Sheet_4: -8987622073568031362
+      Magic Book Sheet_5: 1949583994444897704
+      Magic Book Sheet_6: 4047790061780935138
+      Magic Book Sheet_7: -1981973268637272945
+      Magic Book Sheet_8: 5551687447841271906
+      Magic Book Sheet_9: 2841712980317480178
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
