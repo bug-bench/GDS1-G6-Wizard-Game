@@ -10,6 +10,9 @@ public class SpellData : ScriptableObject
     public float cooldownTime = 1.5f;
     public GameObject spellPrefab;
 
+    [Tooltip("勾选：按住副键期间不算冷却，松开副键后才开始 cooldown（疾跑、弧形盾等）。不勾选：按下瞬间进冷却（闪现等）。")]
+    public bool cooldownStartsOnRelease;
+
     [Header("FPS Drop System")]
     public GameObject pickupPrefab;
 }

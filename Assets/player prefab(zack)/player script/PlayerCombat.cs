@@ -22,10 +22,15 @@ public class PlayerCombat : MonoBehaviour
 
     private float attackCDTimer;
     private float movementCDTimer;
+    private SpellBehavior activeMainSpell;
     private SpellBehavior activeSubSpell;
 
     private PlayerController controller;
     private Color originalColor;
+
+    private PlayerInput playerInput;
+    private InputAction castMainAction;
+    private InputAction castSubAction;
 
     void Awake()
     {
@@ -37,6 +42,48 @@ public class PlayerCombat : MonoBehaviour
         originalColor = GetComponent<SpriteRenderer>().color;
     }
 
+    void OnEnable()
+    {
+        playerInput = GetComponent<PlayerInput>();
+        if (playerInput == null || playerInput.actions == null) return;
+
+        castMainAction = playerInput.actions.FindAction("Player/CastMain", throwIfNotFound: false)
+                         ?? playerInput.actions.FindAction("CastMain", throwIfNotFound: false);
+        if (castMainAction != null)
+        {
+            castMainAction.started += OnCastMainStarted;
+            castMainAction.canceled += OnCastMainCanceled;
+        }
+
+        castSubAction = playerInput.actions.FindAction("Player/CastSub", throwIfNotFound: false)
+                        ?? playerInput.actions.FindAction("CastSub", throwIfNotFound: false);
+        if (castSubAction != null)
+        {
+            castSubAction.started += OnCastSubStarted;
+            castSubAction.canceled += OnCastSubCanceled;
+        }
+    }
+
+    void OnDisable()
+    {
+        if (castMainAction != null)
+        {
+            castMainAction.started -= OnCastMainStarted;
+            castMainAction.canceled -= OnCastMainCanceled;
+            castMainAction = null;
+        }
+
+        if (castSubAction != null)
+        {
+            castSubAction.started -= OnCastSubStarted;
+            castSubAction.canceled -= OnCastSubCanceled;
+            castSubAction = null;
+        }
+
+        CleanupHeldAttackEffects(applyReleaseCooldown: false);
+        CleanupHeldMovementEffects(applyReleaseCooldown: false);
+    }
+
     void Update()
     {
         if (attackCDTimer > 0f) attackCDTimer -= Time.deltaTime;
@@ -44,8 +91,95 @@ public class PlayerCombat : MonoBehaviour
     }
 
     /// <summary>
-    /// 按拾取顺序：先填左键槽（主武器），再填右键槽（副武器）。双槽都有则不再捡起（不会覆盖）。
+    /// 松开左键：结束主槽按住类技能（盾/疾跑若错放主槽）并可选进入攻击冷却。
     /// </summary>
+    void CleanupHeldAttackEffects(bool applyReleaseCooldown)
+    {
+        bool hadTracked = activeMainSpell != null;
+        if (activeMainSpell != null)
+        {
+            activeMainSpell.StopExecute();
+            activeMainSpell = null;
+        }
+
+        if (applyReleaseCooldown && hadTracked && currentAttackSpell != null && currentAttackSpell.cooldownStartsOnRelease)
+            attackCDTimer = currentAttackSpell.cooldownTime;
+    }
+
+    /// <summary>
+    /// 松开右键 / 被打断 / 丢副武器：副槽按住类 + 疾跑 + 盾实例。
+    /// </summary>
+    void CleanupHeldMovementEffects(bool applyReleaseCooldown)
+    {
+        bool hadTracked = activeSubSpell != null;
+
+        if (activeSubSpell != null)
+        {
+            activeSubSpell.StopExecute();
+            activeSubSpell = null;
+        }
+
+        if (controller != null)
+            controller.ClearSprintMultiplier();
+
+        foreach (var s in GetComponentsInChildren<SprintSpell>(true))
+        {
+            if (s != null) Destroy(s.gameObject);
+        }
+
+        DestroyAllReflectShieldsUnderRoot();
+
+        if (applyReleaseCooldown && hadTracked && currentMovementSpell != null && currentMovementSpell.cooldownStartsOnRelease)
+            movementCDTimer = currentMovementSpell.cooldownTime;
+    }
+
+    // Send Messages 模式下 PlayerInput 会查找 OnCastMain/OnCastSub；实际逻辑在下方 InputAction 订阅。
+    void OnCastMain(InputValue _) { }
+    void OnCastSub(InputValue _) { }
+
+    void OnCastMainStarted(InputAction.CallbackContext _)
+    {
+        if (currentAttackSpell == null) return;
+        if (activeMainSpell != null) return;
+        if (isKnockedDown || attackCDTimer > 0f) return;
+
+        DestroyAllReflectShieldsUnderRoot();
+        activeMainSpell = ExecuteAndReturnSpell(currentAttackSpell, ref attackCDTimer);
+    }
+
+    void OnCastMainCanceled(InputAction.CallbackContext _)
+    {
+        CleanupHeldAttackEffects(applyReleaseCooldown: true);
+    }
+
+    void OnCastSubStarted(InputAction.CallbackContext _)
+    {
+        if (currentMovementSpell == null) return;
+        if (activeSubSpell != null) return;
+        if (isKnockedDown || movementCDTimer > 0f) return;
+
+        activeSubSpell = ExecuteAndReturnSpell(currentMovementSpell, ref movementCDTimer);
+    }
+
+    void OnCastSubCanceled(InputAction.CallbackContext _)
+    {
+        CleanupHeldMovementEffects(applyReleaseCooldown: true);
+    }
+
+    void DestroyAllReflectShieldsUnderRoot()
+    {
+        Transform root = transform.root;
+        foreach (ReflectShieldSpell sh in root.GetComponentsInChildren<ReflectShieldSpell>(true))
+        {
+            if (sh == null) continue;
+            if ((Object)activeSubSpell == (Object)sh)
+                activeSubSpell = null;
+            if ((Object)activeMainSpell == (Object)sh)
+                activeMainSpell = null;
+            Destroy(sh.gameObject);
+        }
+    }
+
     public bool EquipSpell(SpellData newSpell)
     {
         if (newSpell == null) return false;
@@ -79,7 +213,6 @@ public class PlayerCombat : MonoBehaviour
 
         GameObject dropObj = Instantiate(dataToDrop.pickupPrefab, transform.position, Quaternion.identity);
 
-        // pickupPrefab 若误用成弹道预制体，SpellProjectile.Start 会销毁整颗物体；生成后立刻拆掉弹道脚本
         SpellProjectile[] strayProjectiles = dropObj.GetComponentsInChildren<SpellProjectile>(true);
         for (int i = 0; i < strayProjectiles.Length; i++)
             Object.DestroyImmediate(strayProjectiles[i]);
@@ -87,7 +220,6 @@ public class PlayerCombat : MonoBehaviour
         SpellPickup pickup = dropObj.GetComponentInChildren<SpellPickup>(true);
         if (pickup == null)
         {
-            // 常见原因：SpellData 仍指向旧预制体、预制体未 Apply、或 SpellPickup 变成 Missing Script
             pickup = dropObj.AddComponent<SpellPickup>();
             Debug.LogWarning($"「{dropObj.name}」实例上未找到 SpellPickup，已在根节点自动添加。请在工程里打开 Pickup 预制体检查引用并点 Apply，避免只靠运行时兜底。");
         }
@@ -106,6 +238,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!value.isPressed || currentAttackSpell == null) return;
 
+        CleanupHeldAttackEffects(applyReleaseCooldown: false);
+
         DropSpell(currentAttackSpell);
         currentAttackSpell = null;
         Debug.Log("丢弃了主武器");
@@ -115,41 +249,11 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!value.isPressed || currentMovementSpell == null) return;
 
-        if (activeSubSpell != null)
-        {
-            activeSubSpell.StopExecute();
-            activeSubSpell = null;
-        }
+        CleanupHeldMovementEffects(applyReleaseCooldown: false);
 
         DropSpell(currentMovementSpell);
         currentMovementSpell = null;
         Debug.Log("丢弃了副武器");
-    }
-
-    void OnCastMain(InputValue value)
-    {
-        if (!value.isPressed || isKnockedDown) return;
-        if (currentAttackSpell == null || attackCDTimer > 0f) return;
-
-        ExecuteAndReturnSpell(currentAttackSpell, ref attackCDTimer);
-    }
-
-    void OnCastSub(InputValue value)
-    {
-        if (currentMovementSpell == null) return;
-
-        if (value.isPressed)
-        {
-            if (!isKnockedDown && movementCDTimer <= 0f)
-            {
-                activeSubSpell = ExecuteAndReturnSpell(currentMovementSpell, ref movementCDTimer);
-            }
-        }
-        else if (activeSubSpell != null)
-        {
-            activeSubSpell.StopExecute();
-            activeSubSpell = null;
-        }
     }
 
     SpellBehavior ExecuteAndReturnSpell(SpellData data, ref float cdTimer)
@@ -159,14 +263,14 @@ public class PlayerCombat : MonoBehaviour
         Vector3 spawnPos = firePoint.position + firePoint.up * spellSpawnForwardInset;
         GameObject spellObj = Instantiate(data.spellPrefab, spawnPos, firePoint.rotation);
 
-        // 若 spellPrefab 直接就是带 SpellProjectile 的火球（没有 BasicProjectileSpell），上面从来不会走 Execute，必须在这里认主
         SpellProjectile.RegisterWithCaster(spellObj, gameObject);
 
         SpellBehavior behavior = spellObj.GetComponentInChildren<SpellBehavior>(true);
         if (behavior != null)
             behavior.Execute(gameObject, firePoint);
 
-        cdTimer = data.cooldownTime;
+        if (!data.cooldownStartsOnRelease)
+            cdTimer = data.cooldownTime;
         return behavior;
     }
 
@@ -189,6 +293,9 @@ public class PlayerCombat : MonoBehaviour
 
     IEnumerator KnockdownRoutine()
     {
+        CleanupHeldAttackEffects(applyReleaseCooldown: false);
+        CleanupHeldMovementEffects(applyReleaseCooldown: false);
+
         isKnockedDown = true;
         controller.canMove = false;
 
@@ -203,6 +310,8 @@ public class PlayerCombat : MonoBehaviour
 
     void Die()
     {
+        CleanupHeldAttackEffects(applyReleaseCooldown: false);
+        CleanupHeldMovementEffects(applyReleaseCooldown: false);
         Debug.Log(gameObject.name + " 被淘汰了！");
         gameObject.SetActive(false);
     }

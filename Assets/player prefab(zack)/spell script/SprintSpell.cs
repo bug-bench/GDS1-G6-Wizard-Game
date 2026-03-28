@@ -6,15 +6,14 @@ public class SprintSpell : SpellBehavior
     public float speedMultiplier = 2f;
 
     private PlayerController controller;
-    private float originalSpeed;
 
     public override void Execute(GameObject caster, Transform firePoint)
     {
         controller = caster.GetComponent<PlayerController>();
         if (controller != null)
         {
-            originalSpeed = controller.moveSpeed;
-            controller.moveSpeed *= speedMultiplier;
+            // 用基准移速乘算，禁止对当前 moveSpeed 再 *=（否则会叠乘）
+            controller.ApplySprintMultiplier(speedMultiplier);
             transform.SetParent(caster.transform);
         }
     }
@@ -22,9 +21,13 @@ public class SprintSpell : SpellBehavior
     public override void StopExecute()
     {
         if (controller != null)
-        {
-            controller.moveSpeed = originalSpeed;
-        }
+            controller.ClearSprintMultiplier();
         Destroy(gameObject);
+    }
+
+    void OnDestroy()
+    {
+        if (controller != null)
+            controller.ClearSprintMultiplier();
     }
 }

@@ -7,6 +7,9 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
 
+    /// <summary>开局移速，疾跑等效果只在此基础上乘算，避免多次 *= 叠加速。</summary>
+    public float BaseMoveSpeed { get; private set; }
+
     [Header("Aiming Settings")]
     public float gamepadAimDeadzone = 0.2f; // 手柄瞄准死区，防止摇杆漂移
 
@@ -27,6 +30,18 @@ public class PlayerController : MonoBehaviour
 
         // 确保 Z 轴旋转锁死，防止万向节死锁导致的后空翻
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        BaseMoveSpeed = moveSpeed;
+    }
+
+    public void ApplySprintMultiplier(float multiplier)
+    {
+        moveSpeed = BaseMoveSpeed * multiplier;
+    }
+
+    public void ClearSprintMultiplier()
+    {
+        moveSpeed = BaseMoveSpeed;
     }
 
     // Input System 自动调用的移动方法 (WASD 或 左摇杆)
