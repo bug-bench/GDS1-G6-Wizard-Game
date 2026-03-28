@@ -17,7 +17,7 @@ public class PlayerCard : MonoBehaviour
         Color.yellow
     };
 
-    private bool isReady = false;
+    public bool isReady = false;
 
     private float inputCooldown = 0.2f;
     private float lastInputTime = 0f;

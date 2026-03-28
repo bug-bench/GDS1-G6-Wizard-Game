@@ -1,10 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+
 
 public class PlayerJoinManager : MonoBehaviour
 {
     public GameObject cardPrefab;     // assign in Inspector
     public Transform cardContainer;   // assign in Inspector
+    public List<PlayerCard> playerCards = new List<PlayerCard>();
+    bool gameStarting = false;
 
     private void Start()
     {
@@ -14,6 +19,21 @@ public class PlayerJoinManager : MonoBehaviour
         {
             Debug.Log("Player joined: " + player.playerIndex);
         };
+    }
+
+    void Update()
+    {
+        if (gameStarting) return;
+        if (playerCards.Count == 0) return;
+
+        foreach (var card in playerCards)
+        {
+            if (!card.isReady)
+                return;
+        }
+
+        gameStarting = true;
+        StartGame();
     }
 
     private void OnDestroy()
@@ -30,5 +50,12 @@ public class PlayerJoinManager : MonoBehaviour
         // set the input for the card so it can read left/right/ready
         PlayerCard cardScript = card.GetComponent<PlayerCard>();
         cardScript.SetPlayer(player);
+
+        playerCards.Add(cardScript);
+    }
+
+    void StartGame()
+    {
+        SceneManager.LoadScene("Phase1");
     }
 }
