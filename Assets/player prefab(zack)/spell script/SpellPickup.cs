@@ -75,6 +75,13 @@ public class SpellPickup : MonoBehaviour
 
         bool pickedUp = combat.EquipSpell(spellData);
         if (pickedUp)
+        {
             Destroy(gameObject);
+        }
+        else
+        {
+            // 双槽都已装备时 EquipSpell 会失败，地上包还在——避免误以为「捡不起来是 Bug」
+            Debug.Log("主武器、副武器都已满，请先按 Q 或 E 丢掉一把，再捡。");
+        }
     }
 }

@@ -44,6 +44,14 @@ public class SpellProjectile : MonoBehaviour
         return t == casterRoot.transform || t.IsChildOf(casterRoot.transform);
     }
 
+    /// <summary>
+    /// 不用 CompareTag：项目里若未在 Tag 列表添加 "Wall"/"Player"，CompareTag 会报错刷屏甚至卡死。
+    /// </summary>
+    static bool HasTag(Collider2D col, string tagName)
+    {
+        return col != null && col.gameObject.tag == tagName;
+    }
+
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
         if (IsUnderSpellPickup) return;
@@ -51,7 +59,7 @@ public class SpellProjectile : MonoBehaviour
         // caster 未设置时，以前会误判成「可以打 Player」，导致立刻自伤
         if (caster == null)
         {
-            if (hitInfo.CompareTag("Player"))
+            if (HasTag(hitInfo, "Player"))
                 Destroy(gameObject);
             return;
         }
@@ -62,7 +70,7 @@ public class SpellProjectile : MonoBehaviour
         // 碰撞体在玩家子物体上时 gameObject != caster 根节点，必须用层级判断否则会打到自己
         if (IsColliderOnCaster(caster, hitInfo)) return;
 
-        if (hitInfo.CompareTag("Player"))
+        if (HasTag(hitInfo, "Player"))
         {
             PlayerCombat target = hitInfo.GetComponent<PlayerCombat>()
                 ?? hitInfo.GetComponentInParent<PlayerCombat>();
@@ -73,7 +81,7 @@ public class SpellProjectile : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-        else if (hitInfo.CompareTag("Wall"))
+        else if (HasTag(hitInfo, "Wall"))
         {
             Destroy(gameObject);
         }

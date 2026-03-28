@@ -19,7 +19,8 @@ public class ReflectShieldSpell : SpellBehavior
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        SpellProjectile incomingProjectile = hitInfo.GetComponent<SpellProjectile>();
+        SpellProjectile incomingProjectile = hitInfo.GetComponent<SpellProjectile>()
+            ?? hitInfo.GetComponentInParent<SpellProjectile>();
         if (incomingProjectile == null) return;
 
         incomingProjectile.transform.Rotate(0, 0, 180f);

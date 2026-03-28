@@ -71,7 +71,7 @@ public class RaycastSniperSpell : SpellBehavior
         {
             endPoint = hit.point;
 
-            if (hit.collider.CompareTag("Player"))
+            if (hit.collider.gameObject.tag == "Player")
             {
                 PlayerCombat target = hit.collider.GetComponent<PlayerCombat>()
                     ?? hit.collider.GetComponentInParent<PlayerCombat>();

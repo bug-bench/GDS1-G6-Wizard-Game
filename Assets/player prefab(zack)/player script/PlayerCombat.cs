@@ -84,12 +84,17 @@ public class PlayerCombat : MonoBehaviour
         for (int i = 0; i < strayProjectiles.Length; i++)
             Object.DestroyImmediate(strayProjectiles[i]);
 
-        SpellPickup pickup = dropObj.GetComponent<SpellPickup>();
-        if (pickup != null) pickup.spellData = dataToDrop;
-        else
-            Debug.LogWarning($"掉落物「{dropObj.name}」上没有 SpellPickup，可能无法被捡起。请用专用拾取预制体作为 pickupPrefab。");
+        SpellPickup pickup = dropObj.GetComponentInChildren<SpellPickup>(true);
+        if (pickup == null)
+        {
+            // 常见原因：SpellData 仍指向旧预制体、预制体未 Apply、或 SpellPickup 变成 Missing Script
+            pickup = dropObj.AddComponent<SpellPickup>();
+            Debug.LogWarning($"「{dropObj.name}」实例上未找到 SpellPickup，已在根节点自动添加。请在工程里打开 Pickup 预制体检查引用并点 Apply，避免只靠运行时兜底。");
+        }
 
-        Rigidbody2D rb = dropObj.GetComponent<Rigidbody2D>();
+        pickup.spellData = dataToDrop;
+
+        Rigidbody2D rb = dropObj.GetComponentInChildren<Rigidbody2D>(true);
         if (rb != null && firePoint != null)
         {
             Vector2 dropDirection = firePoint.up;
