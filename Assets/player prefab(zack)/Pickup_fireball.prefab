@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8768904571092098124}
   - component: {fileID: 2935070601429830799}
   - component: {fileID: 4497026461800808960}
+  - component: {fileID: 4587305246406357084}
   m_Layer: 0
   m_Name: Pickup_fireball
   m_TagString: Untagged
@@ -173,6 +174,23 @@ MonoBehaviour:
   pickupCooldown: 1
   fixLineRendererIfNeeded: 1
   spellData: {fileID: 11400000, guid: 681b6d07542439841baa4eebb34eff15, type: 2}
+--- !u!114 &4587305246406357084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2848393363742389300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7757689962edd574695cf50adf337b01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpellProjectile
+  speed: 10
+  damage: 5
+  lifeTime: 3
+  caster: {fileID: 0}
+  ignoreCasterUntilTime: 0
 --- !u!1 &4735336362912590567
 GameObject:
   m_ObjectHideFlags: 0
