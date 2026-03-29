@@ -15,6 +15,8 @@ public class PlayerStats : MonoBehaviour
     public float speed = 5f;
     public float strength = 10f;
 
+   
+
     void Start()
     {
         p1s = FindFirstObjectByType<Phase1Script>();
@@ -195,4 +197,7 @@ public class PlayerStats : MonoBehaviour
         speed -= amount;
         Debug.Log(gameObject.name + " speed boost ended. Speed: " + speed);
     }
+
+
+   
 }
