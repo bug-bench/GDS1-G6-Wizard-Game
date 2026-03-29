@@ -5,10 +5,12 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    //
 
     /// <summary>开局移速，疾跑等效果只在此基础上乘算，避免多次 *= 叠加速。</summary>
-    public float BaseMoveSpeed { get; private set; }
+    //public float BaseMoveSpeed { get; private set; }
+
+    public float sprintMultiplier = 1f;
 
     [Header("Aiming Settings")]
     public float gamepadAimDeadzone = 0.2f; // 手柄瞄准死区，防止摇杆漂移
@@ -19,6 +21,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerInput playerInput;
     private Camera myCam;
+
+    private PlayerStats playerStats;
 
     private Vector2 rawAimInput; // 临时存储手柄右摇杆的原始数据
 
@@ -31,17 +35,19 @@ public class PlayerController : MonoBehaviour
         // 确保 Z 轴旋转锁死，防止万向节死锁导致的后空翻
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        BaseMoveSpeed = moveSpeed;
+       
+
+        playerStats = GetComponent<PlayerStats>();
     }
 
     public void ApplySprintMultiplier(float multiplier)
     {
-        moveSpeed = BaseMoveSpeed * multiplier;
+        sprintMultiplier = multiplier;
     }
 
     public void ClearSprintMultiplier()
     {
-        moveSpeed = BaseMoveSpeed;
+        sprintMultiplier = 1f;
     }
 
     // Input System 自动调用的移动方法 (WASD 或 左摇杆)
@@ -61,7 +67,10 @@ public class PlayerController : MonoBehaviour
         if (canMove)
         {
             // 1. 移动逻辑（两者通用，只受 WASD/左摇杆 影响）
-            rb.linearVelocity = moveInput * moveSpeed;
+            //rb.linearVelocity = moveInput * moveSpeed;
+
+            float currentSpeed = playerStats != null ? playerStats.speed * sprintMultiplier : 5f;
+            rb.linearVelocity = moveInput * currentSpeed;
 
             // 2. 瞄准/转向逻辑（分设备独立处理）
             HandleRotation();

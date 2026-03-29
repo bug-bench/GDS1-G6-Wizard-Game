@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerCombat : MonoBehaviour
 {
     [Header("Stats")]
-    public int health = 100;
+    //public int health = 100;
     public bool isKnockedDown = false;
     public Transform firePoint;
 
@@ -31,10 +31,11 @@ public class PlayerCombat : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction castMainAction;
     private InputAction castSubAction;
-
+    private PlayerStats playerStats;
     void Awake()
     {
         controller = GetComponent<PlayerController>();
+        playerStats = GetComponent<PlayerStats>();
     }
 
     void Start()
@@ -277,11 +278,14 @@ public class PlayerCombat : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (isKnockedDown) return;
+        if (playerStats == null) return;
 
-        health -= damage;
-        Debug.Log(gameObject.name + " 受到伤害，剩余血量: " + health);
+        playerStats.TakeDamage(damage);
 
-        if (health <= 0)
+       
+        Debug.Log(gameObject.name + " 受到伤害，剩余血量: " + playerStats.health);
+
+        if (playerStats.health <= 0)
         {
             Die();
         }
