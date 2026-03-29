@@ -22,9 +22,14 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private Camera myCam;
 
+    private PlayerData playerData;
     private PlayerStats playerStats;
 
     private Vector2 rawAimInput; // 临时存储手柄右摇杆的原始数据
+
+    [Header("Rotation")]
+    public Transform rotationPivot;   
+    public Transform playerSprite;  
 
     void Awake()
     {
@@ -86,41 +91,47 @@ public class PlayerController : MonoBehaviour
     {
         if (playerInput == null) return;
 
-        // ==========================================================
-        // 【键鼠模式】：360度鼠标指针瞄准
-        // ==========================================================
+        Vector2 lookDir = Vector2.zero;
+
         if (playerInput.currentControlScheme == "KeyMouse")
         {
-            if (Mouse.current != null && myCam != null)
-            {
-                // 获取鼠标在屏幕上的坐标，并转化为属于这个玩家自己的摄像机世界坐标
-                Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
-                Vector2 mouseWorldPos = myCam.ScreenToWorldPoint(mouseScreenPos);
+            Camera activeCam = (myCam != null && myCam.gameObject.activeSelf)
+                ? myCam
+                : Camera.main;
 
-                // 计算玩家到鼠标的向量方向
-                Vector2 lookDir = mouseWorldPos - rb.position;
+            if (activeCam == null || Mouse.current == null) return;
 
-                // 如果鼠标离玩家太近（比如重合），则不执行旋转，防止画面抽搐
-                if (lookDir.sqrMagnitude < 0.01f) return;
-
-                float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-                // 强制只在 Z 轴旋转
-                transform.rotation = Quaternion.Euler(0, 0, angle);
-            }
+            Vector2 mouseWorldPos = activeCam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            lookDir = mouseWorldPos - rb.position;
         }
-        // ==========================================================
-        // 【手柄模式】：双摇杆射击 (Move=左摇杆，Aim=右摇杆)
-        // ==========================================================
         else if (playerInput.currentControlScheme == "Gamepad")
         {
-            // 检查右摇杆是否有输入（超过死区）
             if (rawAimInput.sqrMagnitude > gamepadAimDeadzone * gamepadAimDeadzone)
-            {
-                // 用右摇杆的绝对方向来计算角度，与左摇杆移动彻底拆分
-                float angle = Mathf.Atan2(rawAimInput.y, rawAimInput.x) * Mathf.Rad2Deg - 90f;
-                // 强制只在 Z 轴旋转
-                transform.rotation = Quaternion.Euler(0, 0, angle);
-            }
+                lookDir = rawAimInput;
         }
+
+        if (lookDir.sqrMagnitude < 0.01f) return;
+
+        // Rotate only the aim pivot (arrow etc)
+        if (rotationPivot != null)
+        {
+            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+            rotationPivot.rotation = Quaternion.Euler(0, 0, angle);
+        }
+
+        // Flip the sprite based on look direction only
+        if (playerSprite != null)
+        {
+            playerSprite.localScale = new Vector3(
+                lookDir.x < 0 ? -1 : 1,  // flip X based on left/right
+                1,
+                1
+            );
+        }
+    }
+
+    public void Init(PlayerData data)
+    {
+        playerData = data;
     }
 }

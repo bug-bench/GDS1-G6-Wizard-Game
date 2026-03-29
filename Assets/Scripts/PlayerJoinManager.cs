@@ -1,39 +1,25 @@
+// =============================================
+// PlayerJoinManager.cs
+// =============================================
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-
 public class PlayerJoinManager : MonoBehaviour
 {
-    public GameObject cardPrefab;     // assign in Inspector
-    public Transform cardContainer;   // assign in Inspector
-    public List<PlayerCard> playerCards = new List<PlayerCard>();
-    bool gameStarting = false;
+    public GameObject cardPrefab;
+    public Transform cardContainer;
+    public bool useSplitScreen = true;
+    [SerializeField] string scene = "Phase1";
+    private List<PlayerCard> playerCards = new List<PlayerCard>();
+    private HashSet<int> joinedDeviceIds = new HashSet<int>();
+    private bool gameStarting = false;
 
     private void Start()
     {
         PlayerInputManager.instance.onPlayerJoined += OnPlayerJoined;
-
-        PlayerInputManager.instance.onPlayerJoined += (player) =>
-        {
-            Debug.Log("Player joined: " + player.playerIndex);
-        };
-    }
-
-    void Update()
-    {
-        if (gameStarting) return;
-        if (playerCards.Count == 0) return;
-
-        foreach (var card in playerCards)
-        {
-            if (!card.isReady)
-                return;
-        }
-
-        gameStarting = true;
-        StartGame();
     }
 
     private void OnDestroy()
@@ -42,20 +28,52 @@ public class PlayerJoinManager : MonoBehaviour
             PlayerInputManager.instance.onPlayerJoined -= OnPlayerJoined;
     }
 
-    private void OnPlayerJoined(PlayerInput player)
+    private void Update()
     {
-        // spawn the card as child of container
-        GameObject card = Instantiate(cardPrefab, cardContainer);
+        if (gameStarting) return;
+        if (playerCards.Count == 0) return;
 
-        // set the input for the card so it can read left/right/ready
-        PlayerCard cardScript = card.GetComponent<PlayerCard>();
-        cardScript.SetPlayer(player);
+        foreach (var card in playerCards)
+            if (!card.isReady) return;
 
-        playerCards.Add(cardScript);
+        gameStarting = true;
+        StartGame();
     }
 
-    void StartGame()
+    private void OnPlayerJoined(PlayerInput player)
     {
-        SceneManager.LoadScene("Phase1");
+        int deviceId = player.devices[0].deviceId;
+
+        Debug.Log($"OnPlayerJoined — deviceId: {deviceId}, already joined: {joinedDeviceIds.Contains(deviceId)}, total cards: {playerCards.Count}");
+
+        if (joinedDeviceIds.Contains(deviceId))
+        {
+            Destroy(player.gameObject);
+            return;
+        }
+
+        joinedDeviceIds.Add(deviceId);
+
+        GameObject cardGO = Instantiate(cardPrefab, cardContainer);
+        PlayerCard card = cardGO.GetComponent<PlayerCard>();
+        card.SetPlayer(player);
+        playerCards.Add(card);
+    }
+
+    private void StartGame()
+    {
+        GameData.players.Clear();
+        GameData.useSplitScreen = useSplitScreen; 
+
+        foreach (var card in playerCards)
+        {
+            GameData.players.Add(new PlayerData
+            {
+                playerIndex = card.GetPlayer().playerIndex,
+                colorIndex = card.GetColorIndex()
+            });
+        }
+
+        SceneManager.LoadScene(scene);
     }
 }

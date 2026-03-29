@@ -8,14 +8,16 @@ public class SplitScreenCamera : MonoBehaviour
     private int playerIndex;
     private int totalPlayers;
 
-    private void Awake()
+    void Start()
     {
-        PlayerInputManager.instance.onPlayerJoined += HandlePlayerJoined;
-    }
+        cam = GetComponent<Camera>();
 
-    void HandlePlayerJoined(PlayerInput obj)
-    {
-        totalPlayers = PlayerInput.all.Count;
+        // Read from GameData instead of PlayerInput.all
+        // since players joined in the lobby, not this scene
+        playerIndex = GetComponentInParent<PlayerInput>().playerIndex;
+        totalPlayers = GameData.players.Count;
+        cam.depth = playerIndex;
+
         SetupCamera();
     }
 
@@ -41,22 +43,5 @@ public class SplitScreenCamera : MonoBehaviour
         {
             cam.rect = new Rect((playerIndex % 2) * 0.5f, (playerIndex < 2) ? 0.5f : 0, 0.5f, 0.5f);
         }
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        playerIndex = GetComponentInParent<PlayerInput>().playerIndex;
-        totalPlayers = PlayerInput.all.Count;
-        cam = GetComponent<Camera>();
-        cam.depth = playerIndex;
-
-        SetupCamera();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
