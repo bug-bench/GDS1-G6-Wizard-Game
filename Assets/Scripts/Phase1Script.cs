@@ -11,60 +11,62 @@ public class Phase1Script : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        timer = phaseDuration;
-        CurrentPhase = 1;
+        // timer = phaseDuration;
+        // CurrentPhase = 1;
+        currentPhase = 2;
+        CurrentPhase = 2;
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (currentPhase != 1) return;
-        if (timerRunning)
-        {
-            timer -= Time.deltaTime;
+    // void Update()
+    // {
+    //     if (currentPhase != 1) return;
+    //     if (timerRunning)
+    //     {
+    //         timer -= Time.deltaTime;
 
-            if (timer <= 0) {
-                timer = 0;
-                timerRunning = false;
-                OnPhaseComplete();
-            }
-        }
-    }
+    //         if (timer <= 0) {
+    //             timer = 0;
+    //             timerRunning = false;
+    //             OnPhaseComplete();
+    //         }
+    //     }
+    // }
 
-    public float GetCurrentTime() { return timer; }
+    // public float GetCurrentTime() { return timer; }
 
     public int GetCurrentPhase()
     {
         return CurrentPhase;
     }
 
-    void OnPhaseComplete()
-    {
-        Debug.Log("Phase 1 Complete!");
-        //add code to transfer data and players to phase 2
-        StartCoroutine(PhaseTransition());
-    }
+    // void OnPhaseComplete()
+    // {
+    //     Debug.Log("Phase 1 Complete!");
+    //     //add code to transfer data and players to phase 2
+    //     StartCoroutine(PhaseTransition());
+    // }
 
-    void TransferPlayerDataToNextScene()
-    {
-        Debug.Log("Transferring player data to Phase 2...");
+    // void TransferPlayerDataToNextScene()
+    // {
+    //     Debug.Log("Transferring player data to Phase 2...");
 
-        //Dummy logic for 4 players
-        //if adding more players or playing with less, change this to a foreach (Player) function
-        for (int i = 0; i < 4; i++)
-        {
-            Debug.Log("Saving data for Player " + (i + 1));
-        }
-    }
+    //     //Dummy logic for 4 players
+    //     //if adding more players or playing with less, change this to a foreach (Player) function
+    //     for (int i = 0; i < 4; i++)
+    //     {
+    //         Debug.Log("Saving data for Player " + (i + 1));
+    //     }
+    // }
 
-    IEnumerator PhaseTransition()
-    {
-        //wait 20 seconds before switching scenes
-        yield return new WaitForSeconds(20f);
-        TransferPlayerDataToNextScene (); 
+    // IEnumerator PhaseTransition()
+    // {
+    //     //wait 20 seconds before switching scenes
+    //     yield return new WaitForSeconds(20f);
+    //     TransferPlayerDataToNextScene (); 
 
-        //Load Phase 2 scene
-        currentPhase = 2;
-        CurrentPhase = 2;
-    }
+    //     //Load Phase 2 scene
+    //     currentPhase = 2;
+    //     CurrentPhase = 2;
+    // }
 }
