@@ -3,7 +3,7 @@ using UnityEngine;
 public class SpellProjectile : MonoBehaviour
 {
     public float speed = 10f;
-    public int damage = 10;
+    public float damage = 5f;
     public float lifeTime = 3f;
 
     // 用来记录发射这个火球的玩家是谁
@@ -77,7 +77,15 @@ public class SpellProjectile : MonoBehaviour
             // 双保险：即使 IgnoreCollision 漏了某个碰撞体，也不打施法者本人
             if (target != null && target.gameObject != caster)
             {
-                target.TakeDamage(damage);
+                float totalDamage = damage;
+
+                PlayerStats casterStats = caster.GetComponent<PlayerStats>();
+                if (casterStats != null)
+                {
+                    totalDamage += casterStats.strength;
+                }
+
+                target.TakeDamage(Mathf.RoundToInt(totalDamage));
                 Destroy(gameObject);
             }
         }
