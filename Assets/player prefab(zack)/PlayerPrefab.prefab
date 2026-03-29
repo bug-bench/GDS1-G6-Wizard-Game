@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 7884151391088619397}
   - component: {fileID: 1397807279015869338}
   - component: {fileID: 7014073608482475539}
+  - component: {fileID: -8087840984707553682}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -304,12 +305,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce4ae6e3584d554c816e617e48e8511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
-  health: 100
   isKnockedDown: 0
   firePoint: {fileID: 2102165188656464589}
   currentAttackSpell: {fileID: 0}
   currentMovementSpell: {fileID: 0}
   dropForce: 8
+  spellSpawnForwardInset: 0.28
 --- !u!114 &7014073608482475539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,10 +323,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f30b10c69c3554a9ad72e2908bc3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 5
+  sprintMultiplier: 1
   gamepadAimDeadzone: 0.2
   moveInput: {x: 0, y: 0}
   canMove: 1
+--- !u!114 &-8087840984707553682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2773116537761935081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43519ea8279634a43b0d000e800a6916, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  health: 100
+  speed: 5
+  strength: 10
 --- !u!1 &3712652026574967776
 GameObject:
   m_ObjectHideFlags: 0
