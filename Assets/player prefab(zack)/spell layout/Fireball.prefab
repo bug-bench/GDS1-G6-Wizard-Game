@@ -170,6 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellProjectile
   speed: 10
-  damage: 10
+  damage: 1
   lifeTime: 3
   caster: {fileID: 0}
+  ignoreCasterUntilTime: 0

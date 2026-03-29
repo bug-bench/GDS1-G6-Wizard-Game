@@ -3,7 +3,7 @@ using UnityEngine;
 public class SpellProjectile : MonoBehaviour
 {
     public float speed = 10f;
-    public float damage = 5f;
+    public float damage = 1f;
     public float lifeTime = 3f;
 
     // 用来记录发射这个火球的玩家是谁
