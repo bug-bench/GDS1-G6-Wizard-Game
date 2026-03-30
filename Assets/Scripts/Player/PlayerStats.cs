@@ -14,6 +14,7 @@ public class PlayerStats : MonoBehaviour
     public float health = 100f;
     public float speed = 5f;
     public float strength = 10f;
+    public bool IsAliveArena = true;
 
    
 
@@ -152,7 +153,9 @@ public class PlayerStats : MonoBehaviour
         {
             //add arena death logic here
 
-
+            IsAliveArena = false;
+            ArenaScript AS = FindFirstObjectByType<ArenaScript>();
+            AS.PlayerEliminated(gameObject);
 
         }
     }
