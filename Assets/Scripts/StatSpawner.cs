@@ -6,12 +6,13 @@ public class StatSpawner : MonoBehaviour
     public GameObject AttackSprite;
     public GameObject HealthSprite;
     public GameObject MovementSprite;
+    public GameObject Laser;
 
 
     public Vector2 Spawncenter;
     public Vector2 SpawnSize = new Vector2(10F, 10F);
 
-    public int numberToSpawn = 10;
+    public int numberToSpawn = 30;
 
     public float respawnDelay = 3f;
     void Start()
@@ -34,7 +35,7 @@ public class StatSpawner : MonoBehaviour
                 Random.Range(Spawncenter.y - SpawnSize.y / 2f, Spawncenter.y + SpawnSize.y / 2f)
             );
 
-        int randomStat = Random.Range(0, 3);
+        int randomStat = Random.Range(0, 4);
 
         GameObject prefabToSpawn = null;
 
@@ -48,6 +49,9 @@ public class StatSpawner : MonoBehaviour
                 break;
             case 2:
                 prefabToSpawn = MovementSprite;
+                break;
+            case 3:                
+                prefabToSpawn = Laser;
                 break;
         }
 
