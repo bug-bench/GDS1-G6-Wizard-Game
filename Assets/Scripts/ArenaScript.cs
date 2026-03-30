@@ -19,7 +19,7 @@ public class ArenaScript : MonoBehaviour
 
     public void PlayerEliminated(GameObject player)
     {
-        if (playersAlive.Contains(player))
+        if (playersAlive.Contains(player) && player.GetComponent<PlayerStats>().IsAliveArena == false)
         {
             playersAlive.Remove(player);
             playersEliminated.Add(player);
