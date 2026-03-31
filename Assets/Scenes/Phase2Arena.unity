@@ -16104,9 +16104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63ebc33d95c7d2041b8a5dc4a90ea740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatSpawner
-  AttackSprite: {fileID: 6652476222007982217, guid: 0a64e55620ad1a3408cf53ee62483490, type: 3}
-  HealthSprite: {fileID: 8531777423059755645, guid: 6215d757aa0d69f4e924a65e6794b453, type: 3}
-  MovementSprite: {fileID: 3689716220766011371, guid: baf7dc1b937d63c4fa766c7c06f2ac49, type: 3}
+  AttackSprite: {fileID: 6652476222007982217, guid: eda0ee78f7a03e74b8305df4937eeeba, type: 3}
+  HealthSprite: {fileID: 8531777423059755645, guid: 86f67c003d52a4249bbaded45805e218, type: 3}
+  MovementSprite: {fileID: 3689716220766011371, guid: 6ac3dba6fa4558b4db3a9f8db6ca47f8, type: 3}
   Laser: {fileID: 2848393363742389300, guid: 8b2c4a0d5b440224d984f5f3d6017ec0, type: 3}
   Spawncenter: {x: 0, y: -4}
   SpawnSize: {x: 20, y: 13}
