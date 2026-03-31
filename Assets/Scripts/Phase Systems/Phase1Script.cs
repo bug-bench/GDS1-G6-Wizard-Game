@@ -61,7 +61,8 @@ public class Phase1Script : MonoBehaviour
             Debug.Log($"Player {player.playerIndex} — color: {player.colorIndex}, spells: {player.spells.Count}");
         }
 
-        // Tell Phase 2 to use a single camera
+        // 进入 Phase2 竞技场前强制单相机（与 Phase2 共享镜头设计一致）；若竞技场也要分屏，勿在此处写死 false。
+        // Force single shared camera before Phase2 arena; remove or gate this if arena should stay split-screen.
         GameData.useSplitScreen = false;
     }
 

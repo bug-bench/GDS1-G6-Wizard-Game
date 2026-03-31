@@ -9,7 +9,7 @@ public class PlayerCard : MonoBehaviour
     public GameObject readyText;
 
     private PlayerInput player;
-    
+
     private InputAction moveAction;
     private InputAction submitAction;
 
@@ -25,16 +25,68 @@ public class PlayerCard : MonoBehaviour
     private float inputCooldown = 0.2f;
     private float lastInputTime = 0f;
 
+    /// <summary>
+    /// 大厅用的 InputAsset 可能是 PlayerControls（地图名 Player）、TestInput（地图名 GamePlay）等，不能写死一个名字。
+    /// Lobby may use PlayerControls (map "Player"), TestInput (map "GamePlay"), etc.; do not hard-code one map name.
+    /// </summary>
+    static InputActionMap ResolveLobbyActionMap(PlayerInput input)
+    {
+        if (input == null || input.actions == null) return null;
+
+        InputActionAsset asset = input.actions;
+
+        if (!string.IsNullOrEmpty(input.defaultActionMap))
+        {
+            InputActionMap dm = asset.FindActionMap(input.defaultActionMap, throwIfNotFound: false);
+            if (dm != null && dm.FindAction("Move", throwIfNotFound: false) != null)
+                return dm;
+        }
+
+        foreach (string name in new[] { "Player", "Gameplay", "GamePlay" })
+        {
+            InputActionMap m = asset.FindActionMap(name, throwIfNotFound: false);
+            if (m != null && m.FindAction("Move", throwIfNotFound: false) != null)
+                return m;
+        }
+
+        foreach (InputActionMap m in asset.actionMaps)
+        {
+            if (m.FindAction("Move", throwIfNotFound: false) != null)
+                return m;
+        }
+
+        return null;
+    }
+
+    static InputAction ResolveReadyAction(InputActionMap map)
+    {
+        if (map == null) return null;
+        return map.FindAction("Join", throwIfNotFound: false)
+               ?? map.FindAction("Submit", throwIfNotFound: false);
+    }
+
     public void SetPlayer(PlayerInput input)
     {
         player = input;
-        player.SwitchCurrentActionMap("Gameplay");
-        
-        var actionMap = player.actions.FindActionMap("Gameplay", throwIfNotFound: true);
-        moveAction = actionMap.FindAction("Move", throwIfNotFound: true);
-        submitAction = actionMap.FindAction("Submit", throwIfNotFound: true);
-        
-        Debug.Log($"Player {player.playerIndex} — moveAction: {moveAction?.name}, enabled: {moveAction?.enabled}");
+
+        InputActionMap actionMap = ResolveLobbyActionMap(player);
+        if (actionMap == null)
+        {
+            Debug.LogError($"PlayerCard: 在「{player.actions?.name}」中找不到含 Move 的 Action Map，请检查 Input Actions 资源。 | No action map with Move in '{player.actions?.name}'. Check Input Actions asset.");
+            return;
+        }
+
+        player.SwitchCurrentActionMap(actionMap.name);
+
+        moveAction = actionMap.FindAction("Move", throwIfNotFound: false);
+        submitAction = ResolveReadyAction(actionMap);
+
+        if (moveAction == null)
+            Debug.LogError($"PlayerCard: 地图「{actionMap.name}」缺少 Move。 | Map '{actionMap.name}' has no Move action.");
+        if (submitAction == null)
+            Debug.LogWarning($"PlayerCard: 地图「{actionMap.name}」缺少 Join 与 Submit，无法切换 Ready。 | Map '{actionMap.name}' has no Join/Submit; Ready toggle unavailable.");
+
+        Debug.Log($"Player {player.playerIndex} — map: {actionMap.name}, move: {moveAction != null}, ready: {submitAction != null}");
 
         readyText.SetActive(false);
         UpdateColor();
@@ -45,18 +97,8 @@ public class PlayerCard : MonoBehaviour
     private void Update()
     {
         if (moveAction == null || submitAction == null)
-        {
-            Debug.Log($"Actions null on card");
             return;
-        }
-        
-        // log only when input detected
-        var move = moveAction.ReadValue<Vector2>();
-        if (move.magnitude > 0.1f)
-            Debug.Log($"Move: {move}");
-        if (submitAction.triggered)
-            Debug.Log($"Submit triggered");
-            
+
         HandleColorChange();
         HandleReady();
     }

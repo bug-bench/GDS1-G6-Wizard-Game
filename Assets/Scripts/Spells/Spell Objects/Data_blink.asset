@@ -16,4 +16,4 @@ MonoBehaviour:
   spellType: 1
   cooldownTime: 1
   spellPrefab: {fileID: 7895179520453860780, guid: 1e7b2dba4c7e04c4e9a74ee64240b475, type: 3}
-  pickupPrefab: {fileID: 2848393363742389300, guid: 95e05e97cb7788d409cce459904262bc, type: 3}
+  pickupPrefab: {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}

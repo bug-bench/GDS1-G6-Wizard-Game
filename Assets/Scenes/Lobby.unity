@@ -255,7 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   cardPrefab: {fileID: 6367834551410800005, guid: 2a06c7d997dcd4161a2183dbaa623c0d, type: 3}
   cardContainer: {fileID: 200389504}
-  useSplitScreen: 0
+  useSplitScreen: 1
   scene: Phase2Arena
 --- !u!1 &527777866
 GameObject:

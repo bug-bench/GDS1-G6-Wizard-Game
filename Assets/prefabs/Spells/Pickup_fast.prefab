@@ -172,7 +172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpellPickup
   pickupCooldown: 1
   fixLineRendererIfNeeded: 1
-  spellData: {fileID: 11400000, guid: 062a8af9fc841c143912be5391436001, type: 2}
+  spellData: {fileID: 11400000, guid: a9e39dfbfaa8a3045ace2b8de3ff4c02, type: 2}
 --- !u!1 &4735336362912590567
 GameObject:
   m_ObjectHideFlags: 0

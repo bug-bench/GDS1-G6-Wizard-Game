@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShotgunSpell : SpellBehavior
 {
-    [Header("霰弹枪数值接口")]
+    [Header("霰弹枪数值接口 — Shotgun Tuning")]
     public GameObject pelletPrefab;
     public int pelletCount = 5;
     public float spreadAngle = 45f;

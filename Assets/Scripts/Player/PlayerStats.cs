@@ -144,19 +144,15 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log(gameObject.name + " has died.");
 
-        if (p1s.GetCurrentPhase() == 1)
-        {
+        if (p1s != null && p1s.GetCurrentPhase() == 1)
             DropRandomPickups();
-        }
 
-        if (p2s.GetCurrentMinigame() == "Arena")
+        if (p2s != null && p2s.GetCurrentMinigame() == "Arena")
         {
-            //add arena death logic here
-
             IsAliveArena = false;
             ArenaScript AS = FindFirstObjectByType<ArenaScript>();
-            AS.PlayerEliminated(gameObject);
-
+            if (AS != null)
+                AS.PlayerEliminated(gameObject);
         }
     }
 

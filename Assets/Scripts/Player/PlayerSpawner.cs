@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
@@ -28,12 +27,19 @@ public class PlayerSpawner : MonoBehaviour
                 ? spawnPoints[i].position
                 : new Vector3(i * 2, 0, 0);
 
+            InputDevice device = null;
+            if (data.deviceId >= 0)
+                device = InputSystem.GetDeviceById(data.deviceId);
+
+            if (device == null && data.deviceId >= 0)
+                Debug.LogWarning($"PlayerSpawner: 找不到 deviceId={data.deviceId} 的设备，该玩家可能未正确配对输入。 | No device for deviceId={data.deviceId}; input pairing may be wrong.");
+
             PlayerInput playerInput = PlayerInput.Instantiate(
                 playerPrefab,
                 playerIndex: data.playerIndex,
                 controlScheme: null,
                 splitScreenIndex: GameData.useSplitScreen ? data.playerIndex : -1,
-                pairWithDevice: InputSystem.devices[data.playerIndex]
+                pairWithDevice: device
             );
 
             playerInput.transform.position = spawnPos;

@@ -4,17 +4,18 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// LoL 风格闪现：朝「当前瞄准目标点」传送，距离不超过 blinkDistance；
 /// 若鼠标在脚下则退回为沿 firePoint 方向；途中撞墙则停在墙前。
+/// LoL-style blink toward current aim, clamped to blinkDistance; if mouse is on feet, blink along firePoint; stop before walls.
 /// </summary>
 public class BlinkSpell : SpellBehavior
 {
-    [Header("闪现数值接口")]
+    [Header("闪现数值接口 — Blink Tuning")]
     public float blinkDistance = 4f;
     public LayerMask obstacleLayer;
 
-    [Tooltip("撞墙时终点离墙皮留的空隙")]
+    [Tooltip("撞墙时终点离墙皮留的空隙 — Gap from wall surface when stopping on hit.")]
     public float wallBuffer = 0.2f;
 
-    [Tooltip("射线起点沿移动方向微移，避免从碰撞体内部出发")]
+    [Tooltip("射线起点沿移动方向微移，避免从碰撞体内部出发 — Nudge ray origin along move dir to avoid casting from inside colliders.")]
     public float castInset = 0.08f;
 
     public override void Execute(GameObject caster, Transform firePoint)
@@ -35,7 +36,7 @@ public class BlinkSpell : SpellBehavior
             float dist = toTarget.magnitude;
             if (dist < 0.08f)
             {
-                // 鼠标几乎在角色身上：按面朝方向闪一段，避免原地抽搐
+                // 鼠标几乎在角色身上：按面朝方向闪一段，避免原地抽搐 — Mouse on character: blink along facing to avoid jitter.
                 dir = firePoint.up.normalized;
                 travelDist = blinkDistance;
             }
@@ -47,7 +48,7 @@ public class BlinkSpell : SpellBehavior
         }
         else
         {
-            // 手柄：沿右摇杆瞄准方向，最大 blinkDistance
+            // 手柄：沿右摇杆瞄准方向，最大 blinkDistance — Gamepad: along right-stick aim, up to blinkDistance.
             dir = firePoint.up.normalized;
             travelDist = blinkDistance;
         }

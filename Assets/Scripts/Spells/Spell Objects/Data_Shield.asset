@@ -15,5 +15,6 @@ MonoBehaviour:
   spellName: Shield
   spellType: 1
   cooldownTime: 1
-  spellPrefab: {fileID: 7895179520453860780, guid: 1e7b2dba4c7e04c4e9a74ee64240b475, type: 3}
-  pickupPrefab: {fileID: 2848393363742389300, guid: 95e05e97cb7788d409cce459904262bc, type: 3}
+  spellPrefab: {fileID: 7895179520453860780, guid: 9e2a83427c031d145ba24514cf4c08ae, type: 3}
+  cooldownStartsOnRelease: 1
+  pickupPrefab: {fileID: 2848393363742389300, guid: adcbd26f59ff1924a9d3c02f1315da4e, type: 3}

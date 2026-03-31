@@ -3,24 +3,26 @@ using UnityEngine;
 /// <summary>
 /// 按住副键：在 FirePoint 前方生成一道弧形蓝色线条（LineRenderer），并用 EdgeCollider2D 作触发反弹区。
 /// 预制体可为空物体，脚本会自动补 LineRenderer / EdgeCollider2D / Kinematic Rigidbody2D。
+/// Hold sub button: arc LineRenderer in front of FirePoint plus EdgeCollider2D trigger to reflect projectiles.
+/// Prefab can be empty; script adds LineRenderer, EdgeCollider2D, and kinematic Rigidbody2D if missing.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class ReflectShieldSpell : SpellBehavior
 {
-    [Header("弧形盾")]
-    [Tooltip("弧的半径（世界单位大致观感）")]
+    [Header("弧形盾 / Arc Shield")]
+    [Tooltip("弧的半径（世界单位大致观感） — Arc radius in world units (visual scale).")]
     public float arcRadius = 0.55f;
 
-    [Tooltip("弧展开总角度（度），例如 110 像身前一面月牙")]
+    [Tooltip("弧展开总角度（度），例如 110 像身前一面月牙 — Total arc span in degrees (e.g. 110 for a front crescent).")]
     public float arcAngleDegrees = 110f;
 
-    [Tooltip("弧线上的顶点数，越多越圆滑")]
+    [Tooltip("弧线上的顶点数，越多越圆滑 — Vertex count along the arc; higher is smoother.")]
     public int arcSegments = 24;
 
-    [Tooltip("沿 FirePoint 本地 Y 前移弧心，让弧鼓在身前")]
+    [Tooltip("沿 FirePoint 本地 Y 前移弧心，让弧鼓在身前 — Offset arc center along FirePoint local Y so the bulge sits in front.")]
     public float localForwardOffset = 0.35f;
 
-    [Header("线条外观")]
+    [Header("线条外观 / Line Look")]
     public float lineWidth = 0.08f;
     public Color arcColor = new Color(0.35f, 0.75f, 1f, 0.95f);
     public int sortingOrder = 12;
