@@ -74,20 +74,16 @@ public class PlayerJoinManager : MonoBehaviour
     private void StartGame()
     {
         GameData.players.Clear();
-        GameData.useSplitScreen = useSplitScreen; 
+        GameData.useSplitScreen = false;
 
         foreach (var card in playerCards)
         {
-            var pi = card.GetPlayer();
-            int devId = -1;
-            if (pi != null && pi.devices.Count > 0)
-                devId = pi.devices[0].deviceId;
-
+            var player = card.GetPlayer();
             GameData.players.Add(new PlayerData
             {
-                playerIndex = pi != null ? pi.playerIndex : 0,
+                playerIndex = player.playerIndex,
                 colorIndex = card.GetColorIndex(),
-                deviceId = devId
+                device = player.devices[0] // save actual device reference
             });
         }
 
