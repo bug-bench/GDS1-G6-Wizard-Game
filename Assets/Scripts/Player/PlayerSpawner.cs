@@ -6,11 +6,11 @@ public class PlayerSpawner : MonoBehaviour
     public GameObject playerPrefab;
     public Transform[] spawnPoints;
 
-    [SerializeField] Color[] colors = {
-        new Color(0.76f, 0.27f, 0.27f),
-        new Color(0.27f, 0.47f, 0.76f),
-        new Color(0.31f, 0.65f, 0.42f),
-        new Color(0.85f, 0.70f, 0.30f),
+    [SerializeField] private Color[] colors = {
+        UseHexColor.HexColor("C2453A"),
+        UseHexColor.HexColor("3A6FBF"),
+        UseHexColor.HexColor("3DA65A"),
+        UseHexColor.HexColor("D4A83A"),
     };
 
     private void Start()
@@ -45,8 +45,10 @@ public class PlayerSpawner : MonoBehaviour
             playerInput.transform.position = spawnPos;
 
             var sr = playerInput.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null)
+            if (sr != null) {
                 sr.color = colors[data.colorIndex];
+                data.playerSprite = sr.sprite; // save sprite 
+            }
 
             if (!GameData.useSplitScreen)
             {

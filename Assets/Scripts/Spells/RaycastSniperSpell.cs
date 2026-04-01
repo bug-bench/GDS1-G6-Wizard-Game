@@ -82,7 +82,11 @@ public class RaycastSniperSpell : SpellBehavior
                     PlayerStats casterStats = caster.GetComponent<PlayerStats>();
                     if (casterStats != null)
                         total += Mathf.RoundToInt(casterStats.strength);
-                    target.TakeDamage(total);
+
+                    var casterInput = caster.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+                    int attackerIndex = casterInput != null ? casterInput.playerIndex : -1; 
+
+                    target.TakeDamage(total, attackerIndex);
                 }
             }
         }
