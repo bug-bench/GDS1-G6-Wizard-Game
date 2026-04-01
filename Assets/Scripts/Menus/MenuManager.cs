@@ -4,11 +4,11 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     [Header("Scene Names")]
-    [SerializeField] string lobbyScene = "Lobby";
+    [SerializeField] string scene;
 
     public void OnPlayClicked()
     {
-        SceneManager.LoadScene(lobbyScene);
+        SceneManager.LoadScene(scene);
     }
 
     public void OnExitClicked()

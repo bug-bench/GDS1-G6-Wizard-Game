@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
         if (playerSprite != null)
         {
             playerSprite.localScale = new Vector3(
-                lookDir.x < 0 ? -1 : 1,  // flip X based on left/right
+                lookDir.x < 0 ? 1 : -1,  // flip X based on left/right
                 1,
                 1
             );

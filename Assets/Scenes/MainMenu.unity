@@ -974,7 +974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8be33709cbbe04a97ad61ee3cc0a302f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  lobbyScene: Lobby
+  scene: Lobby
 --- !u!1 &1213907936
 GameObject:
   m_ObjectHideFlags: 0
