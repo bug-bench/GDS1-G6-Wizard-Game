@@ -531,10 +531,14 @@ PrefabInstance:
       propertyPath: enableWinState
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8655477116126972635, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 46557759085722620, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1109632002}
   m_SourcePrefab: {fileID: 100100000, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
 --- !u!1 &540679096
 GameObject:
@@ -15747,6 +15751,24 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 95e05e97cb7788d409cce459904262bc, type: 3}
+--- !u!1 &1109632001 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 46557759085722620, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
+  m_PrefabInstance: {fileID: 523584577}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1109632002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109632001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3943b7748872464d9ac185caa49e1b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArenaScript
+  winScene: WinScene
 --- !u!1 &1272710879
 GameObject:
   m_ObjectHideFlags: 0

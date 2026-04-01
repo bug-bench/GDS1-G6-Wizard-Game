@@ -12,6 +12,7 @@ public class PlayerCard : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction submitAction;
+    private float joinTime;
 
     private int colorIndex = 0;
     [SerializeField] Color[] colors = {
@@ -68,6 +69,7 @@ public class PlayerCard : MonoBehaviour
     public void SetPlayer(PlayerInput input)
     {
         player = input;
+        joinTime = Time.time;
 
         InputActionMap actionMap = ResolveLobbyActionMap(player);
         if (actionMap == null)
@@ -126,13 +128,15 @@ public class PlayerCard : MonoBehaviour
 
     private void HandleReady()
     {
+        // Ignore input for 0.5s after joining to prevent players instantly readying up
+        if (Time.time - joinTime < 0.5f) return;
+
         if (submitAction.triggered)
         {
             isReady = !isReady;
             readyText.SetActive(isReady);
         }
     }
-
     private void UpdateColor()
     {
         characterImage.color = colors[colorIndex];
