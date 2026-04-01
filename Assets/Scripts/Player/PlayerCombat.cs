@@ -296,22 +296,25 @@ public class PlayerCombat : MonoBehaviour
         return behavior;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, int attackerIndex = -1)
     {
+        Debug.Log($"TakeDamage called — damage: {damage}, attackerIndex: {attackerIndex}");
         if (isKnockedDown) return;
-        if (playerStats == null)
-        {
-            Debug.LogWarning($"{name}: 受击但未挂载 PlayerStats，伤害被忽略。请在玩家预制体上添加 PlayerStats。 | Hit ignored: no PlayerStats on player prefab.");
-            return;
-        }
+        if (playerStats == null) return;
+
+        // Record damage dealt by attacking player
+        if (attackerIndex >= 0)
+            GameData.RecordDamage(attackerIndex, damage);
+            Debug.Log($"RecordDamage called — attackerIndex: {attackerIndex}, amount: {damage}, total now: {GameData.players.Find(p => p.playerIndex == attackerIndex)?.damageDealt}");
 
         playerStats.TakeDamage(damage);
 
-       
-        Debug.Log(gameObject.name + " 受到伤害，剩余血量 / took damage, HP: " + playerStats.health);
-
         if (playerStats.health <= 0)
         {
+            // Record kill for attacking player
+            if (attackerIndex >= 0)
+                GameData.RecordKill(attackerIndex);
+
             Die();
         }
         else

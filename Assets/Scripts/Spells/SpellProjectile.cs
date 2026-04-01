@@ -88,7 +88,10 @@ public class SpellProjectile : MonoBehaviour
                     totalDamage += casterStats.strength;
                 }
 
-                target.TakeDamage(Mathf.RoundToInt(totalDamage));
+                var casterInput = caster.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+                int attackerIndex = casterInput != null ? casterInput.playerIndex : -1;
+                Debug.Log($"Projectile hit — caster: {caster.name}, target: {target.name}, damage: {Mathf.RoundToInt(totalDamage)}, attackerIndex: {attackerIndex}");
+                target.TakeDamage(Mathf.RoundToInt(totalDamage), attackerIndex);
                 Destroy(gameObject);
             }
         }
