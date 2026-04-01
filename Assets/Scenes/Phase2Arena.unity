@@ -487,10 +487,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Event Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 46557759085722620, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5001570120544354245, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.47389
@@ -531,32 +527,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8655477116126972635, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
+      propertyPath: enableWinState
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 46557759085722620, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 523584579}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
---- !u!1 &523584578 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 46557759085722620, guid: 4b679106f6fa3ca46a1b419b0ae715fa, type: 3}
-  m_PrefabInstance: {fileID: 523584577}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &523584579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 523584578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0177ce65accb4d66a199ce13377bbdc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArenaManager
-  winScene: WinScene
 --- !u!1 &540679096
 GameObject:
   m_ObjectHideFlags: 0
@@ -15700,10 +15679,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4497026461800808960, guid: f26e7b5623dd50643ae1bcf8f81c2b7f, type: 3}
-      propertyPath: spellData
-      value: 
-      objectReference: {fileID: 11400000, guid: a9e39dfbfaa8a3045ace2b8de3ff4c02, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
