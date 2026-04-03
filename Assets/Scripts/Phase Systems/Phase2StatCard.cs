@@ -10,20 +10,28 @@ public class Phase2StatCard : MonoBehaviour
     public TextMeshProUGUI strengthText;
     public TextMeshProUGUI speedText;
 
+    [Header("Spell Slots")]
+    public Image firstSpellSlot;       // assign in Inspector
+    public Image secondSpellSlot;        // assign in Inspector
+
+    // Shown when slot is empty
+    public Sprite emptySlotSprite;    // assign a grey placeholder in Inspector
+
     private PlayerStats stats;
+    private PlayerCombat combat;
 
     private Color[] colors = {
-        HexColor("C2453A"),
-        HexColor("3A6FBF"),
-        HexColor("3DA65A"),
-        HexColor("D4A83A"),
+        UseHexColor.HexColor("C2453A"),
+        UseHexColor.HexColor("3A6FBF"),
+        UseHexColor.HexColor("3DA65A"),
+        UseHexColor.HexColor("D4A83A"),
     };
 
     public void Init(PlayerStats playerStats, PlayerData data)
     {
         stats = playerStats;
+        combat = playerStats.GetComponent<PlayerCombat>();
 
-        // Color the panel itself
         if (data != null)
         {
             GetComponent<Image>().color = colors[data.colorIndex];
@@ -41,14 +49,34 @@ public class Phase2StatCard : MonoBehaviour
 
     private void UpdateDisplay()
     {
-        healthText.text = $"HP: {Mathf.RoundToInt(stats.CurrentHealth())}";
-        strengthText.text = $"STR: {Mathf.RoundToInt(stats.CurrentStrength())}";
-        speedText.text = $"SPD: {Mathf.RoundToInt(stats.CurrentSpeed())}";
+        // Stats
+        healthText.text = $"{Mathf.RoundToInt(stats.CurrentHealth())}";
+        strengthText.text = $"{Mathf.RoundToInt(stats.CurrentStrength())}";
+        speedText.text = $"{Mathf.RoundToInt(stats.CurrentSpeed())}";
+
+        // Spell icons — update every frame so equip/drop reflects instantly
+        if (combat != null)
+        {
+            SetSlotIcon(firstSpellSlot, combat.currentAttackSpell);
+            SetSlotIcon(secondSpellSlot, combat.currentMovementSpell);
+        }
     }
 
-    private static Color HexColor(string hex)
+    private void SetSlotIcon(Image slot, SpellData spell)
     {
-        ColorUtility.TryParseHtmlString("#" + hex, out Color color);
-        return color;
+        if (slot == null) return;
+
+        Sprite icon = spell?.GetIcon();
+
+        if (icon != null)
+        {
+            slot.sprite = icon;
+            slot.color = spell.GetIconColor(); // use the prefab's sprite color
+        }
+        else
+        {
+            slot.sprite = emptySlotSprite;
+            slot.color = new Color(1, 1, 1, 0.3f);
+        }
     }
 }

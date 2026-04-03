@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -6512412375670681614, guid: 061e3882b25844577b3078134e6e0746, type: 3}
   m_Color: {r: 0.4433961, g: 0.8706181, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpellPickup
   pickupCooldown: 1
   fixLineRendererIfNeeded: 1
-  spellData: {fileID: 11400000, guid: 062a8af9fc841c143912be5391436001, type: 2}
+  spellData: {fileID: 11400000, guid: a9e39dfbfaa8a3045ace2b8de3ff4c02, type: 2}
 --- !u!1 &4735336362912590567
 GameObject:
   m_ObjectHideFlags: 0

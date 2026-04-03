@@ -974,7 +974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8be33709cbbe04a97ad61ee3cc0a302f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  lobbyScene: Lobby
+  scene: Lobby
 --- !u!1 &1213907936
 GameObject:
   m_ObjectHideFlags: 0
@@ -1343,7 +1343,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'The Wizard Game '
+  m_text: 'Wizard Game '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5cd5623078aa6482eb2553ef06084b03, type: 2}
   m_sharedMaterial: {fileID: -2653981860555638141, guid: 5cd5623078aa6482eb2553ef06084b03, type: 2}

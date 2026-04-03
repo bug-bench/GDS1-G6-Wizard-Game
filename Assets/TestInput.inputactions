@@ -17,12 +17,12 @@
                 },
                 {
                     "name": "Submit",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "99da4778-baaa-4765-b3ab-af7199781e3a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [

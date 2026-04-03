@@ -4,13 +4,13 @@ using UnityEngine.InputSystem;
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
-    public Transform[] spawnPoints; // assign in Inspector per scene
+    public Transform[] spawnPoints;
 
-    [SerializeField] Color[] colors = {
-    new Color(0.76f, 0.27f, 0.27f), // muted red
-    new Color(0.27f, 0.47f, 0.76f), // muted blue
-    new Color(0.31f, 0.65f, 0.42f), // muted green
-    new Color(0.85f, 0.70f, 0.30f), // muted gold/yellow
+    [SerializeField] private Color[] colors = {
+        UseHexColor.HexColor("C2453A"),
+        UseHexColor.HexColor("3A6FBF"),
+        UseHexColor.HexColor("3DA65A"),
+        UseHexColor.HexColor("D4A83A"),
     };
 
     private void Start()
@@ -28,23 +28,28 @@ public class PlayerSpawner : MonoBehaviour
                 ? spawnPoints[i].position
                 : new Vector3(i * 2, 0, 0);
 
+            if (data.device == null)
+            {
+                Debug.LogWarning($"Player {data.playerIndex} has no saved device — input may not work.");
+                continue;
+            }
+
             PlayerInput playerInput = PlayerInput.Instantiate(
                 playerPrefab,
                 playerIndex: data.playerIndex,
                 controlScheme: null,
                 splitScreenIndex: GameData.useSplitScreen ? data.playerIndex : -1,
-                pairWithDevice: InputSystem.devices[data.playerIndex]
+                pairWithDevice: data.device
             );
 
             playerInput.transform.position = spawnPos;
 
-            // Apply color
             var sr = playerInput.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null)
+            if (sr != null) {
                 sr.color = colors[data.colorIndex];
+                data.playerSprite = sr.sprite; // save sprite 
+            }
 
-            // If not split screen, disable the player's child camera and canvas
-            // so the shared Phase2Camera takes over
             if (!GameData.useSplitScreen)
             {
                 var playerCam = playerInput.GetComponentInChildren<Camera>();

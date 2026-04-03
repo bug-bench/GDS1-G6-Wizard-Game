@@ -144,20 +144,31 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log(gameObject.name + " has died.");
 
-        if (p1s.GetCurrentPhase() == 1)
-        {
+        if (p1s != null && p1s.GetCurrentPhase() == 1)
             DropRandomPickups();
-        }
 
-        if (p2s.GetCurrentMinigame() == "Arena")
+        IsAliveArena = false;
+        ArenaScript AS = FindFirstObjectByType<ArenaScript>();
+        Debug.Log($"ArenaScript found: {AS != null}"); // ADD THIS
+        if (AS != null) 
         {
-            //add arena death logic here
-
-            IsAliveArena = false;
-            ArenaScript AS = FindFirstObjectByType<ArenaScript>();
             AS.PlayerEliminated(gameObject);
-
         }
+
+        // if (p2s != null && p2s.GetCurrentMinigame() == "Arena")
+        // {
+        //     IsAliveArena = false;
+        //     ArenaScript AS = FindFirstObjectByType<ArenaScript>();
+        //     Debug.Log($"ArenaScript found: {AS != null}"); // ADD THIS
+        //     if (AS != null) 
+        //     {
+        //         AS.PlayerEliminated(gameObject);
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.Log($"Die() — p2s null: {p2s == null}, minigame: {p2s?.GetCurrentMinigame()}");
+        // }
     }
 
     void DropRandomPickups()
