@@ -46,7 +46,7 @@ public class Phase2Script : MonoBehaviour
         switch (minigameName)
         {
             case "Arena":
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene("Phase2Arena");
                 StartArenaMode();
                 break;
             default:

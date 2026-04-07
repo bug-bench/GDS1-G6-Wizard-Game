@@ -16,7 +16,7 @@ public class Phase1Script : MonoBehaviour
     void Start()
     {
         timer = phaseDuration;
-        CurrentPhase = 1;
+        CurrentPhase = currentPhase;
         // currentPhase = 2;
         // CurrentPhase = 2;
     }
