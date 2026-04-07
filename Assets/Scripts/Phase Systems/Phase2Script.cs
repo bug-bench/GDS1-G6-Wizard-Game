@@ -5,6 +5,7 @@ public class Phase2Script : MonoBehaviour
 {
     private Phase1Script p1s;
     private string currentMinigame;
+    private bool phaseChosen = false;
 
     void Start()
     {
@@ -20,9 +21,10 @@ public class Phase2Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (p1s.GetCurrentPhase() == 2)
+        if (p1s.GetCurrentPhase() == 2 && phaseChosen != true)
         {
             MinigameChosen("Arena");
+            phaseChosen = true;
         }
     }
 
