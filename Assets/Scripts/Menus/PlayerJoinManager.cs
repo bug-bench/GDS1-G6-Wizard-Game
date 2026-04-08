@@ -36,7 +36,7 @@ public class PlayerJoinManager : MonoBehaviour
     {
         if (gameStarting) return;
         if (playerCards.Count == 0) return;
-        if (playerCards.Count < 2) return; 
+        // if (playerCards.Count < 2) return; 
 
         foreach (var card in playerCards)
             if (!card.isReady) return;
@@ -75,7 +75,7 @@ public class PlayerJoinManager : MonoBehaviour
     private void StartGame()
     {
         // GameData.players.Clear();
-        GameData.useSplitScreen = false;
+        GameData.useSplitScreen = useSplitScreen;
 
         foreach (var card in playerCards)
         {
