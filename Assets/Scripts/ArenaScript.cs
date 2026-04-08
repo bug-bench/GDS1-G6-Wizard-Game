@@ -23,6 +23,22 @@ public class ArenaScript : MonoBehaviour
         foreach (GameObject player in players)
             playersAlive.Add(player);
         Debug.Log($"ArenaScript tracking {playersAlive.Count} players");
+
+        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+        if (spawnPoints.Length < players.Length)
+        {
+            Debug.LogError("Not enough spawn points for all players!");
+            yield break;
+        }
+
+        // Optional: randomize spawn points
+        //ShuffleArray(spawnPoints);
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].transform.position = spawnPoints[i].transform.position;
+            players[i].transform.rotation = spawnPoints[i].transform.rotation;
+        }
     }
 
     public void PlayerEliminated(GameObject player)
@@ -47,6 +63,17 @@ public class ArenaScript : MonoBehaviour
         {
             Debug.Log("Draw!");
             EndGame(playersEliminated);
+        }
+    }
+
+    private void ShuffleArray(GameObject[] array)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            int rand = Random.Range(i, array.Length);
+            GameObject temp = array[i];
+            array[i] = array[rand];
+            array[rand] = temp;
         }
     }
 
