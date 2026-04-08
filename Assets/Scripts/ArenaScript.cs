@@ -2,10 +2,12 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class ArenaScript : MonoBehaviour
 {
     [SerializeField] private string winScene = "WinScene";
+    [SerializeField] private bool gameWon = false;
 
     private GameObject[] players;
     private List<GameObject> playersAlive = new List<GameObject>();
@@ -14,6 +16,21 @@ public class ArenaScript : MonoBehaviour
     void Start()
     {
         StartCoroutine(FindPlayersNextFrame());
+    }
+
+    void Update()
+    {
+        if (gameWon)
+        {
+            foreach (GameObject player in players)
+            {
+                SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
+                sr.enabled = false;
+                PlayerInput pi = player.GetComponent<PlayerInput>();
+                pi.DeactivateInput();
+            }
+            EndGame(playersEliminated, playersAlive[0]);
+        }
     }
 
     private IEnumerator FindPlayersNextFrame()
@@ -80,6 +97,13 @@ public class ArenaScript : MonoBehaviour
     private void EndGame(List<GameObject> eliminations)
     {
         GameData.winnerIndex = -1;
+        foreach (GameObject player in players)
+        {
+            SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
+            sr.enabled = false;
+            Destroy(player.GetComponent<PersistentObject>());
+            Destroy(player.gameObject);
+        }
         SceneManager.LoadScene(winScene);
     }
 
