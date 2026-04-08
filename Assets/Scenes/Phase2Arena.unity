@@ -16516,7 +16516,6 @@ GameObject:
   - component: {fileID: 1820256228}
   - component: {fileID: 1820256227}
   - component: {fileID: 1820256229}
-  - component: {fileID: 1820256230}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -16618,29 +16617,6 @@ MonoBehaviour:
   SpawnSize: {x: 20, y: 13}
   numberToSpawn: 10
   respawnDelay: 3
---- !u!114 &1820256230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1820256226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41d4f9ff0d827438ca9965ad094cb0e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawner
-  playerPrefab: {fileID: 2773116537761935081, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
-  spawnPoints:
-  - {fileID: 530924115}
-  - {fileID: 699335304}
-  - {fileID: 1766589510}
-  - {fileID: 842421365}
-  colors:
-  - {r: 0.7607843, g: 0.27058825, b: 0.22745098, a: 1}
-  - {r: 0.22745098, g: 0.43529412, b: 0.7490196, a: 1}
-  - {r: 0.23921569, g: 0.6509804, b: 0.3529412, a: 1}
-  - {r: 0.83137256, g: 0.65882355, b: 0.22745098, a: 1}
 --- !u!1001 &1907767902
 PrefabInstance:
   m_ObjectHideFlags: 0
