@@ -50,6 +50,12 @@ public class PlayerSpawner : MonoBehaviour
                 data.playerSprite = sr.sprite; // save sprite 
             }
 
+            var go = playerInput.gameObject;
+            if (go != null)
+            {
+                GameData.players[i].playerGameObject = go;
+            }
+
             if (!GameData.useSplitScreen)
             {
                 var playerCam = playerInput.GetComponentInChildren<Camera>();

@@ -59,6 +59,11 @@ public class Phase1Script : MonoBehaviour
         foreach (var player in GameData.players)
         {
             Debug.Log($"Player {player.playerIndex} — color: {player.colorIndex}, spells: {player.spells.Count}");
+            GameObject playerObj = player.playerGameObject;
+            if (playerObj.GetComponent<PersistentObject>() == null)
+            {
+                playerObj.AddComponent<PersistentObject>();
+            }
         }
 
         // 进入 Phase2 竞技场前强制单相机（与 Phase2 共享镜头设计一致）；若竞技场也要分屏，勿在此处写死 false。
