@@ -10,7 +10,7 @@ public class SpellSpawner : MonoBehaviour
     public Vector2 SpawnSize = new Vector2(10F, 10F);
 
 
-    public int numberToSpawn = 30;
+    public int numberToSpawn = 4;
 
     public float respawnDelay = 10f;
 
