@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8768904571092098124}
   - component: {fileID: 2935070601429830799}
   - component: {fileID: 4497026461800808960}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Pickup_fast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 3622272335237750432}
   - component: {fileID: 3928292970709921665}
   - component: {fileID: 4696770049037580002}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: fast
   m_TagString: Untagged
   m_Icon: {fileID: 0}

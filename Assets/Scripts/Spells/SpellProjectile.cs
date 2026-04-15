@@ -73,6 +73,27 @@ public class SpellProjectile : MonoBehaviour
         // 碰撞体在玩家子物体上时 gameObject != caster 根节点，必须用层级判断否则会打到自己 — Colliders may be on child objects; use hierarchy check, not reference equality to root.
         if (IsColliderOnCaster(caster, hitInfo)) return;
 
+
+        float totalDamage = damage;
+
+        PlayerStats casterStats = caster.GetComponent<PlayerStats>();
+        if (casterStats != null)
+        {
+            totalDamage += casterStats.strength;
+        }
+
+        //destroyable object code 
+        destroyableObject destroyobject = hitInfo.GetComponent<destroyableObject>()
+        ?? hitInfo.GetComponentInParent<destroyableObject>();
+
+        if (destroyobject != null)
+        {
+            destroyobject.takeDamage(totalDamage);
+            Destroy(gameObject);
+            return;
+        }
+
+
         if (HasTag(hitInfo, "Player"))
         {
             PlayerCombat target = hitInfo.GetComponent<PlayerCombat>()
@@ -80,25 +101,27 @@ public class SpellProjectile : MonoBehaviour
             // 双保险：即使 IgnoreCollision 漏了某个碰撞体，也不打施法者本人 — Extra guard: never damage the caster even if IgnoreCollision missed a collider.
             if (target != null && target.gameObject != caster)
             {
-                float totalDamage = damage;
-
-                PlayerStats casterStats = caster.GetComponent<PlayerStats>();
-                if (casterStats != null)
-                {
-                    totalDamage += casterStats.strength;
-                }
+                
 
                 var casterInput = caster.GetComponent<UnityEngine.InputSystem.PlayerInput>();
                 int attackerIndex = casterInput != null ? casterInput.playerIndex : -1;
                 Debug.Log($"Projectile hit — caster: {caster.name}, target: {target.name}, damage: {Mathf.RoundToInt(totalDamage)}, attackerIndex: {attackerIndex}");
                 target.TakeDamage(Mathf.RoundToInt(totalDamage), attackerIndex);
                 Destroy(gameObject);
+
+
             }
+
         }
         else if (HasTag(hitInfo, "Wall"))
         {
             Destroy(gameObject);
         }
+
+      
+
+
+
     }
 
     /// <summary>

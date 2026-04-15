@@ -15,6 +15,11 @@ public class StatSpawner : MonoBehaviour
     public int numberToSpawn = 30;
 
     public float respawnDelay = 3f;
+
+    //spawn distance so no overlay
+    public float DistancebetweenStats = 1f;
+    public LayerMask statLayer;
+    public int maxattempts = 20;
     void Start()
     {
         SpawnStats();
@@ -30,14 +35,32 @@ public class StatSpawner : MonoBehaviour
     }
     void SpawnSingleStats()
     {
-        Vector2 randomPosition = new Vector2(
-                Random.Range(Spawncenter.x - SpawnSize.x / 2f, Spawncenter.x + SpawnSize.x / 2f),
-                Random.Range(Spawncenter.y - SpawnSize.y / 2f, Spawncenter.y + SpawnSize.y / 2f)
-            );
+        Vector2 randomPosition = Vector2.zero;
+        bool foundValidPosition = false;
+        for (int i = 0; i < maxattempts; i++)
+        {
 
-        int randomStat = Random.Range(0, 4);
 
-        GameObject prefabToSpawn = null;
+             randomPosition = new Vector2(
+                    Random.Range(Spawncenter.x - SpawnSize.x / 2f, Spawncenter.x + SpawnSize.x / 2f),
+                    Random.Range(Spawncenter.y - SpawnSize.y / 2f, Spawncenter.y + SpawnSize.y / 2f)
+                );
+
+            Collider2D hit = Physics2D.OverlapCircle(randomPosition, DistancebetweenStats, statLayer);
+
+            if(hit == null)
+            {
+                foundValidPosition = true;
+                break;
+            }
+
+
+
+        }
+            int randomStat = Random.Range(0, 4);
+
+            GameObject prefabToSpawn = null;
+        
 
         switch (randomStat)
         {
@@ -73,5 +96,11 @@ public class StatSpawner : MonoBehaviour
         yield return new WaitForSeconds(respawnDelay);
         SpawnSingleStats();
     }
-    
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(Spawncenter, SpawnSize);
+    }
+
 }
