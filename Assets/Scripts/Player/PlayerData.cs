@@ -9,6 +9,7 @@ public class PlayerData
     public List<string> spells = new List<string>();
     public InputDevice device;
     public Sprite playerSprite; // saves sprite at spawn 
+    public GameObject playerGameObject;
 
 
     // Combat stats

@@ -5,13 +5,13 @@ public class PersistentObject : MonoBehaviour
     public static PersistentObject Instance;
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        // if (Instance != null && Instance != this)
+        // {
+        //     Destroy(gameObject);
+        //     return;
+        // }
 
-        Instance = this;
+        // Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 }
