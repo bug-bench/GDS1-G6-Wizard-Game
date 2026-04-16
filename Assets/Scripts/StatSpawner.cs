@@ -6,7 +6,7 @@ public class StatSpawner : MonoBehaviour
     public GameObject AttackSprite;
     public GameObject HealthSprite;
     public GameObject MovementSprite;
-    public GameObject Laser;
+    public GameObject Spell;
 
 
     public Vector2 Spawncenter;
@@ -74,7 +74,7 @@ public class StatSpawner : MonoBehaviour
                 prefabToSpawn = MovementSprite;
                 break;
             case 3:                
-                prefabToSpawn = Laser;
+                prefabToSpawn = Spell;
                 break;
         }
 
