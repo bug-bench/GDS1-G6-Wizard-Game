@@ -56,7 +56,7 @@ public class StatSpawner : MonoBehaviour
 
             Collider2D hit = Physics2D.OverlapCircle(randomPosition, DistancebetweenStats, statLayer);
 
-            if(hit == null)
+            if(hit == null && hasTile)
             {
                 foundValidPosition = true;
                 break;

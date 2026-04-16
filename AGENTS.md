@@ -8,7 +8,7 @@
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Pickup, Water, UI
 - Active game object:
-  - Name: Tilemap
+  - Name: Spawner_SW
   - Tag: Untagged
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

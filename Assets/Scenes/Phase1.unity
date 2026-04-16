@@ -1280,20 +1280,24 @@ PrefabInstance:
       objectReference: {fileID: 2848393363742389300, guid: f26e7b5623dd50643ae1bcf8f81c2b7f, type: 3}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: SpawnSize.x
-      value: 6
+      value: 23.666666
       objectReference: {fileID: 0}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: SpawnSize.y
-      value: 12
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: Spawncenter.x
-      value: -28
+      value: -23.666666
       objectReference: {fileID: 0}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: Spawncenter.y
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
+      propertyPath: groundTilemap
+      value: 
+      objectReference: {fileID: 1862591039}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2786,8 +2790,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac82c94ce0aeaf40a74429654804f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  phaseDuration: 15
-  transitionDelay: 3
+  phaseDuration: 300
+  transitionDelay: 20
   useSplitScreen: 0
 --- !u!4 &602761923
 Transform:
@@ -7869,20 +7873,24 @@ PrefabInstance:
       objectReference: {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: SpawnSize.x
-      value: 19
+      value: 23.666666
       objectReference: {fileID: 0}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: SpawnSize.y
-      value: 11
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: Spawncenter.x
-      value: -9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: Spawncenter.y
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
+      propertyPath: groundTilemap
+      value: 
+      objectReference: {fileID: 1862591039}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
