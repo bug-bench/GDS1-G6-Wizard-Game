@@ -1,12 +1,14 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class StatSpawner : MonoBehaviour
 {
     public GameObject AttackSprite;
     public GameObject HealthSprite;
     public GameObject MovementSprite;
-    public GameObject Laser;
+    public GameObject Spell;
+    public Tilemap groundTilemap;
 
 
     public Vector2 Spawncenter;
@@ -46,20 +48,30 @@ public class StatSpawner : MonoBehaviour
                     Random.Range(Spawncenter.y - SpawnSize.y / 2f, Spawncenter.y + SpawnSize.y / 2f)
                 );
 
+            // convert to tile position
+            Vector3Int cellPos = groundTilemap.WorldToCell(randomPosition);
+
+            // check if tile exists
+            bool hasTile = groundTilemap.HasTile(cellPos);
+
             Collider2D hit = Physics2D.OverlapCircle(randomPosition, DistancebetweenStats, statLayer);
 
-            if(hit == null)
+            if(hit == null && hasTile)
             {
                 foundValidPosition = true;
                 break;
             }
 
-
-
         }
-            int randomStat = Random.Range(0, 4);
+        
+        if (!foundValidPosition)
+        {
+            return;
+        }
 
-            GameObject prefabToSpawn = null;
+        int randomStat = Random.Range(0, 4);
+
+        GameObject prefabToSpawn = null;
         
 
         switch (randomStat)
@@ -74,7 +86,7 @@ public class StatSpawner : MonoBehaviour
                 prefabToSpawn = MovementSprite;
                 break;
             case 3:                
-                prefabToSpawn = Laser;
+                prefabToSpawn = Spell;
                 break;
         }
 
