@@ -35,6 +35,11 @@ public class HazardArea : MonoBehaviour
     [Tooltip("区域存在多长时间后自动销毁（0表示永久存在） — Destroy area after X seconds (0 = infinite).")]
     public float lifetime = 0f;
 
+    [Header("Caster Immunity")]
+    [Tooltip("施法者本人是否免疫此陷阱的伤害和效果 — Is the caster immune to this hazard?")]
+    public bool ignoreCaster = true;
+    [HideInInspector] public GameObject caster;
+
     // 记录在区域内的玩家，用于持续伤害
     private Dictionary<GameObject, float> playersInside = new Dictionary<GameObject, float>();
     // 记录每个玩家在区域内被扣除的具体速度值，以便离开时精准恢复
@@ -88,6 +93,10 @@ public class HazardArea : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GameObject player = other.gameObject;
+            
+            if (ignoreCaster && caster != null && IsColliderOnCaster(caster, other))
+                return;
+
             PlayerStats stats = player.GetComponent<PlayerStats>();
             if (stats == null) return;
 
@@ -134,6 +143,10 @@ public class HazardArea : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GameObject player = other.gameObject;
+
+            if (ignoreCaster && caster != null && IsColliderOnCaster(caster, other))
+                return;
+
             if (playersInside.ContainsKey(player))
             {
                 playersInside.Remove(player);
@@ -150,5 +163,12 @@ public class HazardArea : MonoBehaviour
                 speedDrops.Remove(player);
             }
         }
+    }
+
+    static bool IsColliderOnCaster(GameObject casterRoot, Collider2D col)
+    {
+        if (casterRoot == null || col == null) return false;
+        Transform t = col.transform;
+        return t == casterRoot.transform || t.IsChildOf(casterRoot.transform);
     }
 }

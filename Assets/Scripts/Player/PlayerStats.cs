@@ -89,10 +89,35 @@ public class PlayerStats : MonoBehaviour
         Debug.Log(gameObject.name + " speed decreased to: " + speed);
     }
 
+    private Coroutine activeSpeedBoostCoroutine;
+    private float speedBoostEndTime;
+    private float currentSpeedBoostAmount;
+
     //for use with spells that increase speed temporarily
     public void ApplyTemporarySpeedBoost(float amount, float duration)
     {
-        StartCoroutine(SpeedBoostCoroutine(amount, duration));
+        speedBoostEndTime = Time.time + duration;
+
+        if (activeSpeedBoostCoroutine == null)
+        {
+            currentSpeedBoostAmount = amount;
+            speed += currentSpeedBoostAmount;
+            Debug.Log(gameObject.name + " speed boosted to: " + speed);
+            activeSpeedBoostCoroutine = StartCoroutine(SpeedBoostRoutine());
+        }
+    }
+
+    IEnumerator SpeedBoostRoutine()
+    {
+        while (Time.time < speedBoostEndTime)
+        {
+            yield return null;
+        }
+
+        speed -= currentSpeedBoostAmount;
+        currentSpeedBoostAmount = 0f;
+        activeSpeedBoostCoroutine = null;
+        Debug.Log(gameObject.name + " speed boost ended. Speed: " + speed);
     }
 
     public float CurrentSpeed() { return speed; }
@@ -144,7 +169,7 @@ public class PlayerStats : MonoBehaviour
     // PHASE ONE DEATH/DROP HANDLING
     // =====================
 
-    void Die()
+    public void Die()
     {
         Debug.Log(gameObject.name + " has died.");
 
@@ -158,21 +183,6 @@ public class PlayerStats : MonoBehaviour
         {
             AS.PlayerEliminated(gameObject);
         }
-
-        // if (p2s != null && p2s.GetCurrentMinigame() == "Arena")
-        // {
-        //     IsAliveArena = false;
-        //     ArenaScript AS = FindFirstObjectByType<ArenaScript>();
-        //     Debug.Log($"ArenaScript found: {AS != null}"); // ADD THIS
-        //     if (AS != null) 
-        //     {
-        //         AS.PlayerEliminated(gameObject);
-        //     }
-        // }
-        // else
-        // {
-        //     Debug.Log($"Die() — p2s null: {p2s == null}, minigame: {p2s?.GetCurrentMinigame()}");
-        // }
     }
 
     void DropRandomPickups()
@@ -199,41 +209,36 @@ public class PlayerStats : MonoBehaviour
     }
 
     // =====================
-    // COROUTINES
-    // =====================
-
-        IEnumerator SpeedBoostCoroutine(float amount, float duration)
-    {
-        //Apply boost
-        speed += amount;
-        Debug.Log(gameObject.name + " speed boosted to: " + speed);
-
-        //Wait for duration
-        yield return new WaitForSeconds(duration);
-
-        //Remove boost
-        speed -= amount;
-        Debug.Log(gameObject.name + " speed boost ended. Speed: " + speed);
-    }
-
-    // =====================
     // STATUS EFFECTS
     // =====================
 
+    private Coroutine activeSlowCoroutine;
+    private float slowEndTime;
+    private float currentSpeedDrop;
+
     public void ApplySpeedMultiplier(float multiplier, float duration)
     {
-        StartCoroutine(SpeedMultiplierCoroutine(multiplier, duration));
+        slowEndTime = Time.time + duration;
+
+        if (activeSlowCoroutine == null)
+        {
+            currentSpeedDrop = speed * (1f - multiplier);
+            speed -= currentSpeedDrop;
+            Debug.Log($"{gameObject.name} speed multiplied by {multiplier}. New speed: {speed}");
+            activeSlowCoroutine = StartCoroutine(SlowRoutine());
+        }
     }
 
-    IEnumerator SpeedMultiplierCoroutine(float multiplier, float duration)
+    IEnumerator SlowRoutine()
     {
-        float speedDrop = speed * (1f - multiplier);
-        speed -= speedDrop;
-        Debug.Log($"{gameObject.name} speed multiplied by {multiplier}. New speed: {speed}");
+        while (Time.time < slowEndTime)
+        {
+            yield return null;
+        }
 
-        yield return new WaitForSeconds(duration);
-
-        speed += speedDrop;
+        speed += currentSpeedDrop;
+        currentSpeedDrop = 0f;
+        activeSlowCoroutine = null;
         Debug.Log($"{gameObject.name} speed restored. Speed: {speed}");
     }
 
@@ -249,35 +254,48 @@ public class PlayerStats : MonoBehaviour
         Debug.Log($"{gameObject.name} is rooted for {duration}s");
     }
 
-    public void ApplyBurn(int totalDamage, float duration, float tickInterval = 0.5f, int attackerIndex = -1)
-    {
-        StartCoroutine(BurnCoroutine(totalDamage, duration, tickInterval, attackerIndex));
-    }
+    private Coroutine activeBurnCoroutine;
+    private float burnEndTime;
+    private int currentBurnDamagePerTick;
+    private int currentBurnAttacker;
 
-    IEnumerator BurnCoroutine(int totalDamage, float duration, float tickInterval, int attackerIndex)
+    public void ApplyBurn(int totalDamage, float duration, float tickInterval = 0.5f, int attackerIndex = -1)
     {
         int ticks = Mathf.FloorToInt(duration / tickInterval);
         if (ticks <= 0) ticks = 1;
         int damagePerTick = Mathf.Max(1, totalDamage / ticks);
 
-        for (int i = 0; i < ticks; i++)
+        burnEndTime = Time.time + duration;
+        currentBurnDamagePerTick = damagePerTick;
+        currentBurnAttacker = attackerIndex;
+
+        if (activeBurnCoroutine == null)
+        {
+            activeBurnCoroutine = StartCoroutine(BurnRoutine(tickInterval));
+        }
+    }
+
+    IEnumerator BurnRoutine(float tickInterval)
+    {
+        while (Time.time < burnEndTime && IsAliveArena)
         {
             yield return new WaitForSeconds(tickInterval);
-            if (!IsAliveArena) break;
+            if (Time.time >= burnEndTime) break;
 
-            health -= damagePerTick;
+            health -= currentBurnDamagePerTick;
             health = Mathf.Clamp(health, 0f, float.MaxValue);
             
-            if (attackerIndex >= 0)
-                GameData.RecordDamage(attackerIndex, damagePerTick);
+            if (currentBurnAttacker >= 0)
+                GameData.RecordDamage(currentBurnAttacker, currentBurnDamagePerTick);
 
             if (health <= 0)
             {
-                if (attackerIndex >= 0)
-                    GameData.RecordKill(attackerIndex);
+                if (currentBurnAttacker >= 0)
+                    GameData.RecordKill(currentBurnAttacker);
                 Die();
                 break;
             }
         }
+        activeBurnCoroutine = null;
     }
 }

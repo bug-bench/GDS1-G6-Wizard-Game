@@ -18,6 +18,9 @@ public class BlinkSpell : SpellBehavior
     [Tooltip("射线起点沿移动方向微移，避免从碰撞体内部出发 — Nudge ray origin along move dir to avoid casting from inside colliders.")]
     public float castInset = 0.08f;
 
+    [Tooltip("闪现落地后的硬直时间（眩晕，无法移动施法） — Stun duration applied to self after blinking.")]
+    public float selfStunDuration = 0.5f;
+
     public override void Execute(GameObject caster, Transform firePoint)
     {
         Vector2 casterPos = caster.transform.position;
@@ -65,6 +68,13 @@ public class BlinkSpell : SpellBehavior
             p.x = finalPos.x;
             p.y = finalPos.y;
             caster.transform.position = p;
+        }
+
+        if (selfStunDuration > 0f)
+        {
+            PlayerStats stats = caster.GetComponent<PlayerStats>();
+            if (stats != null)
+                stats.ApplyStun(selfStunDuration);
         }
 
         Destroy(gameObject);
