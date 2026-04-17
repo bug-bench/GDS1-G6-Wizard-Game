@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da68d7c89dbcb8146ab9e5cc48586ac4, type: 3}
-  m_Name: Data_fire dash
+  m_Name: Data_(trap)thunder
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
-  spellName: firedash
+  spellName: tp thunder
   spellType: 1
   cooldownTime: 2
-  spellPrefab: {fileID: 5384852898878877633, guid: 134464da9bd708447b3a9494ef2643d8, type: 3}
+  spellPrefab: {fileID: 5850923131667784696, guid: 3a0645f360768f24687d202c22ab2822, type: 3}
   icon: {fileID: 0}
-  cooldownStartsOnRelease: 0
-  pickupPrefab: {fileID: 2848393363742389300, guid: 035e076c079a88d4b960a59fbe06015b, type: 3}
+  cooldownStartsOnRelease: 1
+  pickupPrefab: {fileID: 2848393363742389300, guid: 9fed47a29a56cab4ba098089c29978ee, type: 3}
