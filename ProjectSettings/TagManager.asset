@@ -11,7 +11,7 @@ TagManager:
   - Pickup
   - Water
   - UI
-  - 
+  - hazards
   - 
   - 
   - 
@@ -46,6 +46,9 @@ TagManager:
     locked: 0
   - name: player
     uniqueID: 918881291
+    locked: 0
+  - name: hazard
+    uniqueID: 3611608135
     locked: 0
   m_RenderingLayers:
   - Default
