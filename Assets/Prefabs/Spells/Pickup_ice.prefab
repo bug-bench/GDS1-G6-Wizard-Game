@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 8768904571092098124}
   - component: {fileID: 2935070601429830799}
   - component: {fileID: 5539106094290776636}
-  - component: {fileID: -770100163237261120}
   m_Layer: 0
-  m_Name: Pickup_muti fire
+  m_Name: Pickup_ice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,23 +173,6 @@ MonoBehaviour:
   pickupCooldown: 1
   fixLineRendererIfNeeded: 1
   spellData: {fileID: 11400000, guid: 4792d4e0864f855478ad51f270e1377c, type: 2}
---- !u!114 &-770100163237261120
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2848393363742389300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7757689962edd574695cf50adf337b01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpellProjectile
-  speed: 10
-  damage: 1
-  lifeTime: 3
-  caster: {fileID: 0}
-  ignoreCasterUntilTime: 0
 --- !u!1 &4735336362912590567
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +279,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: fire
+  m_text: 'ice
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

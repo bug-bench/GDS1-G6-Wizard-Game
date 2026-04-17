@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     //public float BaseMoveSpeed { get; private set; }
 
     public float sprintMultiplier = 1f;
+    [HideInInspector] public float currentDeceleration;
 
     [Header("Aiming Settings")]
     [Range(0f, 0.95f)]
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour
        
 
         playerStats = GetComponent<PlayerStats>();
+        currentDeceleration = moveDeceleration;
     }
 
     public void ApplySprintMultiplier(float multiplier)
@@ -88,7 +90,10 @@ public class PlayerController : MonoBehaviour
             // 1. PUBG-like: 沿输入方向累加速度 + 上限，松手沿原方向摩擦减速（惯性），不是每帧直接设为目标速度。
             // Additive accel along input, clamp speed; release decelerates along current velocity (momentum slide).
             float maxSpeed = playerStats != null ? playerStats.speed * sprintMultiplier : 5f;
-            Vector2 input = Vector2.ClampMagnitude(moveInput, 1f);
+            
+            bool canInputMove = playerStats == null || (!playerStats.isStunned && !playerStats.isRooted);
+            Vector2 input = canInputMove ? Vector2.ClampMagnitude(moveInput, 1f) : Vector2.zero;
+            
             Vector2 v = rb.linearVelocity;
             float dt = Time.fixedDeltaTime;
 
@@ -105,7 +110,7 @@ public class PlayerController : MonoBehaviour
                 float spd = v.magnitude;
                 if (spd > 1e-4f)
                 {
-                    float drop = moveDeceleration * dt;
+                    float drop = currentDeceleration * dt;
                     if (spd <= drop)
                         v = Vector2.zero;
                     else
@@ -118,7 +123,11 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = v;
 
             // 2. 瞄准/转向逻辑（分设备独立处理） — Aim/rotation per device (mouse vs gamepad).
-            HandleRotation();
+            bool canRotate = playerStats == null || !playerStats.isStunned;
+            if (canRotate)
+            {
+                HandleRotation();
+            }
         }
         else
         {

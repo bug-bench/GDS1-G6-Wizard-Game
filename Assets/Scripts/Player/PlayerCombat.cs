@@ -271,6 +271,7 @@ public class PlayerCombat : MonoBehaviour
         if (currentAttackSpell.spellPrefab == null) return;
         if (activeMainSpell != null) return;
         if (isKnockedDown || attackCDTimer > 0f) return;
+        if (playerStats != null && playerStats.isStunned) return;
 
         DestroyAllReflectShieldsUnderRoot();
         activeMainSpell = ExecuteAndReturnSpell(currentAttackSpell, ref attackCDTimer);
@@ -289,6 +290,7 @@ public class PlayerCombat : MonoBehaviour
         if (currentMovementSpell.spellPrefab == null) return;
         if (activeSubSpell != null) return;
         if (isKnockedDown || movementCDTimer > 0f) return;
+        if (playerStats != null && playerStats.isStunned) return;
 
         activeSubSpell = ExecuteAndReturnSpell(currentMovementSpell, ref movementCDTimer);
         if (currentMovementSpell.cooldownStartsOnRelease)

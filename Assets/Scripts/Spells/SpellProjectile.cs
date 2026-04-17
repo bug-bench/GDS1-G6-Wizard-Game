@@ -6,6 +6,18 @@ public class SpellProjectile : MonoBehaviour
     public float damage = 1f;
     public float lifeTime = 3f;
 
+    [Header("Status Effects on Hit")]
+    [Tooltip("命中附加的燃烧总伤害 — Total burn damage applied on hit.")]
+    public int applyBurnDamage = 0;
+    [Tooltip("燃烧持续时间 — Burn duration.")]
+    public float burnDuration = 3f;
+
+    [Tooltip("命中附加的减速百分比（0~1，例如0.3表示减速30%） — Speed reduction percentage applied on hit.")]
+    [Range(0f, 1f)]
+    public float applySlowPercentage = 0f;
+    [Tooltip("减速持续时间 — Slow duration.")]
+    public float slowDuration = 2f;
+
     // 用来记录发射这个火球的玩家是谁 — Root GameObject of the player who fired this projectile.
     [HideInInspector] public GameObject caster;
 
@@ -112,6 +124,16 @@ public class SpellProjectile : MonoBehaviour
                     knockFromProjectile = (Vector2)transform.up;
 
                 target.TakeDamage(Mathf.RoundToInt(totalDamage), attackerIndex, knockFromProjectile.normalized);
+
+                PlayerStats targetStats = target.GetComponent<PlayerStats>();
+                if (targetStats != null)
+                {
+                    if (applyBurnDamage > 0)
+                        targetStats.ApplyBurn(applyBurnDamage, burnDuration, 0.5f, attackerIndex);
+                    if (applySlowPercentage > 0f)
+                        targetStats.ApplySpeedMultiplier(1f - applySlowPercentage, slowDuration);
+                }
+
                 Destroy(gameObject);
             }
         }

@@ -16,7 +16,11 @@ public class PlayerStats : MonoBehaviour
     public float strength = 10f;
     public bool IsAliveArena = true;
 
-   
+    [Header("Status Effects (Read Only)")]
+    public float stunEndTime;
+    public float rootEndTime;
+    public bool isStunned => Time.time < stunEndTime;
+    public bool isRooted => Time.time < rootEndTime;
 
     void Start()
     {
@@ -198,7 +202,7 @@ public class PlayerStats : MonoBehaviour
     // COROUTINES
     // =====================
 
-    IEnumerator SpeedBoostCoroutine(float amount, float duration)
+        IEnumerator SpeedBoostCoroutine(float amount, float duration)
     {
         //Apply boost
         speed += amount;
@@ -212,6 +216,68 @@ public class PlayerStats : MonoBehaviour
         Debug.Log(gameObject.name + " speed boost ended. Speed: " + speed);
     }
 
+    // =====================
+    // STATUS EFFECTS
+    // =====================
 
-   
+    public void ApplySpeedMultiplier(float multiplier, float duration)
+    {
+        StartCoroutine(SpeedMultiplierCoroutine(multiplier, duration));
+    }
+
+    IEnumerator SpeedMultiplierCoroutine(float multiplier, float duration)
+    {
+        float speedDrop = speed * (1f - multiplier);
+        speed -= speedDrop;
+        Debug.Log($"{gameObject.name} speed multiplied by {multiplier}. New speed: {speed}");
+
+        yield return new WaitForSeconds(duration);
+
+        speed += speedDrop;
+        Debug.Log($"{gameObject.name} speed restored. Speed: {speed}");
+    }
+
+    public void ApplyStun(float duration)
+    {
+        stunEndTime = Mathf.Max(stunEndTime, Time.time + duration);
+        Debug.Log($"{gameObject.name} is stunned for {duration}s");
+    }
+
+    public void ApplyRoot(float duration)
+    {
+        rootEndTime = Mathf.Max(rootEndTime, Time.time + duration);
+        Debug.Log($"{gameObject.name} is rooted for {duration}s");
+    }
+
+    public void ApplyBurn(int totalDamage, float duration, float tickInterval = 0.5f, int attackerIndex = -1)
+    {
+        StartCoroutine(BurnCoroutine(totalDamage, duration, tickInterval, attackerIndex));
+    }
+
+    IEnumerator BurnCoroutine(int totalDamage, float duration, float tickInterval, int attackerIndex)
+    {
+        int ticks = Mathf.FloorToInt(duration / tickInterval);
+        if (ticks <= 0) ticks = 1;
+        int damagePerTick = Mathf.Max(1, totalDamage / ticks);
+
+        for (int i = 0; i < ticks; i++)
+        {
+            yield return new WaitForSeconds(tickInterval);
+            if (!IsAliveArena) break;
+
+            health -= damagePerTick;
+            health = Mathf.Clamp(health, 0f, float.MaxValue);
+            
+            if (attackerIndex >= 0)
+                GameData.RecordDamage(attackerIndex, damagePerTick);
+
+            if (health <= 0)
+            {
+                if (attackerIndex >= 0)
+                    GameData.RecordKill(attackerIndex);
+                Die();
+                break;
+            }
+        }
+    }
 }
