@@ -252,6 +252,14 @@ MonoBehaviour:
   currentMovementSpell: {fileID: 0}
   dropForce: 8
   spellSpawnForwardInset: 0.28
+  hitKnockbackImpulse: 7
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  hitFlashBlinkCount: 3
+  hitFlashHalfDuration: 0.04
+  invincibilityDuration: 0.5
+  invincibilityBlinkVisibleDuration: 0.05
+  invincibilityBlinkHiddenDuration: 0.05
+  invincibilityBlinkSpriteRenderers: []
 --- !u!114 &7014073608482475539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,6 +276,8 @@ MonoBehaviour:
   gamepadAimDeadzone: 0.2
   moveInput: {x: 0, y: 0}
   canMove: 1
+  moveAcceleration: 14
+  moveDeceleration: 10
   rotationPivot: {fileID: 2102165188656464589}
   playerSprite: {fileID: 2897870944537500475}
 --- !u!114 &2667297136540556624

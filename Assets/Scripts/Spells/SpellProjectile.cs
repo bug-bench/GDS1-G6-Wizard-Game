@@ -73,6 +73,14 @@ public class SpellProjectile : MonoBehaviour
         // 碰撞体在玩家子物体上时 gameObject != caster 根节点，必须用层级判断否则会打到自己 — Colliders may be on child objects; use hierarchy check, not reference equality to root.
         if (IsColliderOnCaster(caster, hitInfo)) return;
 
+        ReflectShieldSpell shield = hitInfo.GetComponent<ReflectShieldSpell>()
+            ?? hitInfo.GetComponentInParent<ReflectShieldSpell>();
+        if (shield != null)
+        {
+            shield.ApplyReflectToProjectile(this);
+            return;
+        }
+
         if (HasTag(hitInfo, "Player"))
         {
             PlayerCombat target = hitInfo.GetComponent<PlayerCombat>()
@@ -80,6 +88,12 @@ public class SpellProjectile : MonoBehaviour
             // 双保险：即使 IgnoreCollision 漏了某个碰撞体，也不打施法者本人 — Extra guard: never damage the caster even if IgnoreCollision missed a collider.
             if (target != null && target.gameObject != caster)
             {
+                if (ReflectShieldSpell.HasActiveShieldOn(target))
+                    return;
+
+                if (target.IsInvincible)
+                    return;
+
                 float totalDamage = damage;
 
                 PlayerStats casterStats = caster.GetComponent<PlayerStats>();
@@ -90,8 +104,14 @@ public class SpellProjectile : MonoBehaviour
 
                 var casterInput = caster.GetComponent<UnityEngine.InputSystem.PlayerInput>();
                 int attackerIndex = casterInput != null ? casterInput.playerIndex : -1;
-                Debug.Log($"Projectile hit — caster: {caster.name}, target: {target.name}, damage: {Mathf.RoundToInt(totalDamage)}, attackerIndex: {attackerIndex}");
-                target.TakeDamage(Mathf.RoundToInt(totalDamage), attackerIndex);
+
+                Rigidbody2D trb = target.GetComponent<Rigidbody2D>();
+                Vector2 victimPos = trb != null ? trb.position : (Vector2)target.transform.position;
+                Vector2 knockFromProjectile = victimPos - (Vector2)transform.position;
+                if (knockFromProjectile.sqrMagnitude < 1e-6f)
+                    knockFromProjectile = (Vector2)transform.up;
+
+                target.TakeDamage(Mathf.RoundToInt(totalDamage), attackerIndex, knockFromProjectile.normalized);
                 Destroy(gameObject);
             }
         }

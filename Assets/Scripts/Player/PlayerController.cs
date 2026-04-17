@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[DefaultExecutionOrder(100)]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
@@ -16,10 +17,20 @@ public class PlayerController : MonoBehaviour
     public float sprintMultiplier = 1f;
 
     [Header("Aiming Settings")]
-    public float gamepadAimDeadzone = 0.2f; // 手柄瞄准死区，防止摇杆漂移 — Gamepad aim deadzone to ignore stick drift.
+    [Range(0f, 0.95f)]
+    [Tooltip("手柄瞄准死区，防止摇杆漂移。 — Gamepad aim deadzone to ignore stick drift.")]
+    public float gamepadAimDeadzone = 0.2f;
 
     [HideInInspector] public Vector2 moveInput;
     [HideInInspector] public bool canMove = true;
+
+    [Header("Movement feel (PUBG-style / 惯性加速)")]
+    [Range(1f, 80f)]
+    [Tooltip("有输入时每秒增加的速度量（沿输入方向累加，再限制最大速度）；越小起步越慢。 — Acceleration added per second along input (then clamped); lower = slower ramp-up.")]
+    public float moveAcceleration = 14f;
+    [Range(1f, 80f)]
+    [Tooltip("无输入时每秒沿当前速度方向减少的速率（越小滑得越远）。惯性弱时检查 Rigidbody2D Linear Damping 建议为 0。 — Decel along velocity when no input; set RB Linear Damping to 0 if slide feels weak.")]
+    public float moveDeceleration = 10f;
 
     private Rigidbody2D rb;
     private PlayerInput playerInput;
@@ -74,11 +85,37 @@ public class PlayerController : MonoBehaviour
     {
         if (canMove)
         {
-            // 1. 移动逻辑（两者通用，只受 WASD/左摇杆 影响） — Movement from WASD / left stick only.
-            //rb.linearVelocity = moveInput * moveSpeed;
+            // 1. PUBG-like: 沿输入方向累加速度 + 上限，松手沿原方向摩擦减速（惯性），不是每帧直接设为目标速度。
+            // Additive accel along input, clamp speed; release decelerates along current velocity (momentum slide).
+            float maxSpeed = playerStats != null ? playerStats.speed * sprintMultiplier : 5f;
+            Vector2 input = Vector2.ClampMagnitude(moveInput, 1f);
+            Vector2 v = rb.linearVelocity;
+            float dt = Time.fixedDeltaTime;
 
-            float currentSpeed = playerStats != null ? playerStats.speed * sprintMultiplier : 5f;
-            rb.linearVelocity = moveInput * currentSpeed;
+            if (input.sqrMagnitude > 1e-6f)
+            {
+                Vector2 accelDir = input.normalized;
+                float stick = input.magnitude;
+                v += accelDir * (moveAcceleration * stick * dt);
+                if (v.magnitude > maxSpeed)
+                    v = v.normalized * maxSpeed;
+            }
+            else
+            {
+                float spd = v.magnitude;
+                if (spd > 1e-4f)
+                {
+                    float drop = moveDeceleration * dt;
+                    if (spd <= drop)
+                        v = Vector2.zero;
+                    else
+                        v -= v.normalized * drop;
+                }
+                else
+                    v = Vector2.zero;
+            }
+
+            rb.linearVelocity = v;
 
             // 2. 瞄准/转向逻辑（分设备独立处理） — Aim/rotation per device (mouse vs gamepad).
             HandleRotation();
