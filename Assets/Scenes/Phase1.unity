@@ -447,7 +447,7 @@ PrefabInstance:
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: Spell
       value: 
-      objectReference: {fileID: 2848393363742389300, guid: fb01ddafa728d0f4ea2443907c947fce, type: 3}
+      objectReference: {fileID: 2848393363742389300, guid: d46f618fc90996246992412d3d3bc5d6, type: 3}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: SpawnSize.x
       value: 23.66667
@@ -2157,7 +2157,7 @@ PrefabInstance:
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: Spell
       value: 
-      objectReference: {fileID: 2848393363742389300, guid: 95e05e97cb7788d409cce459904262bc, type: 3}
+      objectReference: {fileID: 2848393363742389300, guid: d46f618fc90996246992412d3d3bc5d6, type: 3}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: SpawnSize.x
       value: 23.66667

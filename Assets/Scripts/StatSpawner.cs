@@ -90,6 +90,12 @@ public class StatSpawner : MonoBehaviour
                 break;
         }
 
+        if (prefabToSpawn == null)
+        {
+            Debug.LogWarning($"StatSpawner: The prefab for randomStat {randomStat} is missing! Please assign it in the Inspector.");
+            return;
+        }
+
         GameObject newStats = Instantiate(prefabToSpawn, randomPosition, Quaternion.identity);
 
         StatPickUp pickup = newStats.GetComponent<StatPickUp>();
