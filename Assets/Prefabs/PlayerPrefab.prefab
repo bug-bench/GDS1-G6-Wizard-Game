@@ -256,7 +256,7 @@ MonoBehaviour:
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   hitFlashBlinkCount: 3
   hitFlashHalfDuration: 0.04
-  invincibilityDuration: 0.5
+  invincibilityDuration: 3
   invincibilityBlinkVisibleDuration: 0.05
   invincibilityBlinkHiddenDuration: 0.05
   invincibilityBlinkSpriteRenderers: []
@@ -273,6 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   sprintMultiplier: 1
+  currentDeceleration: 0
   gamepadAimDeadzone: 0.2
   moveInput: {x: 0, y: 0}
   canMove: 1
@@ -296,6 +297,8 @@ MonoBehaviour:
   speed: 5
   strength: 5
   IsAliveArena: 1
+  stunEndTime: 0
+  rootEndTime: 0
 --- !u!1 &3712652026574967776
 GameObject:
   m_ObjectHideFlags: 0

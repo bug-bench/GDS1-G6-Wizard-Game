@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 632585271899818400}
   - component: {fileID: 4037014463865585039}
   - component: {fileID: 4323834174473380076}
+  - component: {fileID: -6386644846695811109}
   m_Layer: 0
   m_Name: ice
   m_TagString: Untagged
@@ -192,3 +193,19 @@ MonoBehaviour:
   slowDuration: 1
   caster: {fileID: 0}
   ignoreCasterUntilTime: 0
+--- !u!114 &-6386644846695811109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8107549014988267602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cbb0ed5b63afd44bb54807d47d3f65c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShotgunSpell
+  pelletPrefab: {fileID: 8107549014988267602}
+  pelletCount: 3
+  spreadAngle: 45
+  spawnForwardInset: 0.12

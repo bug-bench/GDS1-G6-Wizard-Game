@@ -15,7 +15,7 @@ MonoBehaviour:
   spellName: ice
   spellType: 0
   cooldownTime: 1
-  spellPrefab: {fileID: 7895179520453860780, guid: 6ac1c60aeace3ba4d9a9540a1393077f, type: 3}
+  spellPrefab: {fileID: 8107549014988267602, guid: 3b929f5cb7171d5419471a663e008d54, type: 3}
   icon: {fileID: 0}
   cooldownStartsOnRelease: 0
-  pickupPrefab: {fileID: 2848393363742389300, guid: 95e05e97cb7788d409cce459904262bc, type: 3}
+  pickupPrefab: {fileID: 2848393363742389300, guid: 50396253bc42e3340a24f0351eb7bfcf, type: 3}

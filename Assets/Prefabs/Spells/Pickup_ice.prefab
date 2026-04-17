@@ -12,15 +12,10 @@ GameObject:
   - component: {fileID: 5472372880269138746}
   - component: {fileID: 8768904571092098124}
   - component: {fileID: 2935070601429830799}
-  - component: {fileID: 5539106094290776636}
-<<<<<<< HEAD:Assets/Prefabs/Spells/Pickup_ice.prefab
-  m_Layer: 0
-  m_Name: Pickup_ice
-=======
-  - component: {fileID: -770100163237261120}
+  - component: {fileID: 4497026461800808960}
+  - component: {fileID: -8164115254314051634}
   m_Layer: 3
-  m_Name: Pickup_muti fire
->>>>>>> main:Assets/prefabs/Spells/Pickup_muti fire.prefab
+  m_Name: Pickup_ice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,7 +87,7 @@ SpriteRenderer:
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6512412375670681614, guid: 061e3882b25844577b3078134e6e0746, type: 3}
-  m_Color: {r: 1, g: 0.56764483, b: 0, a: 1}
+  m_Color: {r: 0.4433961, g: 0.8706181, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -164,7 +159,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &5539106094290776636
+--- !u!114 &4497026461800808960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,6 +174,22 @@ MonoBehaviour:
   pickupCooldown: 1
   fixLineRendererIfNeeded: 1
   spellData: {fileID: 11400000, guid: 4792d4e0864f855478ad51f270e1377c, type: 2}
+--- !u!114 &-8164115254314051634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2848393363742389300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cbb0ed5b63afd44bb54807d47d3f65c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShotgunSpell
+  pelletPrefab: {fileID: 8107549014988267602, guid: 3b929f5cb7171d5419471a663e008d54, type: 3}
+  pelletCount: 3
+  spreadAngle: 45
+  spawnForwardInset: 0.12
 --- !u!1 &4735336362912590567
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,7 +202,7 @@ GameObject:
   - component: {fileID: 3928292970709921665}
   - component: {fileID: 4696770049037580002}
   m_Layer: 3
-  m_Name: fire
+  m_Name: fast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,7 +224,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.659, y: -1.433}
+  m_AnchoredPosition: {x: 0.601, y: -1.46}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &3928292970709921665
@@ -285,9 +296,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'ice
-
-'
+  m_text: ice
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

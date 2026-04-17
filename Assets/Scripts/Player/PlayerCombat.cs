@@ -80,15 +80,18 @@ public class PlayerCombat : MonoBehaviour
 
     void BuildInvincibilityBlinkTargets()
     {
-        if (invincibilityBlinkSpriteRenderers != null && invincibilityBlinkSpriteRenderers.Length > 0)
+        int validCount = 0;
+        if (invincibilityBlinkSpriteRenderers != null)
         {
-            int n = 0;
             foreach (var s in invincibilityBlinkSpriteRenderers)
             {
-                if (s != null) n++;
+                if (s != null) validCount++;
             }
+        }
 
-            _invincibilityBlinkTargets = new SpriteRenderer[n];
+        if (validCount > 0)
+        {
+            _invincibilityBlinkTargets = new SpriteRenderer[validCount];
             int i = 0;
             foreach (var s in invincibilityBlinkSpriteRenderers)
             {
@@ -102,6 +105,7 @@ public class PlayerCombat : MonoBehaviour
             _invincibilityBlinkTargets = sr != null ? new[] { sr } : System.Array.Empty<SpriteRenderer>();
         }
 
+        // 初始化 OriginalColors 数组，但此时的颜色可能是白色的预制体默认颜色
         _invincibilityBlinkOriginalColors = new Color[_invincibilityBlinkTargets.Length];
         for (int i = 0; i < _invincibilityBlinkTargets.Length; i++)
         {
@@ -112,6 +116,20 @@ public class PlayerCombat : MonoBehaviour
         spriteRenderer = _invincibilityBlinkTargets.Length > 0 ? _invincibilityBlinkTargets[0] : null;
     }
 
+    /// <summary>
+    /// 在 PlayerSpawner 修改完玩家颜色后调用，更新闪烁恢复时的基准颜色。
+    /// Called after PlayerSpawner sets the player's color, so blinking restores to the correct color.
+    /// </summary>
+    public void UpdateOriginalBlinkColors()
+    {
+        if (_invincibilityBlinkTargets == null || _invincibilityBlinkOriginalColors == null) return;
+        for (int i = 0; i < _invincibilityBlinkTargets.Length; i++)
+        {
+            if (_invincibilityBlinkTargets[i] != null)
+                _invincibilityBlinkOriginalColors[i] = _invincibilityBlinkTargets[i].color;
+        }
+    }
+
     void SetInvincibilityBlinkAlpha(float alpha)
     {
         if (_invincibilityBlinkTargets == null) return;
@@ -119,7 +137,7 @@ public class PlayerCombat : MonoBehaviour
         {
             if (_invincibilityBlinkTargets[i] != null)
             {
-                Color c = _invincibilityBlinkOriginalColors[i]; // 总是基于原色的 RGB
+                Color c = _invincibilityBlinkTargets[i].color; // 获取当前颜色（包括被 Spawner 换过的颜色）
                 c.a = alpha;
                 _invincibilityBlinkTargets[i].color = c;
             }
@@ -453,9 +471,12 @@ public class PlayerCombat : MonoBehaviour
     {
         if (_invincibilityBlinkTargets == null || _invincibilityBlinkTargets.Length == 0)
         {
+            Debug.LogWarning($"{name}: HitInvincibilityVisualRoutine aborted because _invincibilityBlinkTargets is empty!");
             hitFeedbackRoutine = null;
             yield break;
         }
+
+        // Debug.Log($"{name}: Starting Hit Blink Routine. Targets count: {_invincibilityBlinkTargets.Length}");
 
         float endTime = invincibleUntil;
 
@@ -470,16 +491,16 @@ public class PlayerCombat : MonoBehaviour
         // 无敌剩余时间：可调「不透明 / 全透明」时长 — Toggle alpha between 100% and 0%.
         while (Time.time < endTime)
         {
-            RestoreInvincibilityBlinkOriginalColors();
-            float waitOn = Mathf.Min(invincibilityBlinkVisibleDuration, endTime - Time.time);
-            if (waitOn > 0f)
-                yield return new WaitForSeconds(waitOn);
-            if (Time.time >= endTime) break;
-
             SetInvincibilityBlinkAlpha(0f);
             float waitOff = Mathf.Min(invincibilityBlinkHiddenDuration, endTime - Time.time);
             if (waitOff > 0f)
                 yield return new WaitForSeconds(waitOff);
+            if (Time.time >= endTime) break;
+
+            RestoreInvincibilityBlinkOriginalColors();
+            float waitOn = Mathf.Min(invincibilityBlinkVisibleDuration, endTime - Time.time);
+            if (waitOn > 0f)
+                yield return new WaitForSeconds(waitOn);
         }
 
         RestoreInvincibilityVisuals();
