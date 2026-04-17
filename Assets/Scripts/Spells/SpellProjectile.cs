@@ -93,6 +93,25 @@ public class SpellProjectile : MonoBehaviour
             return;
         }
 
+        float totalDamage = damage;
+
+        PlayerStats casterStats = caster.GetComponent<PlayerStats>();
+        if (casterStats != null)
+        {
+            totalDamage += casterStats.strength;
+        }
+
+        //destroyable object code 
+        destroyableObject destroyobject = hitInfo.GetComponent<destroyableObject>()
+            ?? hitInfo.GetComponentInParent<destroyableObject>();
+
+        if (destroyobject != null)
+        {
+            destroyobject.takeDamage(totalDamage);
+            Destroy(gameObject);
+            return;
+        }
+
         if (HasTag(hitInfo, "Player"))
         {
             PlayerCombat target = hitInfo.GetComponent<PlayerCombat>()
@@ -105,14 +124,6 @@ public class SpellProjectile : MonoBehaviour
 
                 if (target.IsInvincible)
                     return;
-
-                float totalDamage = damage;
-
-                PlayerStats casterStats = caster.GetComponent<PlayerStats>();
-                if (casterStats != null)
-                {
-                    totalDamage += casterStats.strength;
-                }
 
                 var casterInput = caster.GetComponent<UnityEngine.InputSystem.PlayerInput>();
                 int attackerIndex = casterInput != null ? casterInput.playerIndex : -1;
@@ -135,12 +146,20 @@ public class SpellProjectile : MonoBehaviour
                 }
 
                 Destroy(gameObject);
+
+
             }
+
         }
         else if (HasTag(hitInfo, "Wall"))
         {
             Destroy(gameObject);
         }
+
+      
+
+
+
     }
 
     /// <summary>
