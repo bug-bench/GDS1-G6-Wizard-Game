@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class WinScreen : MonoBehaviour
 {
@@ -24,6 +25,12 @@ public class WinScreen : MonoBehaviour
     {
         Debug.Log($"WinScreen — winnerIndex: {GameData.winnerIndex}, players: {GameData.players.Count}");
         ShowWinner();
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            player.GetComponent<PlayerInput>().DeactivateInput();
+            player.GetComponentInChildren<SpriteRenderer>().enabled = false;
+        }
     }
 
     private void ShowWinner()

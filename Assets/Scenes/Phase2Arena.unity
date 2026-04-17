@@ -553,7 +553,7 @@ GameObject:
   - component: {fileID: 530924114}
   m_Layer: 0
   m_Name: spawn1
-  m_TagString: Untagged
+  m_TagString: SpawnPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15613,7 +15613,7 @@ GameObject:
   - component: {fileID: 699335303}
   m_Layer: 0
   m_Name: spawn2
-  m_TagString: Untagged
+  m_TagString: SpawnPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15888,7 +15888,7 @@ GameObject:
   - component: {fileID: 842421364}
   m_Layer: 0
   m_Name: spawn4
-  m_TagString: Untagged
+  m_TagString: SpawnPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16541,7 +16541,7 @@ GameObject:
   - component: {fileID: 1766589509}
   m_Layer: 0
   m_Name: spawn3
-  m_TagString: Untagged
+  m_TagString: SpawnPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16674,62 +16674,6 @@ MonoBehaviour:
   SpawnSize: {x: 20, y: 13}
   numberToSpawn: 10
   respawnDelay: 3
-  DistancebetweenStats: 1
-  statLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  maxattempts: 20
---- !u!114 &1820256230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1820256226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41d4f9ff0d827438ca9965ad094cb0e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawner
-  playerPrefab: {fileID: 2773116537761935081, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
-  spawnPoints:
-  - {fileID: 530924115}
-  - {fileID: 699335304}
-  - {fileID: 1766589510}
-  - {fileID: 842421365}
-  colors:
-  - {r: 0.7607843, g: 0.27058825, b: 0.22745098, a: 1}
-  - {r: 0.22745098, g: 0.43529412, b: 0.7490196, a: 1}
-  - {r: 0.23921569, g: 0.6509804, b: 0.3529412, a: 1}
-  - {r: 0.83137256, g: 0.65882355, b: 0.22745098, a: 1}
---- !u!114 &1820256231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1820256226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c576e789810d6f47aebd6272ada022a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpellSpawner
-  spellPrefab:
-  - {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
-  - {fileID: 2848393363742389300, guid: f26e7b5623dd50643ae1bcf8f81c2b7f, type: 3}
-  - {fileID: 2848393363742389300, guid: fb01ddafa728d0f4ea2443907c947fce, type: 3}
-  - {fileID: 2848393363742389300, guid: 95e05e97cb7788d409cce459904262bc, type: 3}
-  - {fileID: 2848393363742389300, guid: adcbd26f59ff1924a9d3c02f1315da4e, type: 3}
-  - {fileID: 2848393363742389300, guid: 8b2c4a0d5b440224d984f5f3d6017ec0, type: 3}
-  Spawncenter: {x: 0, y: -4.94}
-  SpawnSize: {x: 26.9, y: 13.46}
-  numberToSpawn: 4
-  respawnDelay: 10
-  DistancebetweenStats: 1
-  statLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  maxattempts: 20
 --- !u!1001 &1907767902
 PrefabInstance:
   m_ObjectHideFlags: 0

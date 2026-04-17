@@ -2,10 +2,12 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class ArenaScript : MonoBehaviour
 {
     [SerializeField] private string winScene = "WinScene";
+    [SerializeField] private bool gameWon = false;
 
     private GameObject[] players;
     private List<GameObject> playersAlive = new List<GameObject>();
@@ -16,6 +18,21 @@ public class ArenaScript : MonoBehaviour
         StartCoroutine(FindPlayersNextFrame());
     }
 
+    void Update()
+    {
+        if (gameWon)
+        {
+            foreach (GameObject player in players)
+            {
+                SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
+                sr.enabled = false;
+                PlayerInput pi = player.GetComponent<PlayerInput>();
+                pi.DeactivateInput();
+            }
+            EndGame(playersEliminated, playersAlive[0]);
+        }
+    }
+
     private IEnumerator FindPlayersNextFrame()
     {
         yield return null;
@@ -23,6 +40,22 @@ public class ArenaScript : MonoBehaviour
         foreach (GameObject player in players)
             playersAlive.Add(player);
         Debug.Log($"ArenaScript tracking {playersAlive.Count} players");
+
+        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+        if (spawnPoints.Length < players.Length)
+        {
+            Debug.LogError("Not enough spawn points for all players!");
+            yield break;
+        }
+
+        // Optional: randomize spawn points
+        //ShuffleArray(spawnPoints);
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].transform.position = spawnPoints[i].transform.position;
+            players[i].transform.rotation = spawnPoints[i].transform.rotation;
+        }
     }
 
     public void PlayerEliminated(GameObject player)
@@ -50,9 +83,27 @@ public class ArenaScript : MonoBehaviour
         }
     }
 
+    private void ShuffleArray(GameObject[] array)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            int rand = Random.Range(i, array.Length);
+            GameObject temp = array[i];
+            array[i] = array[rand];
+            array[rand] = temp;
+        }
+    }
+
     private void EndGame(List<GameObject> eliminations)
     {
         GameData.winnerIndex = -1;
+        foreach (GameObject player in players)
+        {
+            SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
+            sr.enabled = false;
+            Destroy(player.GetComponent<PersistentObject>());
+            Destroy(player.gameObject);
+        }
         SceneManager.LoadScene(winScene);
     }
 
