@@ -32,7 +32,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Rotation")]
     public Transform rotationPivot;   
-    public Transform playerSprite;  
+    public Transform playerSprite;
+
+
+    //Ice Hazard 
+    private Vector2 currentVelocity;
+    public float acceleration=10f;
+    public float IceAcceleration = 2f;
+
+    private bool onIce = false;
 
     void Awake()
     {
@@ -46,6 +54,8 @@ public class PlayerController : MonoBehaviour
        
 
         playerStats = GetComponent<PlayerStats>();
+
+        
     }
 
     public void ApplySprintMultiplier(float multiplier)
@@ -78,7 +88,11 @@ public class PlayerController : MonoBehaviour
             //rb.linearVelocity = moveInput * moveSpeed;
 
             float currentSpeed = playerStats != null ? playerStats.speed * sprintMultiplier : 5f;
-            rb.linearVelocity = moveInput * currentSpeed;
+            //rb.linearVelocity = moveInput * currentSpeed;
+            float accel = onIce ? IceAcceleration : acceleration;
+            currentVelocity = Vector2.Lerp(currentVelocity, moveInput * currentSpeed, accel * Time.fixedDeltaTime);
+
+            rb.linearVelocity = currentVelocity;
 
             // 2. 瞄准/转向逻辑（分设备独立处理） — Aim/rotation per device (mouse vs gamepad).
             HandleRotation();
@@ -136,5 +150,18 @@ public class PlayerController : MonoBehaviour
     public void Init(PlayerData data)
     {
         playerData = data;
+    }
+
+    public void ApplyIce()
+    {
+       
+        onIce = true;
+       
+    }
+
+    public void removeIce()
+    {
+        onIce = false;
+      
     }
 }
