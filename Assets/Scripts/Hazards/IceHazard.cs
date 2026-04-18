@@ -9,7 +9,7 @@ public class IceHazard : MonoBehaviour
     {
         PlayerController controller =other.GetComponent<PlayerController>();
 
-        controller.ApplyIce();
+        controller.applyIce();
     }
 
     private void OnTriggerExit2D(Collider2D other)
