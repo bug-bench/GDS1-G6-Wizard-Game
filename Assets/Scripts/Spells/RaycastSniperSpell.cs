@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -40,63 +41,94 @@ public class RaycastSniperSpell : SpellBehavior
 
         Vector2 dir = firePoint.up.normalized;
         Vector2 rawStart = firePoint.position;
-        Vector2 startPos = rawStart + dir * castStartInset;
+        Vector2 curPos = rawStart + dir * castStartInset;
+        GameObject damageSource = caster;
 
         if (lineRenderer != null)
-        {
             lineRenderer.enabled = true;
-            lineRenderer.positionCount = 2;
-            lineRenderer.SetPosition(0, rawStart);
-        }
 
         // 面板上 Layer 为 Nothing(0) 时，用默认可碰撞层，否则射线永远打不到东西 — If layer mask is Nothing (0), use default raycast layers or hits never register.
         int mask = layerToHit.value == 0 ? Physics2D.DefaultRaycastLayers : layerToHit.value;
 
-        float castLen = Mathf.Max(0.01f, range - castStartInset);
-        RaycastHit2D[] hits = Physics2D.RaycastAll(startPos, dir, castLen, mask);
-        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+        float budget = Mathf.Max(0.01f, range - castStartInset);
+        const float reflectSkin = 0.02f;
+        const int maxBounces = 12;
 
-        RaycastHit2D hit = default;
-        bool hitValid = false;
-        foreach (RaycastHit2D h in hits)
-        {
-            if (h.collider == null) continue;
-            if (IsColliderOnCaster(caster, h.collider)) continue;
-            hit = h;
-            hitValid = true;
-            break;
-        }
+        var linePts = new List<Vector3> { rawStart };
 
-        Vector2 endPoint;
-        if (hitValid)
+        for (int bounce = 0; bounce < maxBounces && budget > 0.001f; bounce++)
         {
-            endPoint = hit.point;
+            RaycastHit2D[] hits = Physics2D.RaycastAll(curPos, dir, budget, mask);
+            System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+            RaycastHit2D hit = default;
+            bool hitValid = false;
+            foreach (RaycastHit2D h in hits)
+            {
+                if (h.collider == null) continue;
+                if (IsColliderOnCaster(damageSource, h.collider)) continue;
+                hit = h;
+                hitValid = true;
+                break;
+            }
+
+            if (!hitValid)
+            {
+                linePts.Add(curPos + dir * budget);
+                break;
+            }
+
+            linePts.Add(hit.point);
+
+            ReflectShieldSpell shield = hit.collider.GetComponentInParent<ReflectShieldSpell>();
+            if (shield != null)
+            {
+                Vector2 n = hit.normal.sqrMagnitude > 1e-8f ? hit.normal.normalized : (-dir).normalized;
+                dir = Vector2.Reflect(dir, n).normalized;
+                budget -= hit.distance;
+                curPos = hit.point + dir * reflectSkin;
+
+                // 盾牌现在直接挂在玩家根节点上
+                Transform playerRoot = shield.transform.parent;
+                if (playerRoot != null)
+                    damageSource = playerRoot.gameObject;
+                continue;
+            }
+
+            if (hit.collider.gameObject.tag == "Wall")
+                break;
 
             if (hit.collider.gameObject.tag == "Player")
             {
                 PlayerCombat target = hit.collider.GetComponent<PlayerCombat>()
                     ?? hit.collider.GetComponentInParent<PlayerCombat>();
-                if (target != null && target.gameObject != caster)
+                if (target != null && target.gameObject != damageSource)
                 {
+                    if (ReflectShieldSpell.HasActiveShieldOn(target))
+                        break;
+
                     int total = damage;
-                    PlayerStats casterStats = caster.GetComponent<PlayerStats>();
-                    if (casterStats != null)
-                        total += Mathf.RoundToInt(casterStats.strength);
+                    PlayerStats srcStats = damageSource.GetComponent<PlayerStats>();
+                    if (srcStats != null)
+                        total += Mathf.RoundToInt(srcStats.strength);
 
-                    var casterInput = caster.GetComponent<UnityEngine.InputSystem.PlayerInput>();
-                    int attackerIndex = casterInput != null ? casterInput.playerIndex : -1; 
+                    var srcInput = damageSource.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+                    int attackerIndex = srcInput != null ? srcInput.playerIndex : -1;
 
-                    target.TakeDamage(total, attackerIndex);
+                    target.TakeDamage(total, attackerIndex, dir);
                 }
+                break;
             }
-        }
-        else
-        {
-            endPoint = startPos + dir * castLen;
+
+            break;
         }
 
         if (lineRenderer != null)
-            lineRenderer.SetPosition(1, endPoint);
+        {
+            lineRenderer.positionCount = linePts.Count;
+            for (int i = 0; i < linePts.Count; i++)
+                lineRenderer.SetPosition(i, linePts[i]);
+        }
 
         StartCoroutine(HideLine());
     }

@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da68d7c89dbcb8146ab9e5cc48586ac4, type: 3}
-  m_Name: Data_fire
+  m_Name: Data_(trap)fire
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
-  spellName: fire
-  spellType: 0
-  cooldownTime: 1
-  spellPrefab: {fileID: 7895179520453860780, guid: 6ac1c60aeace3ba4d9a9540a1393077f, type: 3}
-  pickupPrefab: {fileID: 2848393363742389300, guid: 95e05e97cb7788d409cce459904262bc, type: 3}
+  spellName: tp fire
+  spellType: 1
+  cooldownTime: 2
+  spellPrefab: {fileID: 7199195918394562724, guid: 21f10aec9ff05f24f9215827f0040ca0, type: 3}
+  icon: {fileID: 0}
+  cooldownStartsOnRelease: 1
+  pickupPrefab: {fileID: 2848393363742389300, guid: d46f618fc90996246992412d3d3bc5d6, type: 3}
