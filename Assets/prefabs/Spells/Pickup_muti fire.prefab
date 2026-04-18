@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2935070601429830799}
   - component: {fileID: 5539106094290776636}
   - component: {fileID: -770100163237261120}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Pickup_muti fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 3622272335237750432}
   - component: {fileID: 3928292970709921665}
   - component: {fileID: 4696770049037580002}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}

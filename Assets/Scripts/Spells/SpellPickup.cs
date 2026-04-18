@@ -12,6 +12,8 @@ public class SpellPickup : MonoBehaviour
 
     public SpellData spellData;
 
+    private SpellSpawner spawner;
+
     private float pickupReadyTime;
 
     void Awake()
@@ -77,6 +79,8 @@ public class SpellPickup : MonoBehaviour
         bool pickedUp = combat.EquipSpell(spellData);
         if (pickedUp)
         {
+
+            spawner.RespawnSpell();
             Destroy(gameObject);
         }
         else
@@ -84,5 +88,13 @@ public class SpellPickup : MonoBehaviour
             // 双槽都已装备时 EquipSpell 会失败，地上包还在——避免误以为「捡不起来是 Bug」 — Both slots full: EquipSpell fails and pickup remains; log so it is not mistaken for a bug.
             Debug.Log("主武器、副武器都已满，请先按 Q 或 E 丢掉一把，再捡。 | Both weapon slots full; press Q or E to drop one, then pick up.");
         }
+    }
+
+    public void SetSpawner(SpellSpawner spellSpawner)
+    {
+        spawner = spellSpawner;
+
+
+
     }
 }
