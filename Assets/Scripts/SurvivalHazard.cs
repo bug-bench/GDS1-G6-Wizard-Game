@@ -66,6 +66,9 @@ public class SurvivalHazard : MonoBehaviour
 
     bool ReachedEnd()
     {
+        // NOTE
+        // this value needs to be changed based on the size of the arena.
+        //  for the person making it, PLEASE CHANGE THIS TO AN APPROAPRIATE AMOUNT
         float limit = 20f;
 
         return Mathf.Abs(transform.position.x) > limit || 
