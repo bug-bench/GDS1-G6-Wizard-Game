@@ -79,8 +79,10 @@ public class SpellPickup : MonoBehaviour
         bool pickedUp = combat.EquipSpell(spellData);
         if (pickedUp)
         {
-
-            spawner.RespawnSpell();
+            if (spawner != null)
+            {
+                spawner.RespawnSpell();
+            }
             Destroy(gameObject);
         }
         else

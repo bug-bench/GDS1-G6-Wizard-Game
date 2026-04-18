@@ -50,6 +50,13 @@ public class PlayerSpawner : MonoBehaviour
                 data.playerSprite = sr.sprite; // save sprite 
             }
 
+            // 更新战斗脚本里的原始颜色，防止闪烁后变回白色
+            var combat = playerInput.GetComponent<PlayerCombat>();
+            if (combat != null)
+            {
+                combat.UpdateOriginalBlinkColors();
+            }
+
             var go = playerInput.gameObject;
             if (go != null)
             {

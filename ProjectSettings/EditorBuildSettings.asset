@@ -13,10 +13,16 @@ EditorBuildSettings:
     guid: b73483bd59e4549a5be1c5aeae84976d
   - enabled: 1
     path: Assets/Scenes/Phase1.unity
+    guid: afa704d8cfc448342a354cdf6b2708e6
+  - enabled: 0
+    path: Assets/Scenes/Phase1_MyBackup.unity
     guid: 9240b00be0fdbc44fbad87fe1d1cb8f9
   - enabled: 1
     path: Assets/Scenes/Phase2Arena.unity
     guid: fc3ec3e1911879541899d5741c632740
+  - enabled: 1
+    path: Assets/Scenes/Phase2Survival.unity
+    guid: 1b98f7a55e9fd88438903fe74d138594
   - enabled: 1
     path: Assets/Scenes/WinScene.unity
     guid: 23a9ff162d8984049bc2cb7acc69350f

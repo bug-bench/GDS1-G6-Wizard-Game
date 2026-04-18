@@ -60,7 +60,17 @@ public class ArenaScript : MonoBehaviour
 
     public void PlayerEliminated(GameObject player)
     {
-        if (playersAlive.Contains(player) && player.GetComponent<PlayerStats>().IsAliveArena == false)
+        playersAlive.RemoveAll(p => p == null);
+
+        if (player == null)
+        {
+            Debug.LogWarning("PlayerEliminated called with null reference.");
+            TryEndGameAfterElimination();
+            return;
+        }
+
+        PlayerStats stats = player.GetComponent<PlayerStats>();
+        if (playersAlive.Contains(player) && stats != null && stats.IsAliveArena == false)
         {
             playersAlive.Remove(player);
             playersEliminated.Add(player);
@@ -68,13 +78,29 @@ public class ArenaScript : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning(player.name + " not found in playersAlive.");
+            Debug.LogWarning(player.name + " not found in playersAlive or still marked alive.");
         }
+
+        TryEndGameAfterElimination();
+    }
+
+    void TryEndGameAfterElimination()
+    {
+        playersAlive.RemoveAll(p => p == null);
 
         if (playersAlive.Count == 1)
         {
-            Debug.Log("Winner: " + playersAlive[0].name);
-            EndGame(playersEliminated, playersAlive[0]);
+            GameObject winner = playersAlive[0];
+            if (winner == null)
+            {
+                playersAlive.RemoveAll(p => p == null);
+                if (playersAlive.Count == 0)
+                    EndGame(playersEliminated);
+                return;
+            }
+
+            Debug.Log("Winner: " + winner.name);
+            EndGame(playersEliminated, winner);
         }
         else if (playersAlive.Count == 0)
         {
