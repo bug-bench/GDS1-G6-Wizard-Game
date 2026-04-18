@@ -2,11 +2,11 @@
 - Project name: GDS1-G6-Wizard-Game
 - Unity version: Unity 6000.3.8f1
 - Active scene:
-  - Name: Phase1
+  - Name: Phase2Survival
   - Tags:
     - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, SpawnPoint
   - Layers:
-    - Default, TransparentFX, Ignore Raycast, Pickup, Water, UI
+    - Default, TransparentFX, Ignore Raycast, Water, UI
 - Active game object:
   - Name: Event Manager
   - Tag: Untagged
