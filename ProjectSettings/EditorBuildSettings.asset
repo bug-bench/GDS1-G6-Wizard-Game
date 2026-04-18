@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Phase2Arena.unity
     guid: fc3ec3e1911879541899d5741c632740
   - enabled: 1
+    path: Assets/Scenes/Phase2Survival.unity
+    guid: 1b98f7a55e9fd88438903fe74d138594
+  - enabled: 1
     path: Assets/Scenes/WinScene.unity
     guid: 23a9ff162d8984049bc2cb7acc69350f
   - enabled: 0
