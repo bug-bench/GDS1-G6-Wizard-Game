@@ -155,9 +155,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3417f418aa9fee4792a81b361e8edc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RaycastSniperSpell
-  damage: 50
+  damage: 25
   range: 100
   layerToHit:
     serializedVersion: 2
     m_Bits: 0
+  castStartInset: 0.12
   lineVisualDuration: 0.1

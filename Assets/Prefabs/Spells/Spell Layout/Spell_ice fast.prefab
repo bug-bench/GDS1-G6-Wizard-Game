@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3695687674715017439}
   - component: {fileID: -7769601191573867197}
   m_Layer: 0
-  m_Name: Spell_fast
+  m_Name: Spell_ice fast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

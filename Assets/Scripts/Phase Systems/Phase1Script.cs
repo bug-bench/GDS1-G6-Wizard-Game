@@ -82,6 +82,6 @@ public class Phase1Script : MonoBehaviour
         //Load Phase 2 scene
         currentPhase = 2;
         CurrentPhase = 2;
-        SceneManager.LoadScene("Phase2Arena");
+        
     }
 }

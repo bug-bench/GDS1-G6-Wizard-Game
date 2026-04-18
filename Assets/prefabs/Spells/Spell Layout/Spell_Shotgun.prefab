@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cbb0ed5b63afd44bb54807d47d3f65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShotgunSpell
-  pelletPrefab: {fileID: 1485216680615802304, guid: d968089a870a89d498c522a28935580e, type: 3}
-  pelletCount: 5
+  pelletPrefab: {fileID: 8107549014988267602, guid: 3b929f5cb7171d5419471a663e008d54, type: 3}
+  pelletCount: 3
   spreadAngle: 45
   spawnForwardInset: 0.12

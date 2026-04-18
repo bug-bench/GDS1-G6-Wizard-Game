@@ -32,7 +32,39 @@ public class PlayerCombat : MonoBehaviour
     private bool pendingSubReleaseCooldown;
 
     private PlayerController controller;
-    private Color originalColor;
+
+    [Header("Hit feedback (Isaac-style / 以撒受击)")]
+    [Range(0f, 40f)]
+    [Tooltip("受击沿击退方向的冲量（Rigidbody2D）。 — Impulse knockback on hit.")]
+    public float hitKnockbackImpulse = 7f;
+    [Tooltip("闪白颜色。 — Sprite tint during hit frames.")]
+    public Color hitFlashColor = Color.white;
+    [Range(0, 12)]
+    [Tooltip("闪白次数（每次先白再回原色）。 — Number of white flash cycles.")]
+    public int hitFlashBlinkCount = 3;
+    [Range(0.01f, 0.35f)]
+    [Tooltip("单次闪白或恢复的时长（秒）。 — One white-flash half-cycle in seconds.")]
+    public float hitFlashHalfDuration = 0.04f;
+
+    [Header("Invincibility / 无敌帧")]
+    [Range(0.1f, 5f)]
+    [Tooltip("受伤后多少秒内免疫伤害。 — Invulnerability duration after hit.")]
+    public float invincibilityDuration = 1.5f;
+    [Range(0.05f, 2f)]
+    [Tooltip("无敌闪烁：每段「不透明」的时长（秒）。 — Seconds renderer stays opaque per blink.")]
+    public float invincibilityBlinkVisibleDuration = 0.05f;
+    [Range(0.05f, 2f)]
+    [Tooltip("无敌闪烁：每段「全透明」的时长（秒）。 — Seconds renderer stays transparent per blink.")]
+    public float invincibilityBlinkHiddenDuration = 0.05f;
+    [Tooltip("参与无敌闪烁的精灵（通过 alpha 开关显示）；留空则自动使用根/子物体上的第一个 SpriteRenderer。 — Sprites toggled during i-blink; empty = auto-find one body sprite.")]
+    public SpriteRenderer[] invincibilityBlinkSpriteRenderers;
+
+    private float invincibleUntil;
+    private Rigidbody2D playerRb;
+    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer[] _invincibilityBlinkTargets;
+    private Color[] _invincibilityBlinkOriginalColors;
+    private Coroutine hitFeedbackRoutine;
 
     private PlayerInput playerInput;
     private InputAction castMainAction;
@@ -42,14 +74,103 @@ public class PlayerCombat : MonoBehaviour
     {
         controller = GetComponent<PlayerController>();
         playerStats = GetComponent<PlayerStats>();
+        playerRb = GetComponent<Rigidbody2D>();
+        BuildInvincibilityBlinkTargets();
     }
 
-    void Start()
+    void BuildInvincibilityBlinkTargets()
     {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr != null)
-            originalColor = sr.color;
+        int validCount = 0;
+        if (invincibilityBlinkSpriteRenderers != null)
+        {
+            foreach (var s in invincibilityBlinkSpriteRenderers)
+            {
+                if (s != null) validCount++;
+            }
+        }
+
+        if (validCount > 0)
+        {
+            _invincibilityBlinkTargets = new SpriteRenderer[validCount];
+            int i = 0;
+            foreach (var s in invincibilityBlinkSpriteRenderers)
+            {
+                if (s != null)
+                    _invincibilityBlinkTargets[i++] = s;
+            }
+        }
+        else
+        {
+            var sr = GetComponent<SpriteRenderer>() ?? GetComponentInChildren<SpriteRenderer>();
+            _invincibilityBlinkTargets = sr != null ? new[] { sr } : System.Array.Empty<SpriteRenderer>();
+        }
+
+        // 初始化 OriginalColors 数组，但此时的颜色可能是白色的预制体默认颜色
+        _invincibilityBlinkOriginalColors = new Color[_invincibilityBlinkTargets.Length];
+        for (int i = 0; i < _invincibilityBlinkTargets.Length; i++)
+        {
+            if (_invincibilityBlinkTargets[i] != null)
+                _invincibilityBlinkOriginalColors[i] = _invincibilityBlinkTargets[i].color;
+        }
+
+        spriteRenderer = _invincibilityBlinkTargets.Length > 0 ? _invincibilityBlinkTargets[0] : null;
     }
+
+    /// <summary>
+    /// 在 PlayerSpawner 修改完玩家颜色后调用，更新闪烁恢复时的基准颜色。
+    /// Called after PlayerSpawner sets the player's color, so blinking restores to the correct color.
+    /// </summary>
+    public void UpdateOriginalBlinkColors()
+    {
+        if (_invincibilityBlinkTargets == null || _invincibilityBlinkOriginalColors == null) return;
+        for (int i = 0; i < _invincibilityBlinkTargets.Length; i++)
+        {
+            if (_invincibilityBlinkTargets[i] != null)
+                _invincibilityBlinkOriginalColors[i] = _invincibilityBlinkTargets[i].color;
+        }
+    }
+
+    void SetInvincibilityBlinkAlpha(float alpha)
+    {
+        if (_invincibilityBlinkTargets == null) return;
+        for (int i = 0; i < _invincibilityBlinkTargets.Length; i++)
+        {
+            if (_invincibilityBlinkTargets[i] != null)
+            {
+                Color c = _invincibilityBlinkTargets[i].color; // 获取当前颜色（包括被 Spawner 换过的颜色）
+                c.a = alpha;
+                _invincibilityBlinkTargets[i].color = c;
+            }
+        }
+    }
+
+    void SetAllInvincibilityBlinkColors(Color c)
+    {
+        if (_invincibilityBlinkTargets == null) return;
+        foreach (var s in _invincibilityBlinkTargets)
+        {
+            if (s != null)
+                s.color = c;
+        }
+    }
+
+    void RestoreInvincibilityBlinkOriginalColors()
+    {
+        if (_invincibilityBlinkTargets == null || _invincibilityBlinkOriginalColors == null) return;
+        for (int i = 0; i < _invincibilityBlinkTargets.Length; i++)
+        {
+            if (_invincibilityBlinkTargets[i] != null)
+                _invincibilityBlinkTargets[i].color = _invincibilityBlinkOriginalColors[i];
+        }
+    }
+
+    void RestoreInvincibilityVisuals()
+    {
+        RestoreInvincibilityBlinkOriginalColors();
+    }
+
+    /// <summary>弹道等可查询：无敌期间不扣血且弹丸应穿过。 — True while post-hit i-frames are active.</summary>
+    public bool IsInvincible => Time.time < invincibleUntil;
 
     void OnEnable()
     {
@@ -91,6 +212,15 @@ public class PlayerCombat : MonoBehaviour
 
         CleanupHeldAttackEffects(applyReleaseCooldown: false);
         CleanupHeldMovementEffects(applyReleaseCooldown: false);
+
+        if (hitFeedbackRoutine != null)
+        {
+            StopCoroutine(hitFeedbackRoutine);
+            hitFeedbackRoutine = null;
+        }
+
+        invincibleUntil = 0f;
+        RestoreInvincibilityVisuals();
     }
 
     void Update()
@@ -159,6 +289,7 @@ public class PlayerCombat : MonoBehaviour
         if (currentAttackSpell.spellPrefab == null) return;
         if (activeMainSpell != null) return;
         if (isKnockedDown || attackCDTimer > 0f) return;
+        if (playerStats != null && playerStats.isStunned) return;
 
         DestroyAllReflectShieldsUnderRoot();
         activeMainSpell = ExecuteAndReturnSpell(currentAttackSpell, ref attackCDTimer);
@@ -177,6 +308,7 @@ public class PlayerCombat : MonoBehaviour
         if (currentMovementSpell.spellPrefab == null) return;
         if (activeSubSpell != null) return;
         if (isKnockedDown || movementCDTimer > 0f) return;
+        if (playerStats != null && playerStats.isStunned) return;
 
         activeSubSpell = ExecuteAndReturnSpell(currentMovementSpell, ref movementCDTimer);
         if (currentMovementSpell.cooldownStartsOnRelease)
@@ -296,57 +428,100 @@ public class PlayerCombat : MonoBehaviour
         return behavior;
     }
 
-    public void TakeDamage(int damage, int attackerIndex = -1)
+    /// <param name="knockbackWorldDir">击退方向（世界空间），零向量则只做闪白不做冲量。 — World-space push direction; zero = flash only.</param>
+    public void TakeDamage(int damage, int attackerIndex = -1, Vector2 knockbackWorldDir = default)
     {
-        Debug.Log($"TakeDamage called — damage: {damage}, attackerIndex: {attackerIndex}");
         if (isKnockedDown) return;
-        if (playerStats == null) return;
+        if (playerStats == null)
+        {
+            Debug.LogWarning($"{name}: TakeDamage ignored — no PlayerStats.");
+            return;
+        }
 
-        // Record damage dealt by attacking player
+        if (Time.time < invincibleUntil)
+            return;
+
+        // 先开无敌窗口，避免同一帧多发子弹重复结算。 — Open i-frames before applying damage to block same-frame multi-hit.
+        invincibleUntil = Time.time + invincibilityDuration;
+
         if (attackerIndex >= 0)
             GameData.RecordDamage(attackerIndex, damage);
-            Debug.Log($"RecordDamage called — attackerIndex: {attackerIndex}, amount: {damage}, total now: {GameData.players.Find(p => p.playerIndex == attackerIndex)?.damageDealt}");
 
         playerStats.TakeDamage(damage);
 
+        if (playerRb != null && knockbackWorldDir.sqrMagnitude > 0.0001f)
+            playerRb.AddForce(knockbackWorldDir.normalized * hitKnockbackImpulse, ForceMode2D.Impulse);
+
+        if (_invincibilityBlinkTargets != null && _invincibilityBlinkTargets.Length > 0)
+        {
+            if (hitFeedbackRoutine != null)
+                StopCoroutine(hitFeedbackRoutine);
+            hitFeedbackRoutine = StartCoroutine(HitInvincibilityVisualRoutine());
+        }
+
         if (playerStats.health <= 0)
         {
-            // Record kill for attacking player
             if (attackerIndex >= 0)
                 GameData.RecordKill(attackerIndex);
-
             Die();
-        }
-        else
-        {
-            StartCoroutine(KnockdownRoutine());
         }
     }
 
-    IEnumerator KnockdownRoutine()
+    IEnumerator HitInvincibilityVisualRoutine()
     {
-        CleanupHeldAttackEffects(applyReleaseCooldown: false);
-        CleanupHeldMovementEffects(applyReleaseCooldown: false);
+        if (_invincibilityBlinkTargets == null || _invincibilityBlinkTargets.Length == 0)
+        {
+            Debug.LogWarning($"{name}: HitInvincibilityVisualRoutine aborted because _invincibilityBlinkTargets is empty!");
+            hitFeedbackRoutine = null;
+            yield break;
+        }
 
-        isKnockedDown = true;
-        controller.canMove = false;
+        // Debug.Log($"{name}: Starting Hit Blink Routine. Targets count: {_invincibilityBlinkTargets.Length}");
 
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr != null)
-            sr.color = Color.gray;
+        float endTime = invincibleUntil;
 
-        yield return new WaitForSeconds(1.5f);
+        for (int i = 0; i < hitFlashBlinkCount; i++)
+        {
+            SetAllInvincibilityBlinkColors(hitFlashColor);
+            yield return new WaitForSeconds(hitFlashHalfDuration);
+            RestoreInvincibilityBlinkOriginalColors();
+            yield return new WaitForSeconds(hitFlashHalfDuration);
+        }
 
-        if (sr != null)
-            sr.color = originalColor;
-        controller.canMove = true;
-        isKnockedDown = false;
+        // 无敌剩余时间：可调「不透明 / 全透明」时长 — Toggle alpha between 100% and 0%.
+        while (Time.time < endTime)
+        {
+            SetInvincibilityBlinkAlpha(0f);
+            float waitOff = Mathf.Min(invincibilityBlinkHiddenDuration, endTime - Time.time);
+            if (waitOff > 0f)
+                yield return new WaitForSeconds(waitOff);
+            if (Time.time >= endTime) break;
+
+            RestoreInvincibilityBlinkOriginalColors();
+            float waitOn = Mathf.Min(invincibilityBlinkVisibleDuration, endTime - Time.time);
+            if (waitOn > 0f)
+                yield return new WaitForSeconds(waitOn);
+        }
+
+        RestoreInvincibilityVisuals();
+        hitFeedbackRoutine = null;
     }
 
     void Die()
     {
         CleanupHeldAttackEffects(applyReleaseCooldown: false);
         CleanupHeldMovementEffects(applyReleaseCooldown: false);
+
+        if (hitFeedbackRoutine != null)
+        {
+            StopCoroutine(hitFeedbackRoutine);
+            hitFeedbackRoutine = null;
+        }
+
+        RestoreInvincibilityVisuals();
+
+        invincibleUntil = 0f;
+
         Debug.Log(gameObject.name + " 被淘汰了！ | Eliminated!");
         gameObject.SetActive(false);
     }

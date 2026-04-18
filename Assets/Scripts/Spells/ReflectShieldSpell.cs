@@ -9,18 +9,31 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class ReflectShieldSpell : SpellBehavior
 {
-    [Header("弧形盾 / Arc Shield")]
-    [Tooltip("弧的半径（世界单位大致观感） — Arc radius in world units (visual scale).")]
-    public float arcRadius = 0.55f;
+    /// <summary>
+    /// 持盾期间用于弹道/激光：身体 Trigger 可能与盾重叠，统一按「有盾则挡投射物」处理。
+    /// While shield exists, treat as blocking projectiles/laser when body trigger would also fire.
+    /// </summary>
+    public static bool HasActiveShieldOn(PlayerCombat target)
+    {
+        if (target == null) return false;
+        var shields = target.GetComponentsInChildren<ReflectShieldSpell>(true);
+        for (int i = 0; i < shields.Length; i++)
+        {
+            if (shields[i] != null && shields[i].isActiveAndEnabled && shields[i].gameObject.activeInHierarchy)
+                return true;
+        }
+        return false;
+    }
 
-    [Tooltip("弧展开总角度（度），例如 110 像身前一面月牙 — Total arc span in degrees (e.g. 110 for a front crescent).")]
-    public float arcAngleDegrees = 110f;
+    [Header("环形盾 / Circle Shield")]
+    [Tooltip("圆环的半径（世界单位大致观感） — Circle radius in world units (visual scale).")]
+    public float radius = 0.65f;
 
-    [Tooltip("弧线上的顶点数，越多越圆滑 — Vertex count along the arc; higher is smoother.")]
-    public int arcSegments = 24;
+    [Tooltip("圆环上的顶点数，越多越圆滑 — Vertex count along the circle; higher is smoother.")]
+    public int segments = 36;
 
-    [Tooltip("沿 FirePoint 本地 Y 前移弧心，让弧鼓在身前 — Offset arc center along FirePoint local Y so the bulge sits in front.")]
-    public float localForwardOffset = 0.35f;
+    [Tooltip("沿施法者中心 Y 轴的偏移（通常填 0 即可包裹全身） — Offset along caster's local Y (0 to center on player).")]
+    public float localCenterOffsetY = 0f;
 
     [Header("线条外观 / Line Look")]
     public float lineWidth = 0.08f;
@@ -42,8 +55,8 @@ public class ReflectShieldSpell : SpellBehavior
             lineRenderer = gameObject.AddComponent<LineRenderer>();
 
         lineRenderer.useWorldSpace = false;
-        lineRenderer.loop = false;
-        lineRenderer.positionCount = arcSegments + 1;
+        lineRenderer.loop = true; // 闭合圆环
+        lineRenderer.positionCount = segments;
         lineRenderer.startWidth = lineWidth;
         lineRenderer.endWidth = lineWidth;
         lineRenderer.numCapVertices = 4;
@@ -64,23 +77,25 @@ public class ReflectShieldSpell : SpellBehavior
     {
         EnsureComponents();
 
-        transform.SetParent(firePoint, worldPositionStays: false);
-        transform.localPosition = Vector3.up * localForwardOffset;
+        // 挂载到玩家根节点，而不是枪口，这样圆环能完美包裹玩家
+        transform.SetParent(caster.transform, worldPositionStays: false);
+        transform.localPosition = Vector3.up * localCenterOffsetY;
         transform.localRotation = Quaternion.identity;
 
-        float halfRad = arcAngleDegrees * 0.5f * Mathf.Deg2Rad;
-        var edgePoints = new Vector2[arcSegments + 1];
+        float step = 360f / segments * Mathf.Deg2Rad;
+        var edgePoints = new Vector2[segments + 1];
 
-        for (int i = 0; i <= arcSegments; i++)
+        for (int i = 0; i < segments; i++)
         {
-            float t = arcSegments > 0 ? i / (float)arcSegments : 0f;
-            float a = Mathf.Lerp(-halfRad, halfRad, t);
-            float x = Mathf.Sin(a) * arcRadius;
-            float y = Mathf.Cos(a) * arcRadius;
+            float a = i * step;
+            float x = Mathf.Sin(a) * radius;
+            float y = Mathf.Cos(a) * radius;
             edgePoints[i] = new Vector2(x, y);
             lineRenderer.SetPosition(i, new Vector3(x, y, 0f));
         }
-
+        
+        // EdgeCollider2D 需要首尾相连来闭合碰撞
+        edgePoints[segments] = edgePoints[0];
         edgeCollider.points = edgePoints;
     }
 
@@ -89,16 +104,18 @@ public class ReflectShieldSpell : SpellBehavior
         Destroy(gameObject);
     }
 
-    void OnTriggerEnter2D(Collider2D hitInfo)
+    /// <summary>
+    /// 由 SpellProjectile 统一触发：避免与玩家身体 Trigger 的回调顺序不确定导致「先扣血再反弹」。
+    /// Invoked from SpellProjectile only so shield always wins ordering over the player body trigger.
+    /// </summary>
+    public void ApplyReflectToProjectile(SpellProjectile incomingProjectile)
     {
-        SpellProjectile incomingProjectile = hitInfo.GetComponent<SpellProjectile>()
-            ?? hitInfo.GetComponentInParent<SpellProjectile>();
         if (incomingProjectile == null) return;
 
         incomingProjectile.transform.Rotate(0, 0, 180f);
 
-        Transform firePointTr = transform.parent;
-        Transform playerRoot = firePointTr != null ? firePointTr.parent : null;
+        // 现在盾牌直接挂在 caster 下，所以 parent 就是 playerRoot
+        Transform playerRoot = transform.parent;
         if (playerRoot == null) return;
 
         incomingProjectile.caster = playerRoot.gameObject;
