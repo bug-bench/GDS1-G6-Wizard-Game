@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -44,7 +45,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("Rotation")]
     public Transform rotationPivot;   
-    public Transform playerSprite;  
+    public Transform playerSprite;
+
+    //Ice harzard 
+    private bool onIce = false;
+
+    public float iceAccelerationMultiplier = 0.3f;
+    public float iceDecelerationMultiplier = 0.2f;
 
     void Awake()
     {
@@ -96,12 +103,14 @@ public class PlayerController : MonoBehaviour
             
             Vector2 v = rb.linearVelocity;
             float dt = Time.fixedDeltaTime;
+            float accel = onIce ? moveAcceleration * iceAccelerationMultiplier : moveAcceleration;
+            float decel = onIce ? moveDeceleration * iceDecelerationMultiplier : currentDeceleration;
 
             if (input.sqrMagnitude > 1e-6f)
             {
                 Vector2 accelDir = input.normalized;
                 float stick = input.magnitude;
-                v += accelDir * (moveAcceleration * stick * dt);
+                v += accelDir * (accel *stick * dt);
                 if (v.magnitude > maxSpeed)
                     v = v.normalized * maxSpeed;
             }
@@ -110,7 +119,7 @@ public class PlayerController : MonoBehaviour
                 float spd = v.magnitude;
                 if (spd > 1e-4f)
                 {
-                    float drop = currentDeceleration * dt;
+                    float drop = decel * dt;
                     if (spd <= drop)
                         v = Vector2.zero;
                     else
@@ -183,4 +192,15 @@ public class PlayerController : MonoBehaviour
     {
         playerData = data;
     }
+
+    public void applyIce()
+    {
+        onIce = true;
+    }
+
+    public void removeIce()
+    {
+        onIce = false;
+    }
+
 }
