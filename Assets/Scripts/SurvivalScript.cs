@@ -122,6 +122,6 @@ public class SurvivalScript : MonoBehaviour
             Debug.Log($"Survival Ended - Player {p.playerIndex} kills: {p.kills}, damage: {p.damageDealt}");
         }
 
-        SceneManager.LoadScene("winScene");
+        SceneManager.LoadScene(winScene);
     }
 }
