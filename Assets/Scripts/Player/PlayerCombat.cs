@@ -556,6 +556,7 @@ public class PlayerCombat : MonoBehaviour
 
         yield return new WaitForSeconds(10f);
 
+        playerStats.RespawnHeal();
 
         if (controller != null)
         {
