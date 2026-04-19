@@ -12,6 +12,8 @@ public class VotingLogic : MonoBehaviour
     private Dictionary<int, MinigameData> playerVotes = new Dictionary<int, MinigameData>();
     private bool votingActive = false;
     [SerializeField] private float votingDuration = 30f;
+    [SerializeField] private TMPro.TextMeshProUGUI timerText; 
+
     private Action<MinigameData> onVotingComplete;
 
     public void SetMinigames(List<MinigameData> games)
@@ -29,7 +31,19 @@ public class VotingLogic : MonoBehaviour
 
     IEnumerator VotingTimer()
     {
-        yield return new WaitForSeconds(votingDuration);
+        float remaining = votingDuration;
+
+        while (remaining > 0)
+        {
+            remaining -= Time.deltaTime;
+            if (timerText != null)
+                timerText.text = Mathf.CeilToInt(remaining).ToString();
+            yield return null;
+        }
+
+        if (timerText != null)
+            timerText.text = "0";
+
         EndVoting();
     }
 

@@ -108,6 +108,7 @@ public class PlayerCard : MonoBehaviour
     private void HandleColorChange()
     {
         if (isReady) return;
+        if (PauseMenu.IsPaused) return;
         if (Time.time - lastInputTime < inputCooldown) return;
 
         var move = moveAction.ReadValue<Vector2>();
@@ -130,7 +131,7 @@ public class PlayerCard : MonoBehaviour
     {
         // Ignore input for 0.5s after joining to prevent players instantly readying up
         if (Time.time - joinTime < 0.5f) return;
-
+        if (PauseMenu.IsPaused) return;
         if (submitAction.triggered)
         {
             isReady = !isReady;
