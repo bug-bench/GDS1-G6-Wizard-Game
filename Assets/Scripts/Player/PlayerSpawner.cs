@@ -86,5 +86,6 @@ public class PlayerSpawner : MonoBehaviour
                 Debug.LogWarning($"Player {data.playerIndex} has no Phase2StatCard in children");
             }
         }
+        Debug.Log($"PlayerSpawner — useSplitScreen: {GameData.useSplitScreen}");
     }
 }
