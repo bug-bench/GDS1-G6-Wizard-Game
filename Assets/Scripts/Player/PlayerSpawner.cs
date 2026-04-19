@@ -15,7 +15,16 @@ public class PlayerSpawner : MonoBehaviour
 
     private void Start()
     {
-        SpawnAllPlayers();
+        if (GameData.players.Count == 0 || GameData.players[0].playerGameObject == null)
+        {
+            
+            SpawnAllPlayers();
+        }
+        else
+        {
+            
+            SpawnExistingPlayers();
+        }
     }
 
     private void SpawnAllPlayers()
@@ -87,5 +96,22 @@ public class PlayerSpawner : MonoBehaviour
             }
         }
         Debug.Log($"PlayerSpawner — useSplitScreen: {GameData.useSplitScreen}");
+    }
+
+    void SpawnExistingPlayers()
+    {
+        for (int i = 0; i < GameData.players.Count; i++)
+        {
+            var data = GameData.players[i];
+
+            if (data.playerGameObject == null) continue;
+
+            Vector3 spawnPos = spawnPoints != null && i < spawnPoints.Length
+                ? spawnPoints[i].position
+                : new Vector3(i * 2, 0, 0);
+
+            data.playerGameObject.transform.position = spawnPos;
+            data.playerGameObject.SetActive(true);
+        }
     }
 }
