@@ -11,12 +11,24 @@ public class ostacleSpawner : MonoBehaviour
 
 
     public int numberofspawn = 10;
-    public int Delay = 1;
+    public int Delay = 2;
+
+    public int startdelay = 20;
+
+
 
 
     void Start()
     {
+        StartCoroutine(startSpawning());
+    }
+
+    IEnumerator startSpawning()
+    {
+        yield return new WaitForSeconds(startdelay);
         SpawnAll();
+
+        StartCoroutine(RespawnCouroutine());
     }
 
    void SpawnAll()
