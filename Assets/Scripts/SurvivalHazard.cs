@@ -13,7 +13,7 @@ public class SurvivalHazard : MonoBehaviour
     public Direction moveDirection;
 
     [Header("Stats")]
-    public float speed = 1f;
+    public float speed = 10f;
     public float health = 30f;
 
     private float maxHealth;
