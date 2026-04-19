@@ -4797,9 +4797,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac82c94ce0aeaf40a74429654804f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  phaseDuration: 3
+  phaseDuration: 10
   transitionDelay: 1
-  useSplitScreen: 0
 --- !u!4 &602761923
 Transform:
   m_ObjectHideFlags: 0
@@ -4851,6 +4850,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d958e82fd59ba642a17aa1058e4bb4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  availableMinigames: []
+  votingDuration: 30
+  timerText: {fileID: 0}
 --- !u!1 &633976562
 GameObject:
   m_ObjectHideFlags: 0

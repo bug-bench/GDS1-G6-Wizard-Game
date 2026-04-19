@@ -73,6 +73,18 @@ public class PlayerSpawner : MonoBehaviour
             var controller = playerInput.GetComponent<PlayerController>();
             if (controller != null)
                 controller.Init(data);
+
+            // ADD THIS
+            Phase2StatCard card = playerInput.GetComponentInChildren<Phase2StatCard>();
+            if (card != null)
+            {
+                var stats = playerInput.GetComponent<PlayerStats>();
+                card.Init(stats, data);
+            }
+            else
+            {
+                Debug.LogWarning($"Player {data.playerIndex} has no Phase2StatCard in children");
+            }
         }
     }
 }
