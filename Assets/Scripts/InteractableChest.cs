@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InteractableChest : MonoBehaviour
 {
@@ -22,7 +23,15 @@ public class InteractableChest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(playerInRange && Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            BreakObject();
+        }
+
+        if(playerInRange && Gamepad.current.buttonSouth.wasPressedThisFrame)
+        {
+            BreakObject();
+        }
     }
 
     void BreakObject()
@@ -46,7 +55,8 @@ public class InteractableChest : MonoBehaviour
         {
             GameObject prefab = StatPrefabs[Random.Range(0, StatPrefabs.Length)];
 
-            GameObject drops = Instantiate(prefab, transform.position, Quaternion.identity);
+            Vector2 offset = Random.insideUnitCircle * 0.5f;
+            GameObject drops = Instantiate(prefab,(Vector2) transform.position+offset, Quaternion.identity);
 
             Rigidbody2D rb = drops.GetComponent<Rigidbody2D>();
 
@@ -66,7 +76,7 @@ public class InteractableChest : MonoBehaviour
 
         if (roll <= SpelldropChance)
         {
-            GameObject prefab = StatPrefabs[Random.Range(0, SpellPrefabs.Length)];
+            GameObject prefab = SpellPrefabs[Random.Range(0, SpellPrefabs.Length)];
 
             GameObject drops = Instantiate(prefab, transform.position, Quaternion.identity);
 
@@ -77,6 +87,22 @@ public class InteractableChest : MonoBehaviour
                 Vector2 force = Random.insideUnitCircle * dropforce;
                 rb.AddForce(force, ForceMode2D.Impulse);
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.GetComponent<PlayerStats>() != null)
+        {
+            playerInRange = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.GetComponent<PlayerStats>() != null)
+        {
+            playerInRange = false;
         }
     }
 }

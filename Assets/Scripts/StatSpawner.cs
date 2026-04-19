@@ -7,7 +7,7 @@ public class StatSpawner : MonoBehaviour
     public GameObject AttackSprite;
     public GameObject HealthSprite;
     public GameObject MovementSprite;
-    public GameObject Spell;
+    //public GameObject Spell;
     public Tilemap groundTilemap;
 
 
@@ -85,9 +85,9 @@ public class StatSpawner : MonoBehaviour
             case 2:
                 prefabToSpawn = MovementSprite;
                 break;
-            case 3:                
-                prefabToSpawn = Spell;
-                break;
+            //case 3:                
+               // prefabToSpawn = Spell;
+               // break;
         }
 
         if (prefabToSpawn == null)
