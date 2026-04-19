@@ -90,6 +90,11 @@ public class PlayerStats : MonoBehaviour
         Debug.Log(gameObject.name + " healed. Health: " + health);
     }
 
+    public void RespawnHeal()
+    {
+        health = 100f;
+    }
+
     public float CurrentHealth() { return health; }
 
     // =====================
@@ -218,14 +223,18 @@ public class PlayerStats : MonoBehaviour
         Debug.Log(gameObject.name + " has died.");
 
         if (p1s != null && p1s.GetCurrentPhase() == 1)
-            DropRandomPickups();
-
-        IsAliveArena = false;
-        ArenaScript AS = FindFirstObjectByType<ArenaScript>();
-        Debug.Log($"ArenaScript found: {AS != null}"); // ADD THIS
-        if (AS != null) 
         {
-            AS.PlayerEliminated(gameObject);
+            DropRandomPickups();
+        }
+        if (p1s.GetComponent<Phase2Script>().GetCurrentMinigame() == "Arena")
+        {
+            IsAliveArena = false;
+            ArenaScript AS = FindFirstObjectByType<ArenaScript>();
+            Debug.Log($"ArenaScript found: {AS != null}"); // ADD THIS
+            if (AS != null) 
+            {
+                AS.PlayerEliminated(gameObject);
+            }
         }
     }
 
