@@ -40,39 +40,39 @@ public class Phase2Script : MonoBehaviour
         vL.BeginVoting(OnMinigameChosen);
     }
 
-    void OnMinigameChosen(string minigameName)
+    void OnMinigameChosen(MinigameData minigame)
     {
-        Debug.Log("Final Minigame: " + minigameName);
-        currentMinigame = minigameName;
+        Debug.Log("Final Minigame: " + minigame.minigameName);
+        currentMinigame = minigame.minigameName;
 
-        switch (minigameName)
-        {
-            case "Arena":
-                StartArenaMode();
-                SceneManager.LoadScene("Phase2Arena");
-                break;
+        // switch (minigameName)
+        // {
+        //     case "Arena":
+        //         StartArenaMode();
+        //         SceneManager.LoadScene("Phase2Arena");
+        //         break;
 
-            case "Survival":
-                StartSurvivalMode();
-                SceneManager.LoadScene("Phase2Survival");
-                break;
+        //     case "Survival":
+        //         StartSurvivalMode();
+        //         SceneManager.LoadScene("Phase2Survival");
+        //         break;
 
-            default:
-                Debug.LogWarning("Unknown minigame: " + minigameName);
-                break;
-        }
+        //     default:
+        //         Debug.LogWarning("Unknown minigame: " + minigameName);
+        //         break;
+        // }
     }
 
-    void StartSurvivalMode()
-    {
-        gameObject.AddComponent<SurvivalScript>();
-    }
+    // void StartSurvivalMode()
+    // {
+    //     gameObject.AddComponent<SurvivalScript>();
+    // }
 
-    void StartArenaMode()
-    {
-        Debug.Log("Starting Arena Battle Royale mode...");
-        gameObject.AddComponent<ArenaScript>();
-    }
+    // void StartArenaMode()
+    // {
+    //     Debug.Log("Starting Arena Battle Royale mode...");
+    //     gameObject.AddComponent<ArenaScript>();
+    // }
 
     public string GetCurrentMinigame()
     {

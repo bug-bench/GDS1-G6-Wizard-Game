@@ -463,7 +463,18 @@ public class PlayerCombat : MonoBehaviour
         {
             if (attackerIndex >= 0)
                 GameData.RecordKill(attackerIndex);
-            Die();
+            Phase2Script p2scr = FindFirstObjectByType<Phase2Script>();
+            if (p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
+            {
+                Die();
+            }
+            else
+            {
+                if (!isKnockedDown)
+                {
+                    StartCoroutine(Knockdown());
+                }
+            }
         }
     }
 
@@ -524,5 +535,36 @@ public class PlayerCombat : MonoBehaviour
 
         Debug.Log(gameObject.name + " 被淘汰了！ | Eliminated!");
         gameObject.SetActive(false);
+    }
+
+    IEnumerator Knockdown()
+    {
+        isKnockedDown = true;
+
+        CleanupHeldAttackEffects(applyReleaseCooldown: false);
+        CleanupHeldMovementEffects(applyReleaseCooldown: false);
+
+        if (controller != null)
+        {
+            controller.canMove = false;
+        }
+
+        if (playerRb != null)
+        {
+            playerRb.linearVelocity = Vector2.zero;
+        }
+
+        yield return new WaitForSeconds(10f);
+
+        playerStats.RespawnHeal();
+
+        if (controller != null)
+        {
+            controller.canMove = true;
+        }
+
+        isKnockedDown = false;
+
+        invincibleUntil = Time.time + 1f;
     }
 }

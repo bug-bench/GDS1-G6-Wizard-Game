@@ -22,6 +22,8 @@ public static class GameData
     public static List<PlayerData> players = new List<PlayerData>();
     public static bool useSplitScreen = true;
     public static int winnerIndex = -1; // set before loading win scene
+    public static string selectedMinigame = "";
+
 
     public static void AddSpell(int playerIndex, string spellName)
     {
