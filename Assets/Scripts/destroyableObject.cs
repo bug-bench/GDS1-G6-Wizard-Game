@@ -52,7 +52,8 @@ public class destroyableObject : MonoBehaviour
         {
             GameObject prefab = StatPrefabs[Random.Range(0, StatPrefabs.Length)];
 
-            GameObject drops = Instantiate(prefab, transform.position, Quaternion.identity);
+            Vector2 offset = Random.insideUnitCircle * 1f;
+            GameObject drops = Instantiate(prefab, (Vector2)transform.position + offset, Quaternion.identity);
 
             Rigidbody2D rb = drops.GetComponent<Rigidbody2D>();
 

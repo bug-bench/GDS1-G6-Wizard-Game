@@ -51,5 +51,8 @@ TagManager:
   - name: hazard
     uniqueID: 3611608135
     locked: 0
+  - name: interactable
+    uniqueID: 3855226955
+    locked: 0
   m_RenderingLayers:
   - Default

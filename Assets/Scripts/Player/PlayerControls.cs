@@ -154,6 +154,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenChest"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f666921-c1dc-4df3-bd40-d873d1f63b41"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -343,6 +352,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""DropMovement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ad977c2-6631-4a9d-9072-b4e49bd82aee"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyMouse"",
+                    ""action"": ""OpenChest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0c7ba2c-4030-4c4f-8524-cde8624e8fe6"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""OpenChest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -386,6 +417,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_DropAttack = m_Player.FindAction("DropAttack", throwIfNotFound: true);
         m_Player_DropMovement = m_Player.FindAction("DropMovement", throwIfNotFound: true);
+        m_Player_OpenChest = m_Player.FindAction("OpenChest", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -473,6 +505,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_DropAttack;
     private readonly InputAction m_Player_DropMovement;
+    private readonly InputAction m_Player_OpenChest;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -512,6 +545,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/DropMovement".
         /// </summary>
         public InputAction @DropMovement => m_Wrapper.m_Player_DropMovement;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/OpenChest".
+        /// </summary>
+        public InputAction @OpenChest => m_Wrapper.m_Player_OpenChest;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -559,6 +596,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @DropMovement.started += instance.OnDropMovement;
             @DropMovement.performed += instance.OnDropMovement;
             @DropMovement.canceled += instance.OnDropMovement;
+            @OpenChest.started += instance.OnOpenChest;
+            @OpenChest.performed += instance.OnOpenChest;
+            @OpenChest.canceled += instance.OnOpenChest;
         }
 
         /// <summary>
@@ -591,6 +631,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @DropMovement.started -= instance.OnDropMovement;
             @DropMovement.performed -= instance.OnDropMovement;
             @DropMovement.canceled -= instance.OnDropMovement;
+            @OpenChest.started -= instance.OnOpenChest;
+            @OpenChest.performed -= instance.OnOpenChest;
+            @OpenChest.canceled -= instance.OnOpenChest;
         }
 
         /// <summary>
@@ -706,5 +749,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDropMovement(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OpenChest" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOpenChest(InputAction.CallbackContext context);
     }
 }

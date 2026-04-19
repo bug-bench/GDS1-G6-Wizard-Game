@@ -68,6 +68,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OpenChest",
+                    "type": "Button",
+                    "id": "3f666921-c1dc-4df3-bd40-d873d1f63b41",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -255,6 +264,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "DropMovement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ad977c2-6631-4a9d-9072-b4e49bd82aee",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyMouse",
+                    "action": "OpenChest",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0c7ba2c-4030-4c4f-8524-cde8624e8fe6",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "OpenChest",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
