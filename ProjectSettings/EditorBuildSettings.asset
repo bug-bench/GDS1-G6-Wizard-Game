@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Phase1_MyBackup.unity
     guid: 9240b00be0fdbc44fbad87fe1d1cb8f9
   - enabled: 1
+    path: Assets/Scenes/VotingScene.unity
+    guid: 4ab4dd99fdde44efe8ed00afdc8750ff
+  - enabled: 1
     path: Assets/Scenes/Phase2Arena.unity
     guid: fc3ec3e1911879541899d5741c632740
   - enabled: 1

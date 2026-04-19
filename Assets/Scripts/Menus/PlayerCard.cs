@@ -19,7 +19,7 @@ public class PlayerCard : MonoBehaviour
     new Color(0.76f, 0.27f, 0.27f), // muted red
     new Color(0.27f, 0.47f, 0.76f), // muted blue
     new Color(0.31f, 0.65f, 0.42f), // muted green
-    new Color(0.85f, 0.70f, 0.30f), // muted gold/yellow
+    new Color(0.85f, 0.70f, 0.30f), // muted yellow
     };
 
     public bool isReady = false;

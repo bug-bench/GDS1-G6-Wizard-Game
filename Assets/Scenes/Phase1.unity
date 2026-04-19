@@ -4303,8 +4303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac82c94ce0aeaf40a74429654804f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  phaseDuration: 300
-  transitionDelay: 20
+  phaseDuration: 3
+  transitionDelay: 1
   useSplitScreen: 0
 --- !u!4 &602761923
 Transform:
@@ -4352,7 +4352,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602761921}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d958e82fd59ba642a17aa1058e4bb4b, type: 3}
   m_Name: 

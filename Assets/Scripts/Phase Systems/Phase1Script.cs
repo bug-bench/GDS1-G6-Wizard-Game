@@ -11,7 +11,7 @@ public class Phase1Script : MonoBehaviour
     public static int CurrentPhase { get; private set; } = 1;
     private int currentPhase = 1;
 
-    [SerializeField] bool useSplitScreen = false; // Set Inspector to control split-screen for Phase 2
+    // [SerializeField] bool useSplitScreen = false; // Set Inspector to control split-screen for Phase 2
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -70,7 +70,7 @@ public class Phase1Script : MonoBehaviour
 
         // 进入 Phase2 竞技场前强制单相机（与 Phase2 共享镜头设计一致）；若竞技场也要分屏，勿在此处写死 false。
         // Force single shared camera before Phase2 arena; remove or gate this if arena should stay split-screen.
-        GameData.useSplitScreen = useSplitScreen;
+        // GameData.useSplitScreen = useSplitScreen;
     }
 
     IEnumerator PhaseTransition()
@@ -79,9 +79,11 @@ public class Phase1Script : MonoBehaviour
         yield return new WaitForSeconds(transitionDelay);
         // TransferPlayerDataToNextScene (); 
 
+        SceneManager.LoadScene("VotingScene");
+
         //Load Phase 2 scene
-        currentPhase = 2;
-        CurrentPhase = 2;
+        // currentPhase = 2;
+        // CurrentPhase = 2;
         
     }
 }
