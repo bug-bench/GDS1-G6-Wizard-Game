@@ -2,36 +2,38 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class VotingLogic : MonoBehaviour
 {
-    private Dictionary<int, string> playerVotes = new Dictionary<int, string>();
-    private bool votingActive = false;
-    private float votingDuration = 30f;
-    private Action<string> onVotingComplete;
-    private List<string> availableMinigames = new List<string>() {
-        "Arena",
-        "Survival"
-    };
+    [SerializeField] private List<MinigameData> availableMinigames = new List<MinigameData>();
+    // assign in Inspector. Add as many minigames with name, scene, useSplitScreen bool
 
-    public void BeginVoting(Action<string> callback)
+    private Dictionary<int, MinigameData> playerVotes = new Dictionary<int, MinigameData>();
+    private bool votingActive = false;
+    [SerializeField] private float votingDuration = 30f;
+    private Action<MinigameData> onVotingComplete;
+
+    public void SetMinigames(List<MinigameData> games)
+    {
+        availableMinigames = games;
+    }
+
+    public void BeginVoting(Action<MinigameData> callback)
     {
         votingActive = true;
         onVotingComplete = callback;
-
         Debug.Log("Voting started for " + votingDuration + " seconds");
         StartCoroutine(VotingTimer());
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     IEnumerator VotingTimer()
     {
         yield return new WaitForSeconds(votingDuration);
         EndVoting();
     }
 
-    // CALLED BY UI BUTTONS
-    public void RegisterVote(int playerIndex, string minigameName)
+    public void RegisterVote(int playerIndex, MinigameData minigame)
     {
         if (!votingActive)
         {
@@ -39,57 +41,63 @@ public class VotingLogic : MonoBehaviour
             return;
         }
 
-        if (!availableMinigames.Contains(minigameName))
+        if (minigame == null)
         {
-            Debug.LogWarning("Invalid minigame vote: " + minigameName);
+            Debug.LogWarning("Invalid vote");
             return;
         }
 
-        playerVotes[playerIndex] = minigameName;
-
-        Debug.Log($"Player {playerIndex} voted for {minigameName}");
+        playerVotes[playerIndex] = minigame;
+        Debug.Log($"Player {playerIndex} voted for {minigame.minigameName}");
     }
 
     void EndVoting()
     {
         votingActive = false;
 
+        MinigameData chosen;
+
         if (playerVotes.Count == 0)
         {
-            Debug.Log("No votes cast - selecting random minigame");
-            string randomPick = availableMinigames[UnityEngine.Random.Range(0, availableMinigames.Count)];
-            onVotingComplete?.Invoke(randomPick);
-            return;
+            Debug.Log("No votes — picking random");
+            chosen = availableMinigames[UnityEngine.Random.Range(0, availableMinigames.Count)];
+        }
+        else
+        {
+            chosen = GetWeightedResult();
         }
 
-        string chosen = GetWeightedResult();
+        Debug.Log("Selected: " + chosen.minigameName);
+
+        // Use the minigame's own splitScreen setting — no hardcoding
+        GameData.useSplitScreen = chosen.useSplitScreen;
+        GameData.selectedMinigame = chosen.minigameName;
+
         onVotingComplete?.Invoke(chosen);
+
+        SceneManager.LoadScene(chosen.sceneName);
     }
 
-    string GetWeightedResult()
+    MinigameData GetWeightedResult()
     {
-        Dictionary<string, int> voteCounts = new Dictionary<string, int>();
+        Dictionary<MinigameData, int> voteCounts = new Dictionary<MinigameData, int>();
 
-        // Count votes
         foreach (var vote in playerVotes.Values)
         {
             if (!voteCounts.ContainsKey(vote))
                 voteCounts[vote] = 0;
-
             voteCounts[vote]++;
         }
 
-        // Build weighted list
-        List<string> weightedPool = new List<string>();
+        List<MinigameData> weightedPool = new List<MinigameData>();
 
         foreach (var pair in voteCounts)
-        {
             for (int i = 0; i < pair.Value; i++)
                 weightedPool.Add(pair.Key);
-        }
 
-        // Random pick
-        int randIndex = UnityEngine.Random.Range(0, weightedPool.Count);
-        return weightedPool[randIndex];
+        foreach (var item in weightedPool)
+            Debug.Log($"Pool entry: {item.minigameName}");
+
+        return weightedPool[UnityEngine.Random.Range(0, weightedPool.Count)];
     }
 }
