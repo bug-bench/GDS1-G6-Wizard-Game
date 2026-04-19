@@ -11,6 +11,9 @@ public class Phase1Script : MonoBehaviour
     public static int CurrentPhase { get; private set; } = 1;
     private int currentPhase = 1;
 
+    [Header("UI")]
+    [SerializeField] private TMPro.TextMeshProUGUI[] timerTexts;    
+
     // [SerializeField] bool useSplitScreen = false; // Set Inspector to control split-screen for Phase 2
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,6 +22,29 @@ public class Phase1Script : MonoBehaviour
         CurrentPhase = currentPhase;
         // currentPhase = 2;
         // CurrentPhase = 2;
+        StartCoroutine(FindTimerTextsNextFrame());
+    }
+
+    IEnumerator FindTimerTextsNextFrame()
+    {
+        yield return null; // wait for PlayerSpawner to spawn players
+        
+        var allTexts = FindObjectsByType<TMPro.TextMeshProUGUI>(FindObjectsSortMode.None);
+        var found = new System.Collections.Generic.List<TMPro.TextMeshProUGUI>();
+        
+        foreach (var t in allTexts)
+            if (t.gameObject.name == "TimerText") // match by name
+                found.Add(t);
+        
+        timerTexts = found.ToArray();
+        Debug.Log($"Phase1Script found {timerTexts.Length} timer texts");
+    }
+
+    void UpdateTimerUI(string value)
+    {
+        if (timerTexts == null) return;
+        foreach (var t in timerTexts)
+            if (t != null) t.text = $"Time Left: {value}";
     }
 
     // Update is called once per frame
@@ -28,10 +54,13 @@ public class Phase1Script : MonoBehaviour
         if (timerRunning)
         {
             timer -= Time.deltaTime;
+            UpdateTimerUI(Mathf.CeilToInt(timer).ToString());
 
-            if (timer <= 0) {
+            if (timer <= 0)
+            {
                 timer = 0;
                 timerRunning = false;
+                UpdateTimerUI("0");
                 OnPhaseComplete();
             }
         }

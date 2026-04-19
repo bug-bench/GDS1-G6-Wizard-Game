@@ -15,6 +15,8 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
+        if (SceneManager.GetActiveScene().name == mainMenuScene) return;
+         
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             TogglePause();
 
@@ -55,6 +57,7 @@ public class PauseMenu : MonoBehaviour
     public void OnMainMenuPressed()
     {
         IsPaused = false;
+        pausePanel.SetActive(false); // ADD THIS
         Time.timeScale = 1f;
         GameData.players.Clear();
         GameData.winnerIndex = -1;
