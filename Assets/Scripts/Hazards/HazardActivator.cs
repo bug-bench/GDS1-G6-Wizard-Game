@@ -49,7 +49,7 @@ public class HazardActivator : MonoBehaviour
             currentindex = newindex;
 
             ActivateHazards(hazardgroups[currentindex]);
-            Debug.Log("Activated: " + hazardgroups[currentindex]);
+          
 
             yield return new WaitForSeconds(activeDuration);
 
