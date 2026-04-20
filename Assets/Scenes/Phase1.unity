@@ -11079,8 +11079,8 @@ Transform:
   m_GameObject: {fileID: 1481939395}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.06, y: 0.53534, z: 0}
-  m_LocalScale: {x: 1, y: 0.15627095, z: 1}
+  m_LocalPosition: {x: 31.1013, y: 0.53534, z: 0}
+  m_LocalScale: {x: 1.0826, y: 0.15627095, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1906474239}
@@ -54522,6 +54522,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: SpellPrefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: 'SpellPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: 'SpellPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: 'SpellPrefabs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

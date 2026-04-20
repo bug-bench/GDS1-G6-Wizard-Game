@@ -110,12 +110,16 @@ MonoBehaviour:
   - {fileID: 6652476222007982217, guid: eda0ee78f7a03e74b8305df4937eeeba, type: 3}
   - {fileID: 8531777423059755645, guid: 86f67c003d52a4249bbaded45805e218, type: 3}
   - {fileID: 3689716220766011371, guid: 6ac3dba6fa4558b4db3a9f8db6ca47f8, type: 3}
-  - {fileID: 3689716220766011371, guid: 6ac3dba6fa4558b4db3a9f8db6ca47f8, type: 3}
-  - {fileID: 3689716220766011371, guid: 6ac3dba6fa4558b4db3a9f8db6ca47f8, type: 3}
   mindrops: 1
   maxdrops: 3
   SpellPrefabs:
   - {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
+  - {fileID: 2848393363742389300, guid: f26e7b5623dd50643ae1bcf8f81c2b7f, type: 3}
+  - {fileID: 2848393363742389300, guid: 48c445da198fa884399f1c14dd326d03, type: 3}
+  - {fileID: 2848393363742389300, guid: 035e076c079a88d4b960a59fbe06015b, type: 3}
+  - {fileID: 2848393363742389300, guid: 50396253bc42e3340a24f0351eb7bfcf, type: 3}
+  - {fileID: 2848393363742389300, guid: adcbd26f59ff1924a9d3c02f1315da4e, type: 3}
+  - {fileID: 2848393363742389300, guid: 8b2c4a0d5b440224d984f5f3d6017ec0, type: 3}
   SpelldropChance: 0.5
   dropforce: 10
 --- !u!61 &8506434955394964257
