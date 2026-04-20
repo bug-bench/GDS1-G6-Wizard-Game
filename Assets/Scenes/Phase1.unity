@@ -3732,6 +3732,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: dropforce
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5733,6 +5737,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: dropforce
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6140,6 +6148,10 @@ PrefabInstance:
     - target: {fileID: 4725372157210391327, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: dropforce
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12165,6 +12177,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: dropforce
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13406,6 +13422,10 @@ PrefabInstance:
     - target: {fileID: 4725372157210391327, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: dropforce
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -53506,6 +53526,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: dropforce
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -53567,6 +53591,10 @@ PrefabInstance:
     - target: {fileID: 4725372157210391327, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: dropforce
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -54523,21 +54551,37 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: dropforce
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
       propertyPath: SpellPrefabs.Array.size
-      value: 4
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
       propertyPath: 'SpellPrefabs.Array.data[1]'
       value: 
-      objectReference: {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
+      objectReference: {fileID: 2848393363742389300, guid: f26e7b5623dd50643ae1bcf8f81c2b7f, type: 3}
     - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
       propertyPath: 'SpellPrefabs.Array.data[2]'
       value: 
-      objectReference: {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
+      objectReference: {fileID: 2848393363742389300, guid: 48c445da198fa884399f1c14dd326d03, type: 3}
     - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
       propertyPath: 'SpellPrefabs.Array.data[3]'
       value: 
-      objectReference: {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
+      objectReference: {fileID: 2848393363742389300, guid: 035e076c079a88d4b960a59fbe06015b, type: 3}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: 'SpellPrefabs.Array.data[4]'
+      value: 
+      objectReference: {fileID: 2848393363742389300, guid: 50396253bc42e3340a24f0351eb7bfcf, type: 3}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: 'SpellPrefabs.Array.data[5]'
+      value: 
+      objectReference: {fileID: 2848393363742389300, guid: adcbd26f59ff1924a9d3c02f1315da4e, type: 3}
+    - target: {fileID: 4844769412893279343, guid: 68f62580a22324a42bf1b5291412ed9d, type: 3}
+      propertyPath: 'SpellPrefabs.Array.data[6]'
+      value: 
+      objectReference: {fileID: 2848393363742389300, guid: 8b2c4a0d5b440224d984f5f3d6017ec0, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
