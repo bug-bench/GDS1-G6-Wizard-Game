@@ -7267,6 +7267,67 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &924501451
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 924501453}
+  - component: {fileID: 924501452}
+  m_Layer: 0
+  m_Name: spellSpawner (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &924501452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924501451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c576e789810d6f47aebd6272ada022a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpellSpawner
+  spellPrefab:
+  - {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
+  - {fileID: 2848393363742389300, guid: f26e7b5623dd50643ae1bcf8f81c2b7f, type: 3}
+  - {fileID: 2848393363742389300, guid: 48c445da198fa884399f1c14dd326d03, type: 3}
+  - {fileID: 2848393363742389300, guid: 035e076c079a88d4b960a59fbe06015b, type: 3}
+  - {fileID: 2848393363742389300, guid: 50396253bc42e3340a24f0351eb7bfcf, type: 3}
+  - {fileID: 2848393363742389300, guid: adcbd26f59ff1924a9d3c02f1315da4e, type: 3}
+  - {fileID: 2848393363742389300, guid: 8b2c4a0d5b440224d984f5f3d6017ec0, type: 3}
+  Spawncenter: {x: 22.7, y: 5.02}
+  SpawnSize: {x: 8.88, y: 15.41}
+  numberToSpawn: 4
+  respawnDelay: 10
+  DistancebetweenStats: 1
+  statLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  maxattempts: 20
+--- !u!4 &924501453
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924501451}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 22.65, y: 2.88, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &936475635
 GameObject:
   m_ObjectHideFlags: 0
@@ -7865,6 +7926,67 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &1164015680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1164015682}
+  - component: {fileID: 1164015681}
+  m_Layer: 0
+  m_Name: spellSpawner (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1164015681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164015680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c576e789810d6f47aebd6272ada022a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpellSpawner
+  spellPrefab:
+  - {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
+  - {fileID: 2848393363742389300, guid: f26e7b5623dd50643ae1bcf8f81c2b7f, type: 3}
+  - {fileID: 2848393363742389300, guid: 48c445da198fa884399f1c14dd326d03, type: 3}
+  - {fileID: 2848393363742389300, guid: 035e076c079a88d4b960a59fbe06015b, type: 3}
+  - {fileID: 2848393363742389300, guid: 50396253bc42e3340a24f0351eb7bfcf, type: 3}
+  - {fileID: 2848393363742389300, guid: adcbd26f59ff1924a9d3c02f1315da4e, type: 3}
+  - {fileID: 2848393363742389300, guid: 8b2c4a0d5b440224d984f5f3d6017ec0, type: 3}
+  Spawncenter: {x: 8.5, y: -0.39}
+  SpawnSize: {x: 3.45, y: 24.7}
+  numberToSpawn: 4
+  respawnDelay: 10
+  DistancebetweenStats: 1
+  statLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  maxattempts: 20
+--- !u!4 &1164015682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164015680}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 22.65, y: 2.88, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1164354406
 GameObject:
   m_ObjectHideFlags: 0
@@ -54610,6 +54732,8 @@ SceneRoots:
   - {fileID: 98562639}
   - {fileID: 472029104}
   - {fileID: 1494811796}
+  - {fileID: 924501453}
+  - {fileID: 1164015682}
   - {fileID: 2027817980}
   - {fileID: 1164354407}
   - {fileID: 1041449891}
