@@ -4797,7 +4797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac82c94ce0aeaf40a74429654804f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  phaseDuration: 10
+  phaseDuration: 150
   transitionDelay: 1
   timerTexts: []
 --- !u!4 &602761923
