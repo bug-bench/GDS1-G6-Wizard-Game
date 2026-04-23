@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.InputSystem;
 
 public class InteractableChest : MonoBehaviour
@@ -18,19 +19,29 @@ public class InteractableChest : MonoBehaviour
     private bool playerInRange = false;
     private Transform player;
 
-   
+    private Animator anim;
+    private bool Opened = false;
+
+
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if (Opened) return;
         if(playerInRange && Keyboard.current.rKey.wasPressedThisFrame)
         {
-            BreakObject();
+            
+            Openchest();
         }
 
         if(playerInRange && Gamepad.current.buttonSouth.wasPressedThisFrame)
         {
-            BreakObject();
+            
+            Openchest();
         }
     }
 
@@ -105,4 +116,33 @@ public class InteractableChest : MonoBehaviour
             playerInRange = false;
         }
     }
+
+    void Openchest()
+    {
+
+        Opened = true;
+
+        if(anim != null)
+        {
+
+            anim.SetTrigger("Open");
+
+
+        }
+
+        StartCoroutine(OpenRoutine());
+
+       
+
+
+    }
+
+    IEnumerator OpenRoutine()
+    {
+        yield return new WaitForSeconds(1.6f);
+
+        BreakObject();
+
+    }
+
 }
