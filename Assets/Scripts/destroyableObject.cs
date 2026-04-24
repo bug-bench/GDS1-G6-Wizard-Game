@@ -1,9 +1,12 @@
 using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 
 public class destroyableObject : MonoBehaviour
 {
-    public float health = 20f;
+    public int hitstoBreak = 3;
+    private int currentHits = 0;
+  
 
     public GameObject[] StatPrefabs;
     public int mindrops = 2;
@@ -17,17 +20,33 @@ public class destroyableObject : MonoBehaviour
 
     public float dropforce = 3f;
 
-    private Vector3 startPosition;
+    
+
+    public float delay = 0.5f;
+    private Animator anim;
+    private bool isBroken = false;
     void Start()
     {
-        startPosition = transform.position;
+       
+        anim = GetComponent<Animator>();
     }
 
     public void takeDamage(float damage)
     {
-        health -= damage;
 
-        if(health <=0)
+        if (isBroken) return;
+
+        currentHits++;
+        
+        if(currentHits<hitstoBreak)
+        {
+            if(anim != null)
+            {
+                anim.SetTrigger("Hit");
+
+            }
+        }
+        else
         {
             BreakObject();
         }
@@ -35,11 +54,23 @@ public class destroyableObject : MonoBehaviour
    
     void BreakObject()
     {
+        isBroken = true;
+       if(anim !=null)
+        {
+            anim.SetTrigger("Break");
+        }
+
+        StartCoroutine(BreakRoutine());
+
+    }
+
+    IEnumerator BreakRoutine()
+    {
+        yield return new WaitForSeconds(delay);
         DropStats();
         DropSpells();
 
         Destroy(gameObject);
-
     }
 
     void DropStats()
