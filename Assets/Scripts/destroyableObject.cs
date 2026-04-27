@@ -25,10 +25,15 @@ public class destroyableObject : MonoBehaviour
     public float delay = 0.5f;
     private Animator anim;
     private bool isBroken = false;
+
+
+    private AudioSource BarrelSound;
     void Start()
     {
        
         anim = GetComponent<Animator>();
+
+        BarrelSound = GetComponent<AudioSource>();
     }
 
     public void takeDamage(float damage)
@@ -61,6 +66,8 @@ public class destroyableObject : MonoBehaviour
         }
 
         StartCoroutine(BreakRoutine());
+
+        BarrelSound.Play();
 
     }
 
