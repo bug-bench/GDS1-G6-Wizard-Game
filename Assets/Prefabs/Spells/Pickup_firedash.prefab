@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8768904571092098124}
   - component: {fileID: 2935070601429830799}
   - component: {fileID: 5539106094290776636}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Pickup_firedash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 3622272335237750432}
   - component: {fileID: 3928292970709921665}
   - component: {fileID: 4696770049037580002}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,7 +365,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5660896469549945333}
   - component: {fileID: 4877365047494357086}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: itemcollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
