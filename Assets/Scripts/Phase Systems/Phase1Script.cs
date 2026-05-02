@@ -20,8 +20,6 @@ public class Phase1Script : MonoBehaviour
     {
         timer = phaseDuration;
         CurrentPhase = currentPhase;
-        // currentPhase = 2;
-        // CurrentPhase = 2;
         StartCoroutine(FindTimerTextsNextFrame());
     }
 
