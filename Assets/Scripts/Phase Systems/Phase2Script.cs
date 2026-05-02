@@ -27,6 +27,28 @@ public class Phase2Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Phase2Survival"))
+        {
+            if (phaseChosen == false)
+            {
+                phaseChosen = true;
+            }
+            if (currentMinigame != "Survival")
+            {
+                currentMinigame = "Survival";
+            }
+        }
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Phase2Arena"))
+        {
+            if (phaseChosen == false)
+            {
+                phaseChosen = true;
+            }
+            if (currentMinigame != "Arena")
+            {
+                currentMinigame = "Arena";
+            }
+        }
         if (p1s.GetCurrentPhase() == 2 && !phaseChosen)
         {
             phaseChosen = true;

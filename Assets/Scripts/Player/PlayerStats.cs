@@ -226,9 +226,13 @@ public class PlayerStats : MonoBehaviour
         {
             DropRandomPickups();
         }
-        if (p1s.GetComponent<Phase2Script>().GetCurrentMinigame() == "Arena")
+
+        Phase2Script p2 = p1s != null ? p1s.GetComponent<Phase2Script>() : null;
+
+        if (p2 != null && p2.GetCurrentMinigame() == "Arena")
         {
             IsAliveArena = false;
+
             ArenaScript AS = FindFirstObjectByType<ArenaScript>();
             Debug.Log($"ArenaScript found: {AS != null}"); // ADD THIS
             if (AS != null) 
