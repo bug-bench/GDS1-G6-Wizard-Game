@@ -65,10 +65,26 @@ public class SurvivalScript : MonoBehaviour
 
     public void PlayerEliminated(GameObject player)
     {
-        if (!playersAlive.Contains(player)) return;
+        if (player == null) return;
 
-        playersAlive.Remove(player);
-        playersEliminated.Add(player);
+        if (!playersEliminated.Contains(player))
+        {
+            playersEliminated.Add(player);
+        }
+
+        var alivePlayers = new List<GameObject>();
+
+        foreach (var p in players)
+        {
+            if (p != null && p.activeInHierarchy)
+            {
+                alivePlayers.Add(p);
+            }
+        }
+        // if (!playersAlive.Contains(player)) return;
+
+        // playersAlive.Remove(player);
+        // playersEliminated.Add(player);
 
         Debug.Log(player.name + " eliminated. Remaining: " + playersAlive.Count);
 
