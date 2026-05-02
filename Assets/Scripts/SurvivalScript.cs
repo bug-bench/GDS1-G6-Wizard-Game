@@ -24,6 +24,11 @@ public class SurvivalScript : MonoBehaviour
         StartCoroutine(SetupNextFrame());
     }
 
+    void Update()
+    {
+        TryEndGameAfterElimination();
+    }
+
     IEnumerator SetupNextFrame()
     {
         yield return null;
@@ -88,12 +93,45 @@ public class SurvivalScript : MonoBehaviour
 
         Debug.Log(player.name + " eliminated. Remaining: " + playersAlive.Count);
 
-        if (playersAlive.Count == 1)
+        TryEndGameAfterElimination();
+        // if (playersAlive.Count == 1)
+        // {
+        //     EndGame(playersAlive[0]);
+        // }
+        // else if (playersAlive.Count == 0)
+        // {
+        //     EndGame(null);
+        // }
+    }
+
+    List<GameObject> GetAlivePlayers()
+    {
+        List<GameObject> alive = new List<GameObject>();
+
+        foreach (var p in players)
         {
-            EndGame(playersAlive[0]);
+            if (p != null && p.activeInHierarchy)
+            {
+                alive.Add(p);
+            }
         }
-        else if (playersAlive.Count == 0)
+
+        return alive;
+    }
+
+    void TryEndGameAfterElimination()
+    {
+        var alivePlayers = GetAlivePlayers();
+
+        if (alivePlayers.Count == 1)
         {
+            GameObject winner = alivePlayers[0];
+            Debug.Log("Winner: " + winner.name);
+            EndGame(winner);
+        }
+        else if (alivePlayers.Count == 0)
+        {
+            Debug.Log("Draw!");
             EndGame(null);
         }
     }

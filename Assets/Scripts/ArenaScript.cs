@@ -29,7 +29,7 @@ public class ArenaScript : MonoBehaviour
                 PlayerInput pi = player.GetComponent<PlayerInput>();
                 pi.DeactivateInput();
             }
-            EndGame(playersEliminated, playersAlive[0]);
+            EndGame(playersAlive[0]);
         }
         TryEndGameAfterElimination();
     }
@@ -117,7 +117,7 @@ public class ArenaScript : MonoBehaviour
         {
             GameObject winner = alivePlayers[0];
             Debug.Log("Winner: " + winner.name);
-            EndGame(playersEliminated, winner);
+            EndGame(winner);
         }
         else if (alivePlayers.Count == 0)
         {
@@ -171,7 +171,7 @@ public class ArenaScript : MonoBehaviour
         SceneManager.LoadScene(winScene);
     }
 
-    private void EndGame(List<GameObject> eliminations, GameObject winner)
+    private void EndGame(GameObject winner)
     {
         var playerInput = winner.GetComponent<UnityEngine.InputSystem.PlayerInput>();
         GameData.winnerIndex = playerInput != null ? playerInput.playerIndex : 0;
