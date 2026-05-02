@@ -16,8 +16,7 @@ public class InteractableChest : MonoBehaviour
 
     public float dropforce = 3f;
 
-    private bool playerInRange = false;
-    private Transform player;
+    private PlayerInput currentPlayer;
 
     private Animator anim;
     private bool Opened = false;
@@ -31,14 +30,19 @@ public class InteractableChest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Opened) return;
-        if(playerInRange && Keyboard.current.rKey.wasPressedThisFrame)
+
+        if (Opened || currentPlayer == null) return;
+
+        var gamepad = currentPlayer.GetDevice<Gamepad>();
+        var keyboard = currentPlayer.GetDevice<Keyboard>();
+
+        if(keyboard != null && Keyboard.current.rKey.wasPressedThisFrame)
         {
             
             Openchest();
         }
 
-        if(playerInRange && Gamepad.current.buttonSouth.wasPressedThisFrame)
+        if(gamepad !=null && Gamepad.current.buttonSouth.wasPressedThisFrame)
         {
             
             Openchest();
@@ -103,17 +107,19 @@ public class InteractableChest : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<PlayerStats>() != null)
+        PlayerInput pi = other.GetComponent<PlayerInput>();
+        if (pi != null)
         {
-            playerInRange = true;
+            currentPlayer = pi;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.GetComponent<PlayerStats>() != null)
+        PlayerInput pi = other.GetComponent<PlayerInput>();
+        if (pi != null && pi == currentPlayer)
         {
-            playerInRange = false;
+            currentPlayer = pi;
         }
     }
 
