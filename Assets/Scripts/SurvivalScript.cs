@@ -12,7 +12,7 @@ public class SurvivalScript : MonoBehaviour
     private List<GameObject> playersAlive = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
 
-    private SurvivalHazard[] hazards;
+    private List<SurvivalHazard> hazards = new List<SurvivalHazard>();
 
     private int hazardsFinishedThisLoop = 0;
     private int totalHazards;
@@ -35,15 +35,28 @@ public class SurvivalScript : MonoBehaviour
             playersAlive.Add(p);
         }
 
-        hazards = FindObjectsByType<SurvivalHazard>(FindObjectsSortMode.None);
-        totalHazards = hazards.Length;
+        hazards.Clear();
 
-        foreach (var hazard in hazards)
+        var foundHazards = FindObjectsByType <SurvivalHazard>(FindObjectsSortMode.None);
+
+        foreach (var hazard in foundHazards)
         {
             hazard.SetManager(this);
+            hazards.Add(hazard);
         }
 
+        totalHazards = hazards.Count;
+
         Debug.Log($"Survival started with {playersAlive.Count} players and {totalHazards} hazards");
+    }
+
+    public void RegisterHazard(SurvivalHazard hazard)
+    {
+        if (!hazards.Contains(hazard))
+        {
+            hazards.Add(hazard);
+            totalHazards = hazards.Count;
+        }
     }
 
     // ====================

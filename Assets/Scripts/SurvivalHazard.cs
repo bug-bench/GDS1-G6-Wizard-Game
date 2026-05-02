@@ -13,7 +13,7 @@ public class SurvivalHazard : MonoBehaviour
     public Direction moveDirection;
 
     [Header("Stats")]
-    public float speed = 10f;
+    public float speed = 1f;
     public float health = 30f;
 
     private float maxHealth;
@@ -40,7 +40,14 @@ public class SurvivalHazard : MonoBehaviour
         if (ReachedEnd())
         {
             moving = false;
-            manager.HazardFinished();
+            if (manager != null)
+            {
+                manager.HazardFinished();
+            }
+            else
+            {
+                Debug.LogWarning("Hazard has no manager!");
+            }
         }
     }
 
