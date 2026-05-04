@@ -29,8 +29,9 @@ public class ArenaScript : MonoBehaviour
                 PlayerInput pi = player.GetComponent<PlayerInput>();
                 pi.DeactivateInput();
             }
-            EndGame(playersEliminated, playersAlive[0]);
+            EndGame(playersAlive[0]);
         }
+        TryEndGameAfterElimination();
     }
 
     private IEnumerator FindPlayersNextFrame()
@@ -60,53 +61,90 @@ public class ArenaScript : MonoBehaviour
 
     public void PlayerEliminated(GameObject player)
     {
-        playersAlive.RemoveAll(p => p == null);
+        if (player == null) return;
 
-        if (player == null)
+        if (!playersEliminated.Contains(player))
         {
-            Debug.LogWarning("PlayerEliminated called with null reference.");
-            TryEndGameAfterElimination();
-            return;
-        }
-
-        PlayerStats stats = player.GetComponent<PlayerStats>();
-        if (playersAlive.Contains(player) && stats != null && stats.IsAliveArena == false)
-        {
-            playersAlive.Remove(player);
             playersEliminated.Add(player);
-            Debug.Log(player.name + " eliminated. Remaining: " + playersAlive.Count);
-        }
-        else
-        {
-            Debug.LogWarning(player.name + " not found in playersAlive or still marked alive.");
+            Debug.Log(player.name + " eliminated.");
         }
 
         TryEndGameAfterElimination();
+        // playersAlive.RemoveAll(p => p == null);
+
+        // if (player == null)
+        // {
+        //     Debug.LogWarning("PlayerEliminated called with null reference.");
+        //     TryEndGameAfterElimination();
+        //     return;
+        // }
+
+        // PlayerStats stats = player.GetComponent<PlayerStats>();
+        // if (playersAlive.Contains(player) && stats != null && stats.IsAliveArena == false)
+        // {
+        //     playersAlive.Remove(player);
+        //     playersEliminated.Add(player);
+        //     Debug.Log(player.name + " eliminated. Remaining: " + playersAlive.Count);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning(player.name + " not found in playersAlive or still marked alive.");
+        // }
+
+        // TryEndGameAfterElimination();
+    }
+
+    List<GameObject> GetAlivePlayers()
+    {
+        List<GameObject> alive = new List<GameObject>();
+
+        foreach (var p in players)
+        {
+            if (p != null && p.activeInHierarchy)
+            {
+                alive.Add(p);
+            }
+        }
+
+        return alive;
     }
 
     void TryEndGameAfterElimination()
     {
-        playersAlive.RemoveAll(p => p == null);
+        var alivePlayers = GetAlivePlayers();
 
-        if (playersAlive.Count == 1)
+        if (alivePlayers.Count == 1)
         {
-            GameObject winner = playersAlive[0];
-            if (winner == null)
-            {
-                playersAlive.RemoveAll(p => p == null);
-                if (playersAlive.Count == 0)
-                    EndGame(playersEliminated);
-                return;
-            }
-
+            GameObject winner = alivePlayers[0];
             Debug.Log("Winner: " + winner.name);
-            EndGame(playersEliminated, winner);
+            EndGame(winner);
         }
-        else if (playersAlive.Count == 0)
+        else if (alivePlayers.Count == 0)
         {
             Debug.Log("Draw!");
             EndGame(playersEliminated);
         }
+        // playersAlive.RemoveAll(p => p == null);
+
+        // if (playersAlive.Count == 1)
+        // {
+        //     GameObject winner = playersAlive[0];
+        //     if (winner == null)
+        //     {
+        //         playersAlive.RemoveAll(p => p == null);
+        //         if (playersAlive.Count == 0)
+        //             EndGame(playersEliminated);
+        //         return;
+        //     }
+
+        //     Debug.Log("Winner: " + winner.name);
+        //     EndGame(playersEliminated, winner);
+        // }
+        // else if (playersAlive.Count == 0)
+        // {
+        //     Debug.Log("Draw!");
+        //     EndGame(playersEliminated);
+        // }
     }
 
     private void ShuffleArray(GameObject[] array)
@@ -133,7 +171,7 @@ public class ArenaScript : MonoBehaviour
         SceneManager.LoadScene(winScene);
     }
 
-    private void EndGame(List<GameObject> eliminations, GameObject winner)
+    private void EndGame(GameObject winner)
     {
         var playerInput = winner.GetComponent<UnityEngine.InputSystem.PlayerInput>();
         GameData.winnerIndex = playerInput != null ? playerInput.playerIndex : 0;

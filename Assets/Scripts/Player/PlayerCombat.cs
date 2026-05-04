@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -359,6 +360,7 @@ public class PlayerCombat : MonoBehaviour
     void DropSpell(SpellData dataToDrop)
     {
         if (dataToDrop == null) return;
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("VotingScene")) return;
         if (dataToDrop.pickupPrefab == null)
         {
             Debug.LogWarning($"丢弃失败：「{dataToDrop.spellName}」的 SpellData 未指定 pickupPrefab，地上不会出现武器。 | Drop failed: '{dataToDrop.spellName}' SpellData has no pickupPrefab.");
