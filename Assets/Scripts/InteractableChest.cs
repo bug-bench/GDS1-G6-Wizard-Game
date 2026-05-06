@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.InputSystem;
 
 public class InteractableChest : MonoBehaviour
@@ -15,22 +16,36 @@ public class InteractableChest : MonoBehaviour
 
     public float dropforce = 3f;
 
-    private bool playerInRange = false;
-    private Transform player;
+    private PlayerInput currentPlayer;
 
-   
+    private Animator anim;
+    private bool Opened = false;
+
+
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if(playerInRange && Keyboard.current.rKey.wasPressedThisFrame)
+
+        if (Opened || currentPlayer == null) return;
+
+        var gamepad = currentPlayer.GetDevice<Gamepad>();
+        var keyboard = currentPlayer.GetDevice<Keyboard>();
+
+        if(keyboard != null && Keyboard.current.rKey.wasPressedThisFrame)
         {
-            BreakObject();
+            
+            Openchest();
         }
 
-        if(playerInRange && Gamepad.current.buttonSouth.wasPressedThisFrame)
+        if(gamepad !=null && Gamepad.current.buttonSouth.wasPressedThisFrame)
         {
-            BreakObject();
+            
+            Openchest();
         }
     }
 
@@ -92,17 +107,48 @@ public class InteractableChest : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<PlayerStats>() != null)
+        PlayerInput pi = other.GetComponent<PlayerInput>();
+        if (pi != null)
         {
-            playerInRange = true;
+            currentPlayer = pi;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.GetComponent<PlayerStats>() != null)
+        PlayerInput pi = other.GetComponent<PlayerInput>();
+        if (pi != null && pi == currentPlayer)
         {
-            playerInRange = false;
+            currentPlayer = pi;
         }
     }
+
+    void Openchest()
+    {
+
+        Opened = true;
+
+        if(anim != null)
+        {
+
+            anim.SetTrigger("Open");
+
+
+        }
+
+        StartCoroutine(OpenRoutine());
+
+       
+
+
+    }
+
+    IEnumerator OpenRoutine()
+    {
+        yield return new WaitForSeconds(1.6f);
+
+        BreakObject();
+
+    }
+
 }

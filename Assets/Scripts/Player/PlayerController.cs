@@ -27,12 +27,16 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool canMove = true;
 
     [Header("Movement feel (PUBG-style / 惯性加速)")]
-    [Range(1f, 80f)]
-    [Tooltip("有输入时每秒增加的速度量（沿输入方向累加，再限制最大速度）；越小起步越慢。 — Acceleration added per second along input (then clamped); lower = slower ramp-up.")]
-    public float moveAcceleration = 14f;
-    [Range(1f, 80f)]
-    [Tooltip("无输入时每秒沿当前速度方向减少的速率（越小滑得越远）。惯性弱时检查 Rigidbody2D Linear Damping 建议为 0。 — Decel along velocity when no input; set RB Linear Damping to 0 if slide feels weak.")]
-    public float moveDeceleration = 10f;
+    [Range(1f, 200f)]
+    [Tooltip("基础起步加速度。有输入时每秒增加的速度量；越小起步越慢。 — Base acceleration.")]
+    public float moveAcceleration = 60f;
+    [Range(1f, 200f)]
+    [Tooltip("基础刹车减速度。无输入时每秒减少的速率（越小滑得越远）。 — Base deceleration.")]
+    public float moveDeceleration = 50f;
+
+    [Range(0f, 1f)]
+    [Tooltip("【新增】速度对惯性的正相关影响系数。速度越快，惯性越大（加减速变慢，滑得更远）。设为0则惯性固定。")]
+    public float inertiaSpeedFactor = 0.15f;
 
     private Rigidbody2D rb;
     private PlayerInput playerInput;
@@ -96,15 +100,26 @@ public class PlayerController : MonoBehaviour
         {
             // 1. PUBG-like: 沿输入方向累加速度 + 上限，松手沿原方向摩擦减速（惯性），不是每帧直接设为目标速度。
             // Additive accel along input, clamp speed; release decelerates along current velocity (momentum slide).
-            float maxSpeed = playerStats != null ? playerStats.speed * sprintMultiplier : 5f;
+            float baseSpeed = playerStats != null ? playerStats.speed : 5f;
+            float maxSpeed = baseSpeed * sprintMultiplier;
             
+            // 【新增】计算惯性倍率：速度越快，惯性越大（正相关）
+            // 假设标准速度是 5f，超过 5f 的部分会按比例增加惯性
+            float speedExcess = Mathf.Max(0f, maxSpeed - 5f);
+            float inertiaMultiplier = 1f + (speedExcess * inertiaSpeedFactor);
+
             bool canInputMove = playerStats == null || (!playerStats.isStunned && !playerStats.isRooted);
             Vector2 input = canInputMove ? Vector2.ClampMagnitude(moveInput, 1f) : Vector2.zero;
             
             Vector2 v = rb.linearVelocity;
             float dt = Time.fixedDeltaTime;
-            float accel = onIce ? moveAcceleration * iceAccelerationMultiplier : moveAcceleration;
-            float decel = onIce ? moveDeceleration * iceDecelerationMultiplier : currentDeceleration;
+
+            // 惯性越大，实际的加减速度越小（起步更肉，滑得更远）
+            float actualAccel = moveAcceleration / inertiaMultiplier;
+            float actualDecel = currentDeceleration / inertiaMultiplier;
+
+            float accel = onIce ? actualAccel * iceAccelerationMultiplier : actualAccel;
+            float decel = onIce ? actualDecel * iceDecelerationMultiplier : actualDecel;
 
             if (input.sqrMagnitude > 1e-6f)
             {

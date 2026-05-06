@@ -58,9 +58,18 @@ public class ostacleSpawner : MonoBehaviour
 
         GameObject prefab = sprites[Random.Range(0, sprites.Length)];
 
-        Instantiate(prefab, pos, Quaternion.identity);
+        GameObject obj = Instantiate(prefab, pos, Quaternion.identity);
 
-            
+        SurvivalHazard hazard = obj.GetComponent<SurvivalHazard>();
+        if (hazard != null)
+        {
+            SurvivalScript ss = FindFirstObjectByType<SurvivalScript>();
+            if (ss != null)
+            {
+                hazard.SetManager(ss);
+                ss.RegisterHazard(hazard);
+            }
+        }
     }
 
     IEnumerator RespawnCouroutine()

@@ -14,6 +14,8 @@ public class PlayerStats : MonoBehaviour
     [Tooltip("当前生命值。受到伤害会减少，吃道具会增加（无上限），归零时玩家死亡。\nCurrent health. Reduces on taking damage, increases on healing (no cap), player dies when it reaches 0.")]
     public float health = 100f;
 
+    public float MaxHealth = 100f;
+
     [Tooltip("移动速度。数值越高跑得越快，但惯性（刹车距离）也会变大。\nMovement speed. Higher value means faster movement, but also increases inertia (stopping distance).")]
     public float speed = 5f;
 
@@ -86,13 +88,14 @@ public class PlayerStats : MonoBehaviour
     public void Heal(float amount)
     {
         health += amount;
+        if (health > MaxHealth) MaxHealth = health;
 
         Debug.Log(gameObject.name + " healed. Health: " + health);
     }
 
     public void RespawnHeal()
     {
-        health = 100f;
+        health = MaxHealth;
     }
 
     public float CurrentHealth() { return health; }
@@ -226,9 +229,13 @@ public class PlayerStats : MonoBehaviour
         {
             DropRandomPickups();
         }
-        if (p1s.GetComponent<Phase2Script>().GetCurrentMinigame() == "Arena")
+
+        Phase2Script p2 = p1s != null ? p1s.GetComponent<Phase2Script>() : null;
+
+        if (p2 != null && p2.GetCurrentMinigame() == "Arena")
         {
             IsAliveArena = false;
+
             ArenaScript AS = FindFirstObjectByType<ArenaScript>();
             Debug.Log($"ArenaScript found: {AS != null}"); // ADD THIS
             if (AS != null) 

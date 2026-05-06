@@ -67,6 +67,13 @@ public class RaycastSniperSpell : SpellBehavior
             {
                 if (h.collider == null) continue;
                 if (IsColliderOnCaster(damageSource, h.collider)) continue;
+                
+                // 【调试代码】打印激光扫到了什么
+                Debug.Log($"[Laser] 扫到了: {h.collider.gameObject.name}, Layer: {LayerMask.LayerToName(h.collider.gameObject.layer)}, Tag: {h.collider.gameObject.tag}");
+
+                // 忽略地上的技能拾取物（Layer 3: Pickup 或者挂了 SpellPickup 脚本），防止激光被地上的技能挡住
+                if (h.collider.gameObject.layer == LayerMask.NameToLayer("Pickup") || h.collider.GetComponentInParent<SpellPickup>() != null) continue;
+                
                 hit = h;
                 hitValid = true;
                 break;
@@ -80,6 +87,7 @@ public class RaycastSniperSpell : SpellBehavior
 
             linePts.Add(hit.point);
 
+            // 护盾反弹逻辑
             ReflectShieldSpell shield = hit.collider.GetComponentInParent<ReflectShieldSpell>();
             if (shield != null)
             {
@@ -95,7 +103,22 @@ public class RaycastSniperSpell : SpellBehavior
                 continue;
             }
 
-            if (hit.collider.gameObject.tag == "Wall")
+            // 可破坏物逻辑：打到箱子等可破坏物，造成伤害并停止射线
+            destroyableObject destroyobject = hit.collider.GetComponent<destroyableObject>()
+                ?? hit.collider.GetComponentInParent<destroyableObject>();
+            if (destroyobject != null)
+            {
+                int total = damage;
+                PlayerStats srcStats = damageSource.GetComponent<PlayerStats>();
+                if (srcStats != null)
+                    total += Mathf.RoundToInt(srcStats.strength);
+
+                destroyobject.takeDamage(total);
+                break; // 激光打坏箱子后停止穿透
+            }
+
+            // 墙壁逻辑
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("wall") || hit.collider.gameObject.tag == "Wall")
                 break;
 
             if (hit.collider.gameObject.tag == "Player")

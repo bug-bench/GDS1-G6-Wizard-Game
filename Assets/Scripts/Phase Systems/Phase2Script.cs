@@ -18,7 +18,7 @@ public class Phase2Script : MonoBehaviour
             Debug.LogError("EventManager not found!");
             return;
         }
-        if (vL == null)
+        if (vL == null && SceneManager.GetActiveScene() == SceneManager.GetSceneByName("VotingScene"))
         {
             Debug.LogError("VotingLogic missing!");
         }
@@ -27,6 +27,39 @@ public class Phase2Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Phase2Survival"))
+        {
+            if (phaseChosen == false)
+            {
+                phaseChosen = true;
+            }
+            if (currentMinigame != "Survival")
+            {
+                currentMinigame = "Survival";
+            }
+        }
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Phase2Arena"))
+        {
+            if (phaseChosen == false)
+            {
+                phaseChosen = true;
+            }
+            if (currentMinigame != "Arena")
+            {
+                currentMinigame = "Arena";
+            }
+        }
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Phase2Collect"))
+        {
+            if (phaseChosen == false)
+            {
+                phaseChosen = true;
+            }
+            if (currentMinigame != "Collect")
+            {
+                currentMinigame = "Collect";
+            }
+        }
         if (p1s.GetCurrentPhase() == 2 && !phaseChosen)
         {
             phaseChosen = true;

@@ -20,8 +20,6 @@ public class Phase1Script : MonoBehaviour
     {
         timer = phaseDuration;
         CurrentPhase = currentPhase;
-        // currentPhase = 2;
-        // CurrentPhase = 2;
         StartCoroutine(FindTimerTextsNextFrame());
     }
 
@@ -107,6 +105,12 @@ public class Phase1Script : MonoBehaviour
         //wait 20 seconds before switching scenes
         yield return new WaitForSeconds(transitionDelay);
         // TransferPlayerDataToNextScene (); 
+        foreach (var player in GameData.players)
+        {
+            GameObject obj = player.playerGameObject;
+            PlayerStats ps = obj.GetComponent<PlayerStats>();
+            ps.RespawnHeal();
+        }
 
         SceneManager.LoadScene("VotingScene");
 

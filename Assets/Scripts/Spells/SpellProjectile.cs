@@ -71,6 +71,9 @@ public class SpellProjectile : MonoBehaviour
     {
         if (IsUnderSpellPickup) return;
 
+        // 【调试代码】打印子弹撞到了什么东西
+        Debug.Log($"[SpellProjectile] {gameObject.name} 撞到了: {hitInfo.gameObject.name}, Layer: {LayerMask.LayerToName(hitInfo.gameObject.layer)}, Tag: {hitInfo.gameObject.tag}");
+
         // caster 未设置时，以前会误判成「可以打 Player」，导致立刻自伤 — If caster is unset, we used to hit "Player" and self-damage immediately.
         if (caster == null)
         {
@@ -151,7 +154,7 @@ public class SpellProjectile : MonoBehaviour
             }
 
         }
-        else if (HasTag(hitInfo, "Wall"))
+        else if (hitInfo.gameObject.layer == LayerMask.NameToLayer("wall") || HasTag(hitInfo, "Wall"))
         {
             Destroy(gameObject);
         }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5885262741246494514}
   - component: {fileID: 4844769412893279343}
   - component: {fileID: 8506434955394964257}
+  - component: {fileID: -8342638985425138690}
   m_Layer: 0
   m_Name: Chest
   m_TagString: Untagged
@@ -92,7 +93,7 @@ SpriteRenderer:
   m_Size: {x: 0.17, y: 0.17}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!114 &4844769412893279343
 MonoBehaviour:
@@ -110,12 +111,19 @@ MonoBehaviour:
   - {fileID: 6652476222007982217, guid: eda0ee78f7a03e74b8305df4937eeeba, type: 3}
   - {fileID: 8531777423059755645, guid: 86f67c003d52a4249bbaded45805e218, type: 3}
   - {fileID: 3689716220766011371, guid: 6ac3dba6fa4558b4db3a9f8db6ca47f8, type: 3}
-  - {fileID: 3689716220766011371, guid: 6ac3dba6fa4558b4db3a9f8db6ca47f8, type: 3}
-  - {fileID: 3689716220766011371, guid: 6ac3dba6fa4558b4db3a9f8db6ca47f8, type: 3}
+  - {fileID: 3689716220766011371, guid: 6da00e1d3472b9049a65a6ce4adab3b9, type: 3}
+  - {fileID: 3689716220766011371, guid: 5f2824130089ae7418c2000ca74d2d19, type: 3}
+  - {fileID: 3689716220766011371, guid: 99a879caddb5b224b82a2526a2887309, type: 3}
   mindrops: 1
   maxdrops: 3
   SpellPrefabs:
   - {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
+  - {fileID: 2848393363742389300, guid: f26e7b5623dd50643ae1bcf8f81c2b7f, type: 3}
+  - {fileID: 2848393363742389300, guid: 48c445da198fa884399f1c14dd326d03, type: 3}
+  - {fileID: 2848393363742389300, guid: 035e076c079a88d4b960a59fbe06015b, type: 3}
+  - {fileID: 2848393363742389300, guid: 50396253bc42e3340a24f0351eb7bfcf, type: 3}
+  - {fileID: 2848393363742389300, guid: adcbd26f59ff1924a9d3c02f1315da4e, type: 3}
+  - {fileID: 2848393363742389300, guid: 8b2c4a0d5b440224d984f5f3d6017ec0, type: 3}
   SpelldropChance: 0.5
   dropforce: 10
 --- !u!61 &8506434955394964257
@@ -164,6 +172,28 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.28478682, y: 0.25686553}
   m_EdgeRadius: 0
+--- !u!95 &-8342638985425138690
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500665633477678211}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7c7846ac45520194ba878a5ca563b058, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9112796767158326845
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,7 +260,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.00000023841858, y: -0.0015512966}
+  m_Offset: {x: 0.019319475, y: -0.01724787}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -240,5 +270,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.156165, y: 0.15926707}
+  m_Size: {x: 0.5377184, y: 0.42731854}
   m_EdgeRadius: 0

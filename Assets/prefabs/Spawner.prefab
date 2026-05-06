@@ -47,7 +47,10 @@ MonoBehaviour:
   AttackSprite: {fileID: 6652476222007982217, guid: eda0ee78f7a03e74b8305df4937eeeba, type: 3}
   HealthSprite: {fileID: 8531777423059755645, guid: 86f67c003d52a4249bbaded45805e218, type: 3}
   MovementSprite: {fileID: 3689716220766011371, guid: 6ac3dba6fa4558b4db3a9f8db6ca47f8, type: 3}
-  Spell: {fileID: 0}
+  FocusSprite: {fileID: 3689716220766011371, guid: 5f2824130089ae7418c2000ca74d2d19, type: 3}
+  SizeSprite: {fileID: 3689716220766011371, guid: 6da00e1d3472b9049a65a6ce4adab3b9, type: 3}
+  DefenseSprite: {fileID: 3689716220766011371, guid: 99a879caddb5b224b82a2526a2887309, type: 3}
+  groundTilemap: {fileID: 0}
   Spawncenter: {x: 0, y: -4}
   SpawnSize: {x: 20, y: 13}
   numberToSpawn: 10
@@ -55,5 +58,5 @@ MonoBehaviour:
   DistancebetweenStats: 1
   statLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   maxattempts: 20

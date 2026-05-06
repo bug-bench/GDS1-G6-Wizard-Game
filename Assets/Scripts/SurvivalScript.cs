@@ -12,7 +12,7 @@ public class SurvivalScript : MonoBehaviour
     private List<GameObject> playersAlive = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
 
-    private SurvivalHazard[] hazards;
+    private List<SurvivalHazard> hazards = new List<SurvivalHazard>();
 
     private int hazardsFinishedThisLoop = 0;
     private int totalHazards;
@@ -22,6 +22,11 @@ public class SurvivalScript : MonoBehaviour
     void Start()
     {
         StartCoroutine(SetupNextFrame());
+    }
+
+    void Update()
+    {
+        TryEndGameAfterElimination();
     }
 
     IEnumerator SetupNextFrame()
@@ -35,15 +40,28 @@ public class SurvivalScript : MonoBehaviour
             playersAlive.Add(p);
         }
 
-        hazards = FindObjectsByType<SurvivalHazard>(FindObjectsSortMode.None);
-        totalHazards = hazards.Length;
+        hazards.Clear();
 
-        foreach (var hazard in hazards)
+        var foundHazards = FindObjectsByType <SurvivalHazard>(FindObjectsSortMode.None);
+
+        foreach (var hazard in foundHazards)
         {
             hazard.SetManager(this);
+            hazards.Add(hazard);
         }
 
+        totalHazards = hazards.Count;
+
         Debug.Log($"Survival started with {playersAlive.Count} players and {totalHazards} hazards");
+    }
+
+    public void RegisterHazard(SurvivalHazard hazard)
+    {
+        if (!hazards.Contains(hazard))
+        {
+            hazards.Add(hazard);
+            totalHazards = hazards.Count;
+        }
     }
 
     // ====================
@@ -52,19 +70,68 @@ public class SurvivalScript : MonoBehaviour
 
     public void PlayerEliminated(GameObject player)
     {
-        if (!playersAlive.Contains(player)) return;
+        if (player == null) return;
 
-        playersAlive.Remove(player);
-        playersEliminated.Add(player);
+        if (!playersEliminated.Contains(player))
+        {
+            playersEliminated.Add(player);
+        }
+
+        var alivePlayers = new List<GameObject>();
+
+        foreach (var p in players)
+        {
+            if (p != null && p.activeInHierarchy)
+            {
+                alivePlayers.Add(p);
+            }
+        }
+        // if (!playersAlive.Contains(player)) return;
+
+        // playersAlive.Remove(player);
+        // playersEliminated.Add(player);
 
         Debug.Log(player.name + " eliminated. Remaining: " + playersAlive.Count);
 
-        if (playersAlive.Count == 1)
+        TryEndGameAfterElimination();
+        // if (playersAlive.Count == 1)
+        // {
+        //     EndGame(playersAlive[0]);
+        // }
+        // else if (playersAlive.Count == 0)
+        // {
+        //     EndGame(null);
+        // }
+    }
+
+    List<GameObject> GetAlivePlayers()
+    {
+        List<GameObject> alive = new List<GameObject>();
+
+        foreach (var p in players)
         {
-            EndGame(playersAlive[0]);
+            if (p != null && p.activeInHierarchy)
+            {
+                alive.Add(p);
+            }
         }
-        else if (playersAlive.Count == 0)
+
+        return alive;
+    }
+
+    void TryEndGameAfterElimination()
+    {
+        var alivePlayers = GetAlivePlayers();
+
+        if (alivePlayers.Count == 1)
         {
+            GameObject winner = alivePlayers[0];
+            Debug.Log("Winner: " + winner.name);
+            EndGame(winner);
+        }
+        else if (alivePlayers.Count == 0)
+        {
+            Debug.Log("Draw!");
             EndGame(null);
         }
     }

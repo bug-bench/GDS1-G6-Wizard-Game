@@ -16,6 +16,15 @@ public class SpellPickup : MonoBehaviour
 
     private float pickupReadyTime;
 
+    private AudioSource spellPickupSound;
+
+
+
+    void Start()
+    {
+        spellPickupSound = GetComponent<AudioSource>();
+    }
+
     void Awake()
     {
         // 必须在 SpellProjectile.Start 之前关掉弹道脚本，否则 Destroy(gameObject, lifeTime) 会整包销毁拾取物 — Disable before SpellProjectile.Start or delayed Destroy will delete the whole pickup.
@@ -83,6 +92,9 @@ public class SpellPickup : MonoBehaviour
             {
                 spawner.RespawnSpell();
             }
+
+            AudioSource.PlayClipAtPoint(spellPickupSound.clip, transform.position);
+
             Destroy(gameObject);
         }
         else

@@ -7,16 +7,23 @@ public class IceHazard : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerController controller =other.GetComponent<PlayerController>();
+        PlayerController controller =other.GetComponentInParent<PlayerController>();
 
-        controller.applyIce();
+        if(controller != null)
+        {
+            controller.applyIce();
+        }
+       
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        PlayerController controller = other.GetComponent<PlayerController>();
+        PlayerController controller = other.GetComponentInParent<PlayerController>();
 
-        controller.removeIce();
+        if (controller != null)
+        {
+            controller.removeIce();
+        }
     }
 
 }
