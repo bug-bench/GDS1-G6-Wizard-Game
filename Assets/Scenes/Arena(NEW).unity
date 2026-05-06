@@ -45318,7 +45318,7 @@ GameObject:
   - component: {fileID: 2023169553}
   - component: {fileID: 2023169555}
   m_Layer: 0
-  m_Name: water
+  m_Name: water/structures
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
