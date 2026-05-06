@@ -19,7 +19,7 @@ public class BlinkSpell : SpellBehavior
     public float castInset = 0.08f;
 
     [Tooltip("闪现落地后的硬直时间（眩晕，无法移动施法） — Stun duration applied to self after blinking.")]
-    public float selfStunDuration = 0.5f;
+    public float selfStunDuration = 0f;
 
     public override void Execute(GameObject caster, Transform firePoint)
     {
@@ -70,12 +70,13 @@ public class BlinkSpell : SpellBehavior
             caster.transform.position = p;
         }
 
-        if (selfStunDuration > 0f)
-        {
-            PlayerStats stats = caster.GetComponent<PlayerStats>();
-            if (stats != null)
-                stats.ApplyStun(selfStunDuration);
-        }
+        // 取消闪现后的硬直 (Removed self stun after blink)
+        // if (selfStunDuration > 0f)
+        // {
+        //     PlayerStats stats = caster.GetComponent<PlayerStats>();
+        //     if (stats != null)
+        //         stats.ApplyStun(selfStunDuration);
+        // }
 
         Destroy(gameObject);
     }
