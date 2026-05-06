@@ -76,9 +76,29 @@ public class SpellPickup : MonoBehaviour
             proj.enabled = false;
     }
 
+    public bool IsPickupReady()
+    {
+        return Time.time >= pickupReadyTime;
+    }
+
+    public void OnPickedUp()
+    {
+        if (spawner != null)
+        {
+            spawner.RespawnSpell();
+        }
+
+        if (spellPickupSound != null && spellPickupSound.clip != null)
+        {
+            AudioSource.PlayClipAtPoint(spellPickupSound.clip, transform.position);
+        }
+
+        Destroy(gameObject);
+    }
+
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        if (Time.time < pickupReadyTime) return;
+        if (!IsPickupReady()) return;
         if (spellData == null) return;
 
         // 碰撞体常在子物体上，必须用父级查找 PlayerCombat — Collider is often on a child; use GetComponentInParent for PlayerCombat.
@@ -88,14 +108,7 @@ public class SpellPickup : MonoBehaviour
         bool pickedUp = combat.EquipSpell(spellData);
         if (pickedUp)
         {
-            if (spawner != null)
-            {
-                spawner.RespawnSpell();
-            }
-
-            AudioSource.PlayClipAtPoint(spellPickupSound.clip, transform.position);
-
-            Destroy(gameObject);
+            OnPickedUp();
         }
         else
         {
