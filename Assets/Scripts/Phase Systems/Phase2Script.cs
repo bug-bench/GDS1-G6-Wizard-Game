@@ -49,6 +49,17 @@ public class Phase2Script : MonoBehaviour
                 currentMinigame = "Arena";
             }
         }
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Phase2Collect"))
+        {
+            if (phaseChosen == false)
+            {
+                phaseChosen = true;
+            }
+            if (currentMinigame != "Collect")
+            {
+                currentMinigame = "Collect";
+            }
+        }
         if (p1s.GetCurrentPhase() == 2 && !phaseChosen)
         {
             phaseChosen = true;

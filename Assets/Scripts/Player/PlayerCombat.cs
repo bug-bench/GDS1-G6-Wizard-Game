@@ -460,15 +460,23 @@ public class PlayerCombat : MonoBehaviour
                 StopCoroutine(hitFeedbackRoutine);
             hitFeedbackRoutine = StartCoroutine(HitInvincibilityVisualRoutine());
         }
-
+        Phase2Script p2scr = FindFirstObjectByType<Phase2Script>();
         if (playerStats.health <= 0)
         {
             if (attackerIndex >= 0)
                 GameData.RecordKill(attackerIndex);
-            Phase2Script p2scr = FindFirstObjectByType<Phase2Script>();
             if (p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
             {
                 Die();
+            }
+            else if (!isKnockedDown && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
+            {
+                CollectManager cm = FindAnyObjectByType<CollectManager>();
+                if (cm != null)
+                {
+                    cm.DropPickup(gameObject, 999);
+                }
+                StartCoroutine(Knockdown());
             }
             else
             {
@@ -476,6 +484,15 @@ public class PlayerCombat : MonoBehaviour
                 {
                     StartCoroutine(Knockdown());
                 }
+            }
+        }
+        else if (playerStats.health > 0 && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
+        {
+            CollectManager cm = FindAnyObjectByType<CollectManager>();
+            int ri = Random.Range(1, 4);
+            if (cm != null)
+            {
+                cm.DropPickup(gameObject, ri);
             }
         }
     }
@@ -556,7 +573,7 @@ public class PlayerCombat : MonoBehaviour
             playerRb.linearVelocity = Vector2.zero;
         }
 
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(4f);
 
         playerStats.RespawnHeal();
 
