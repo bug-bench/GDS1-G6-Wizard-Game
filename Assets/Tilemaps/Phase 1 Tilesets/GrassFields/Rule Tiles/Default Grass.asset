@@ -18,21 +18,15 @@ MonoBehaviour:
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: 1960352756, guid: 606ed7c2d2cab0f47b6b33a476cf9e07, type: 3}
-    - {fileID: 1249117397, guid: 606ed7c2d2cab0f47b6b33a476cf9e07, type: 3}
-    - {fileID: 1758231055, guid: 606ed7c2d2cab0f47b6b33a476cf9e07, type: 3}
-    - {fileID: 2107504438, guid: 606ed7c2d2cab0f47b6b33a476cf9e07, type: 3}
-    - {fileID: -1024589433, guid: 606ed7c2d2cab0f47b6b33a476cf9e07, type: 3}
-    - {fileID: 254268113, guid: 606ed7c2d2cab0f47b6b33a476cf9e07, type: 3}
+    - {fileID: -376318009, guid: 2f8462833cd9794498a891e5cef2d7b9, type: 3}
     - {fileID: -686167638, guid: 606ed7c2d2cab0f47b6b33a476cf9e07, type: 3}
-    - {fileID: 1522376851, guid: 606ed7c2d2cab0f47b6b33a476cf9e07, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
-    m_PerlinScale: 0.25
-    m_Output: 0
+    m_PerlinScale: 0.18
+    m_Output: 1
     m_ColliderType: 0
-    m_RandomTransform: 1
+    m_RandomTransform: 5
     m_Neighbors: 
     m_NeighborPositions: []
     m_RuleTransform: 0
