@@ -7,6 +7,7 @@ public class CollectPickup : MonoBehaviour
     protected GameObject lastDroppedPlayer = null;
     private bool canAllPickup = true;
     private bool canLastPickup = true;
+    private CollectPickupSpawner spawner;
 
     void Start()
     {
@@ -21,6 +22,11 @@ public class CollectPickup : MonoBehaviour
         }
     }
 
+    void SetSpawner(CollectPickupSpawner pickupSpawner)
+    {
+        spawner = pickupSpawner;
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (cm == null) return;
@@ -30,6 +36,10 @@ public class CollectPickup : MonoBehaviour
         {
             cm.RegisterPickup(col.gameObject);
             Destroy(gameObject);
+            if (spawner != null)
+            {
+                spawner.RespawnPickups();
+            }
         }
     }
 

@@ -163,6 +163,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d89533b6f2c3eaa4db90c4e1b0be79fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  pickup: {fileID: 4915482691405287181, guid: 95dc6e113c798c44c8e61ff3df9915bb, type: 3}
+  groundTilemap: {fileID: 0}
+  Spawncenter: {x: 0, y: 0}
+  SpawnSize: {x: 10, y: 10}
+  numberToSpawn: 10
+  respawnDelay: 3
+  DistancebetweenStats: 1
+  statLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  maxattempts: 20
 --- !u!1 &1307970781
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,7 +18,7 @@ public class Phase2Script : MonoBehaviour
             Debug.LogError("EventManager not found!");
             return;
         }
-        if (vL == null)
+        if (vL == null && SceneManager.GetActiveScene() == SceneManager.GetSceneByName("VotingScene"))
         {
             Debug.LogError("VotingLogic missing!");
         }
