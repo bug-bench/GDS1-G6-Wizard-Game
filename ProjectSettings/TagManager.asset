@@ -43,29 +43,32 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: stats
-    uniqueID: 2154880603
-    locked: 0
-  - name: player
-    uniqueID: 918881291
-    locked: 0
-  - name: hazard
-    uniqueID: 3611608135
-    locked: 0
-  - name: interactable
-    uniqueID: 3855226955
-    locked: 0
   - name: Ground
     uniqueID: 3916517665
     locked: 0
   - name: WalkingInFront
     uniqueID: 3079289797
     locked: 0
+  - name: stats
+    uniqueID: 2154880603
+    locked: 0
+  - name: player
+    uniqueID: 918881291
+    locked: 0
+  - name: interactable
+    uniqueID: 3855226955
+    locked: 0
+  - name: hazard
+    uniqueID: 3611608135
+    locked: 0
   - name: WalkBehind
     uniqueID: 1313174457
     locked: 0
   - name: Decor
     uniqueID: 1590860867
+    locked: 0
+  - name: UI
+    uniqueID: 2906517685
     locked: 0
   m_RenderingLayers:
   - Default
