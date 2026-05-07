@@ -297,6 +297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   health: 100
+  MaxHealth: 100
   speed: 5
   strength: 5
   defense: 0
@@ -319,7 +320,7 @@ GameObject:
   - component: {fileID: 3754481111748754989}
   - component: {fileID: 1396053370728696818}
   - component: {fileID: 5427044139724920543}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,7 +379,7 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: 100
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -614,11 +615,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1340130935435191573, guid: b0dc1f625217742208fe976e2ccd1314, type: 3}
       propertyPath: m_PixelPerfect
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1340130935435191573, guid: b0dc1f625217742208fe976e2ccd1314, type: 3}
       propertyPath: m_SortingOrder
-      value: 10
+      value: 999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1340130935435191573, guid: b0dc1f625217742208fe976e2ccd1314, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1037332361
       objectReference: {fileID: 0}
     - target: {fileID: 1670918479631904478, guid: b0dc1f625217742208fe976e2ccd1314, type: 3}
       propertyPath: m_AnchoredPosition.x
