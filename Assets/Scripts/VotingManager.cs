@@ -16,15 +16,19 @@ public class VotingManager : MonoBehaviour
 
     [Header("Logic")]
     public VotingLogic votingLogic;
+    public SelectionAnimator selectionAnimator;
 
     public List<OptionUI> options = new List<OptionUI>();
 
+    // track vote counts per option index for live display
+    private int[] voteCounts;
+
     void Start()
     {
+        voteCounts = new int[minigames.Count];
         SpawnOptions();
         SpawnPlayers();
-        
-        votingLogic.SetMinigames(minigames); // ADD THIS
+        votingLogic.SetMinigames(minigames);
         votingLogic.BeginVoting(OnVotingComplete);
     }
 
@@ -41,32 +45,43 @@ public class VotingManager : MonoBehaviour
 
     void SpawnPlayers()
     {
-        Debug.Log($"PlayerInput.all count: {PlayerInput.all.Count}");
-        
         foreach (var p in GameData.players)
         {
-            Debug.Log($"Spawning vote marker for player {p.playerIndex}, device: {p.device?.displayName}");
-            
             GameObject marker = Instantiate(markerPrefab);
             PlayerVoteController pvc = marker.GetComponent<PlayerVoteController>();
-            if (pvc == null)
-                pvc = marker.AddComponent<PlayerVoteController>();
-
+            if (pvc == null) pvc = marker.AddComponent<PlayerVoteController>();
             pvc.Init(p.playerIndex, p.colorIndex, this);
         }
     }
 
-    // called by PlayerVoteController — pass the MinigameData directly
     public void RegisterVote(int playerIndex, int optionIndex)
     {
+        // Update live vote count on the card
+        voteCounts[optionIndex]++;
+        options[optionIndex].SetVotes(voteCounts[optionIndex]);
+
         MinigameData minigame = minigames[optionIndex];
         votingLogic.RegisterVote(playerIndex, minigame);
     }
 
     void OnVotingComplete(MinigameData winner)
     {
-        // VotingLogic already handles scene loading
-        // this callback is just for any extra UI you want to show on result
-        Debug.Log($"Voting complete — {winner.minigameName} won");
+        List<OptionUI> votedOptions = new List<OptionUI>();
+        for (int i = 0; i < options.Count; i++)
+            if (voteCounts[i] > 0)
+                votedOptions.Add(options[i]);
+
+        if (votedOptions.Count == 0)
+            votedOptions = new List<OptionUI>(options);
+
+        // Guard — if animator missing, just load directly
+        if (selectionAnimator == null)
+        {
+            Debug.LogError("SelectionAnimator not assigned on VotingManager — loading scene directly.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(winner.sceneName);
+            return;
+        }
+
+        selectionAnimator.PlaySelection(votedOptions, winner);
     }
 }

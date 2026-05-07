@@ -174,7 +174,7 @@ ScriptedImporter:
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
-    border: {x: 14, y: 0, z: 14, w: 0}
+    border: {x: 2, y: 0, z: 2, w: 0}
     customData: 
     rect:
       serializedVersion: 2
@@ -195,15 +195,36 @@ ScriptedImporter:
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
-    border: {x: 14, y: 0, z: 14, w: 0}
+    border: {x: 2, y: 0, z: 2, w: 0}
     customData: 
     rect:
       serializedVersion: 2
-      x: 4
+      x: 3
       y: 29
       width: 32
       height: 15
     spriteID: effc153414e19451ab4bc1edb5f732b7
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  - name: MainMenuBtn_2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 2, y: 0, z: 2, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 3
+      y: 52
+      width: 32
+      height: 15
+    spriteID: 5b85b064c9073447499885e6710db1bb
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -251,9 +272,9 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 0
+        x: 1
         y: 9
-        width: 32
+        width: 30
         height: 15
       spriteId: 7e9eba5fa0b554040a2567104be6ea7a
     - name: Frame_1
@@ -265,6 +286,15 @@ ScriptedImporter:
         width: 32
         height: 17
       spriteId: 35287507a0b7e48c2806e9c199cd609c
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 1
+        y: 9
+        width: 30
+        height: 15
+      spriteId: 229ee6ae14e4c41c7a7685a138ccfaf7
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -311,4 +341,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 64, y: 64}
+  previousTextureSize: {x: 64, y: 128}
