@@ -74,9 +74,34 @@ public class Phase1Script : MonoBehaviour
     void OnPhaseComplete()
     {
         Debug.Log("Phase 1 Complete!");
-        //add code to transfer data and players to phase 2
         TransferPlayerDataToNextScene();
-        StartCoroutine(PhaseTransition());
+        StartCoroutine(ShowStatScreenThenTransition());
+    }
+
+    IEnumerator ShowStatScreenThenTransition()
+    {
+        var statScreens = FindObjectsByType<StatScreenUI>(FindObjectsSortMode.None);
+        int completed = 0;
+        int total     = statScreens.Length;
+
+        if (total == 0)
+        {
+            StartCoroutine(PhaseTransition());
+            yield break;
+        }
+
+        foreach (var screen in statScreens)
+        {
+            PlayerStats ps = screen.GetComponentInParent<PlayerStats>();
+            if (ps == null) continue;
+
+            screen.Show(ps, () =>
+            {
+                completed++;
+                if (completed >= total)
+                    StartCoroutine(PhaseTransition());
+            });
+        }
     }
 
     void TransferPlayerDataToNextScene()

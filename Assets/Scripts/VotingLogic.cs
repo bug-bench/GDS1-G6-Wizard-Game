@@ -89,7 +89,7 @@ public class VotingLogic : MonoBehaviour
 
         onVotingComplete?.Invoke(chosen);
 
-        SceneManager.LoadScene(chosen.sceneName);
+        // SceneManager.LoadScene(chosen.sceneName); commented out to test
     }
 
     MinigameData GetWeightedResult()
