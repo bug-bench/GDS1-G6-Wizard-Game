@@ -19,7 +19,7 @@ public class BlinkSpell : SpellBehavior
     public float castInset = 0.08f;
 
     [Tooltip("闪现落地后的硬直时间（眩晕，无法移动施法） — Stun duration applied to self after blinking.")]
-    public float selfStunDuration = 0.5f;
+    public float selfStunDuration = 0f;
 
     public override void Execute(GameObject caster, Transform firePoint)
     {
@@ -70,12 +70,13 @@ public class BlinkSpell : SpellBehavior
             caster.transform.position = p;
         }
 
-        if (selfStunDuration > 0f)
-        {
-            PlayerStats stats = caster.GetComponent<PlayerStats>();
-            if (stats != null)
-                stats.ApplyStun(selfStunDuration);
-        }
+        // 取消闪现后的硬直 (Removed self stun after blink)
+        // if (selfStunDuration > 0f)
+        // {
+        //     PlayerStats stats = caster.GetComponent<PlayerStats>();
+        //     if (stats != null)
+        //         stats.ApplyStun(selfStunDuration);
+        // }
 
         Destroy(gameObject);
     }
@@ -93,7 +94,31 @@ public class BlinkSpell : SpellBehavior
         if (pathLen < 0.001f)
             return start;
 
-        int mask = obstacleLayer.value == 0 ? Physics2D.DefaultRaycastLayers : obstacleLayer.value;
+        // 默认检测 wall 层，如果没有设置则使用 DefaultRaycastLayers
+        int mask = obstacleLayer.value == 0 ? LayerMask.GetMask("wall") : obstacleLayer.value;
+        if (mask == 0) mask = Physics2D.DefaultRaycastLayers;
+
+        // 1. 检查目标落点是否安全 (落点碰撞检测)
+        // 使用 OverlapCircle 确保落点有足够的空间 (半径 0.25f)
+        bool isDestinationClear = true;
+        Collider2D[] overlaps = Physics2D.OverlapCircleAll(desiredEnd, 0.25f, mask);
+        foreach (var col in overlaps)
+        {
+            if (col != null && !col.isTrigger && !IsColliderOnCaster(caster, col))
+            {
+                isDestinationClear = false;
+                break;
+            }
+        }
+
+        // 如果落点安全（没有卡在墙里），允许直接闪现过去（实现穿墙）
+        if (isDestinationClear)
+        {
+            return desiredEnd;
+        }
+
+        // 2. 如果落点不安全（在墙里），说明墙太厚或者直接点到了墙上
+        // 此时退回到射线击中墙壁的前面，防止卡在墙里
         Vector2 rayOrigin = start + dir * castInset;
         float rayLen = Mathf.Max(0.01f, pathLen - castInset);
 
@@ -103,7 +128,9 @@ public class BlinkSpell : SpellBehavior
         foreach (RaycastHit2D hit in hits)
         {
             if (hit.collider == null) continue;
+            if (hit.collider.isTrigger) continue; // 忽略触发器
             if (IsColliderOnCaster(caster, hit.collider)) continue;
+            
             return hit.point - dir * wallBuffer;
         }
 

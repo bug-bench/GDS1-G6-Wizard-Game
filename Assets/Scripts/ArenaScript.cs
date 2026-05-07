@@ -97,6 +97,7 @@ public class ArenaScript : MonoBehaviour
     List<GameObject> GetAlivePlayers()
     {
         List<GameObject> alive = new List<GameObject>();
+        if (players == null) return alive;
 
         foreach (var p in players)
         {
@@ -111,6 +112,8 @@ public class ArenaScript : MonoBehaviour
 
     void TryEndGameAfterElimination()
     {
+        if (players == null) return;
+
         var alivePlayers = GetAlivePlayers();
 
         if (alivePlayers.Count == 1)
