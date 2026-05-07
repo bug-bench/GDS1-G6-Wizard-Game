@@ -285,7 +285,10 @@ public class PlayerStats : MonoBehaviour
             currentSpeedDrop = speed * (1f - multiplier);
             speed -= currentSpeedDrop;
             Debug.Log($"{gameObject.name} speed multiplied by {multiplier}. New speed: {speed}");
-            activeSlowCoroutine = StartCoroutine(SlowRoutine());
+            if (gameObject.activeInHierarchy)
+            {
+                activeSlowCoroutine = StartCoroutine(SlowRoutine());
+            }
         }
     }
 
