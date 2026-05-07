@@ -51,11 +51,13 @@ public class StatSpawner : MonoBehaviour
                     Random.Range(Spawncenter.y - SpawnSize.y / 2f, Spawncenter.y + SpawnSize.y / 2f)
                 );
 
-            // convert to tile position
-            Vector3Int cellPos = groundTilemap.WorldToCell(randomPosition);
-
             // check if tile exists
-            bool hasTile = groundTilemap.HasTile(cellPos);
+            bool hasTile = true;
+            if (groundTilemap != null)
+            {
+                Vector3Int cellPos = groundTilemap.WorldToCell(randomPosition);
+                hasTile = groundTilemap.HasTile(cellPos);
+            }
 
             Collider2D hit = Physics2D.OverlapCircle(randomPosition, DistancebetweenStats, statLayer);
 

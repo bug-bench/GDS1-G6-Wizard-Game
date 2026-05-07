@@ -74,6 +74,9 @@ public class RaycastSniperSpell : SpellBehavior
                 // 忽略地上的技能拾取物（Layer 3: Pickup 或者挂了 SpellPickup 脚本），防止激光被地上的技能挡住
                 if (h.collider.gameObject.layer == LayerMask.NameToLayer("Pickup") || h.collider.GetComponentInParent<SpellPickup>() != null) continue;
                 
+                // 忽略触发器 (Ignore triggers like hazard areas)
+                if (h.collider.isTrigger) continue;
+                
                 hit = h;
                 hitValid = true;
                 break;

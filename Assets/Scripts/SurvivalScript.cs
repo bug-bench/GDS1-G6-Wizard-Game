@@ -8,7 +8,7 @@ public class SurvivalScript : MonoBehaviour
 {
     [SerializeField] private string winScene = "WinScene";
 
-    private GameObject[] players;
+    private List<GameObject> players = new List<GameObject>();
     private List<GameObject> playersAlive = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
 
@@ -26,15 +26,20 @@ public class SurvivalScript : MonoBehaviour
 
     void Update()
     {
-        TryEndGameAfterElimination();
+        if (players.Count > 0)
+        {
+            TryEndGameAfterElimination();
+        }
     }
 
     IEnumerator SetupNextFrame()
     {
         yield return null;
 
-        players = GameObject.FindGameObjectsWithTag("Player");
-
+        foreach (var player in GameData.players)
+        {
+            players.Add(player.playerGameObject);
+        }
         foreach (GameObject p in players)
         {
             playersAlive.Add(p);

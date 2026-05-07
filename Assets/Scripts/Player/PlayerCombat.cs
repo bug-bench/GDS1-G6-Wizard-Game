@@ -339,6 +339,13 @@ public class PlayerCombat : MonoBehaviour
     {
         if (newSpell == null) return false;
 
+        if ((currentAttackSpell != null && currentAttackSpell.spellName == newSpell.spellName) ||
+            (currentMovementSpell != null && currentMovementSpell.spellName == newSpell.spellName))
+        {
+            Debug.Log("不能同时拿两个一样的技能 | Cannot hold two of the same skills.");
+            return false;
+        }
+
         if (currentAttackSpell == null)
         {
             currentAttackSpell = newSpell;
@@ -390,26 +397,88 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    SpellPickup GetNearestSpellPickup()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 2f);
+        SpellPickup nearest = null;
+        float minDistance = float.MaxValue;
+
+        foreach (var col in colliders)
+        {
+            SpellPickup pickup = col.GetComponentInParent<SpellPickup>();
+            if (pickup == null) pickup = col.GetComponent<SpellPickup>();
+            
+            if (pickup != null && pickup.spellData != null)
+            {
+                if (!pickup.IsPickupReady()) continue;
+
+                float dist = Vector2.Distance(transform.position, pickup.transform.position);
+                if (dist < minDistance)
+                {
+                    minDistance = dist;
+                    nearest = pickup;
+                }
+            }
+        }
+        return nearest;
+    }
+
     void OnDropAttack(InputValue value)
     {
         if (!value.isPressed || currentAttackSpell == null) return;
 
-        CleanupHeldAttackEffects(applyReleaseCooldown: false);
+        SpellPickup nearestPickup = GetNearestSpellPickup();
+        if (nearestPickup != null)
+        {
+            if (currentAttackSpell.spellName == nearestPickup.spellData.spellName)
+            {
+                Debug.Log("主武器已经是该技能 | Main weapon is already this skill.");
+                return;
+            }
+            if (currentMovementSpell != null && currentMovementSpell.spellName == nearestPickup.spellData.spellName)
+            {
+                Debug.Log("副武器已经是该技能，不能拿两个一样的技能 | Sub weapon is already this skill.");
+                return;
+            }
 
-        DropSpell(currentAttackSpell);
-        currentAttackSpell = null;
-        Debug.Log("丢弃了主武器 | Dropped main weapon");
+            CleanupHeldAttackEffects(applyReleaseCooldown: false);
+            SpellData temp = currentAttackSpell;
+            currentAttackSpell = nearestPickup.spellData;
+            
+            nearestPickup.OnPickedUp();
+            DropSpell(temp);
+            
+            Debug.Log("交换了主武器 | Swapped main weapon");
+        }
     }
 
     void OnDropMovement(InputValue value)
     {
         if (!value.isPressed || currentMovementSpell == null) return;
 
-        CleanupHeldMovementEffects(applyReleaseCooldown: false);
+        SpellPickup nearestPickup = GetNearestSpellPickup();
+        if (nearestPickup != null)
+        {
+            if (currentMovementSpell.spellName == nearestPickup.spellData.spellName)
+            {
+                Debug.Log("副武器已经是该技能 | Sub weapon is already this skill.");
+                return;
+            }
+            if (currentAttackSpell != null && currentAttackSpell.spellName == nearestPickup.spellData.spellName)
+            {
+                Debug.Log("主武器已经是该技能，不能拿两个一样的技能 | Main weapon is already this skill.");
+                return;
+            }
 
-        DropSpell(currentMovementSpell);
-        currentMovementSpell = null;
-        Debug.Log("丢弃了副武器 | Dropped sub weapon");
+            CleanupHeldMovementEffects(applyReleaseCooldown: false);
+            SpellData temp = currentMovementSpell;
+            currentMovementSpell = nearestPickup.spellData;
+            
+            nearestPickup.OnPickedUp();
+            DropSpell(temp);
+
+            Debug.Log("交换了副武器 | Swapped sub weapon");
+        }
     }
 
     SpellBehavior ExecuteAndReturnSpell(SpellData data, ref float cdTimer)
@@ -460,15 +529,23 @@ public class PlayerCombat : MonoBehaviour
                 StopCoroutine(hitFeedbackRoutine);
             hitFeedbackRoutine = StartCoroutine(HitInvincibilityVisualRoutine());
         }
-
+        Phase2Script p2scr = FindFirstObjectByType<Phase2Script>();
         if (playerStats.health <= 0)
         {
             if (attackerIndex >= 0)
                 GameData.RecordKill(attackerIndex);
-            Phase2Script p2scr = FindFirstObjectByType<Phase2Script>();
             if (p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
             {
                 Die();
+            }
+            else if (!isKnockedDown && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
+            {
+                CollectManager cm = FindAnyObjectByType<CollectManager>();
+                if (cm != null)
+                {
+                    cm.DropPickup(gameObject, 999);
+                }
+                StartCoroutine(Knockdown());
             }
             else
             {
@@ -476,6 +553,15 @@ public class PlayerCombat : MonoBehaviour
                 {
                     StartCoroutine(Knockdown());
                 }
+            }
+        }
+        else if (playerStats.health > 0 && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
+        {
+            CollectManager cm = FindAnyObjectByType<CollectManager>();
+            int ri = Random.Range(1, 4);
+            if (cm != null)
+            {
+                cm.DropPickup(gameObject, ri);
             }
         }
     }
@@ -556,7 +642,7 @@ public class PlayerCombat : MonoBehaviour
             playerRb.linearVelocity = Vector2.zero;
         }
 
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(4f);
 
         playerStats.RespawnHeal();
 
