@@ -26,7 +26,10 @@ public class SurvivalScript : MonoBehaviour
 
     void Update()
     {
-        TryEndGameAfterElimination();
+        if (players.Count > 0)
+        {
+            TryEndGameAfterElimination();
+        }
     }
 
     IEnumerator SetupNextFrame()
