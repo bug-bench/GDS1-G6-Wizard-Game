@@ -2,7 +2,7 @@
 - Project name: GDS1-G6-Wizard-Game
 - Unity version: Unity 6000.3.8f1
 - Active scene:
-  - Name: Phase2Collect
+  - Name: Phase2Survival
   - Tags:
     - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, SpawnPoint, wall
   - Layers:
