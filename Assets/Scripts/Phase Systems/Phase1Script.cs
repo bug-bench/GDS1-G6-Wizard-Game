@@ -48,6 +48,11 @@ public class Phase1Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Phase1"))
+        {
+            currentPhase = 2;
+        }
+        CurrentPhase = currentPhase;
         if (currentPhase != 1) return;
         if (timerRunning)
         {
@@ -135,6 +140,17 @@ public class Phase1Script : MonoBehaviour
             GameObject obj = player.playerGameObject;
             PlayerStats ps = obj.GetComponent<PlayerStats>();
             ps.RespawnHeal();
+        }
+
+        var statScreens = FindObjectsByType<StatScreenUI>(FindObjectsSortMode.None);
+        int total     = statScreens.Length;
+
+        foreach (var screen in statScreens)
+        {
+            PlayerStats ps = screen.GetComponentInParent<PlayerStats>();
+            if (ps == null) continue;
+
+            screen.Hide();
         }
 
         SceneManager.LoadScene("VotingScene");
