@@ -9,7 +9,7 @@ public class ArenaScript : MonoBehaviour
     [SerializeField] private string winScene = "WinScene";
     [SerializeField] private bool gameWon = false;
 
-    private GameObject[] players;
+    private List<GameObject> players = new List<GameObject>();
     private List<GameObject> playersAlive = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
 
@@ -37,13 +37,16 @@ public class ArenaScript : MonoBehaviour
     private IEnumerator FindPlayersNextFrame()
     {
         yield return null;
-        players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (var player in GameData.players)
+        {
+            players.Add(player.playerGameObject);
+        }
         foreach (GameObject player in players)
             playersAlive.Add(player);
         Debug.Log($"ArenaScript tracking {playersAlive.Count} players");
 
         GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
-        if (spawnPoints.Length < players.Length)
+        if (spawnPoints.Length < players.Count)
         {
             Debug.LogError("Not enough spawn points for all players!");
             yield break;
@@ -52,7 +55,7 @@ public class ArenaScript : MonoBehaviour
         // Optional: randomize spawn points
         //ShuffleArray(spawnPoints);
 
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < players.Count; i++)
         {
             players[i].transform.position = spawnPoints[i].transform.position;
             players[i].transform.rotation = spawnPoints[i].transform.rotation;
@@ -97,7 +100,12 @@ public class ArenaScript : MonoBehaviour
     List<GameObject> GetAlivePlayers()
     {
         List<GameObject> alive = new List<GameObject>();
-        if (players == null) return alive;
+        if (players.Count == 0)
+        {
+            TryFindPlayers();
+        }
+        if (players.Count == 0) return new List<GameObject>();
+        
 
         foreach (var p in players)
         {
@@ -110,9 +118,20 @@ public class ArenaScript : MonoBehaviour
         return alive;
     }
 
+    void TryFindPlayers()
+    {
+        foreach (var player in GameData.players)
+        {
+            if (!players.Contains(player.playerGameObject))
+            {
+                players.Add(player.playerGameObject);
+            }
+        }
+    }
+
     void TryEndGameAfterElimination()
     {
-        if (players == null) return;
+        if (players.Count == 0) return;
 
         var alivePlayers = GetAlivePlayers();
 

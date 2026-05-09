@@ -22,7 +22,7 @@ public class CollectPickup : MonoBehaviour
         }
     }
 
-    void SetSpawner(CollectPickupSpawner pickupSpawner)
+    public void SetSpawner(CollectPickupSpawner pickupSpawner)
     {
         spawner = pickupSpawner;
     }
@@ -36,10 +36,6 @@ public class CollectPickup : MonoBehaviour
         {
             cm.RegisterPickup(col.gameObject);
             Destroy(gameObject);
-            if (spawner != null)
-            {
-                spawner.RespawnPickups();
-            }
         }
     }
 

@@ -48,6 +48,11 @@ public class Phase1Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Phase1"))
+        {
+            currentPhase = 2;
+        }
+        CurrentPhase = currentPhase;
         if (currentPhase != 1) return;
         if (timerRunning)
         {
@@ -74,9 +79,34 @@ public class Phase1Script : MonoBehaviour
     void OnPhaseComplete()
     {
         Debug.Log("Phase 1 Complete!");
-        //add code to transfer data and players to phase 2
         TransferPlayerDataToNextScene();
-        StartCoroutine(PhaseTransition());
+        StartCoroutine(ShowStatScreenThenTransition());
+    }
+
+    IEnumerator ShowStatScreenThenTransition()
+    {
+        var statScreens = FindObjectsByType<StatScreenUI>(FindObjectsSortMode.None);
+        int completed = 0;
+        int total     = statScreens.Length;
+
+        if (total == 0)
+        {
+            StartCoroutine(PhaseTransition());
+            yield break;
+        }
+
+        foreach (var screen in statScreens)
+        {
+            PlayerStats ps = screen.GetComponentInParent<PlayerStats>();
+            if (ps == null) continue;
+
+            screen.Show(ps, () =>
+            {
+                completed++;
+                if (completed >= total)
+                    StartCoroutine(PhaseTransition());
+            });
+        }
     }
 
     void TransferPlayerDataToNextScene()
@@ -110,6 +140,17 @@ public class Phase1Script : MonoBehaviour
             GameObject obj = player.playerGameObject;
             PlayerStats ps = obj.GetComponent<PlayerStats>();
             ps.RespawnHeal();
+        }
+
+        var statScreens = FindObjectsByType<StatScreenUI>(FindObjectsSortMode.None);
+        int total     = statScreens.Length;
+
+        foreach (var screen in statScreens)
+        {
+            PlayerStats ps = screen.GetComponentInParent<PlayerStats>();
+            if (ps == null) continue;
+
+            screen.Hide();
         }
 
         SceneManager.LoadScene("VotingScene");

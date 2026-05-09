@@ -73,6 +73,7 @@ public class VotingLogic : MonoBehaviour
 
         if (playerVotes.Count == 0)
         {
+            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("VotingScene")) return;
             Debug.Log("No votes — picking random");
             chosen = availableMinigames[UnityEngine.Random.Range(0, availableMinigames.Count)];
         }
@@ -89,7 +90,7 @@ public class VotingLogic : MonoBehaviour
 
         onVotingComplete?.Invoke(chosen);
 
-        SceneManager.LoadScene(chosen.sceneName);
+        // SceneManager.LoadScene(chosen.sceneName); commented out to test
     }
 
     MinigameData GetWeightedResult()
