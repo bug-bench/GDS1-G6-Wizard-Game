@@ -90,6 +90,13 @@ public class MeleeSwingSpell : SpellBehavior
 
                     // 击退方向
                     Vector2 knockbackDir = (rootObj.transform.position - casterRef.transform.position).normalized;
+                    
+                    // 防止完全重合时方向为零无法击退
+                    if (knockbackDir == Vector2.zero)
+                    {
+                        knockbackDir = Random.insideUnitCircle.normalized;
+                    }
+
                     Vector2 knockbackVector = knockbackDir * knockbackForce;
 
                     targetCombat.TakeDamage(damage, -1, knockbackVector);

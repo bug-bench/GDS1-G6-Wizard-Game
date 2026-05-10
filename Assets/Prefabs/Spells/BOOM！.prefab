@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 522005165151631547}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.44, y: -0.03, z: 0}
+  m_LocalPosition: {x: -0.01233, y: 0.177, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 4497026461800808960}
   - component: {fileID: -8340363054373902278}
   m_Layer: 3
-  m_Name: MeleeBatPkup
+  m_Name: "BOOM\uFF01"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,7 +98,7 @@ Transform:
   m_GameObject: {fileID: 2848393363742389300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.14, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -155,7 +155,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 7c800b77e7f079749881b55acc51ae03, type: 3}
+  m_Sprite: {fileID: -6512412375670681614, guid: 061e3882b25844577b3078134e6e0746, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpellPickup
   pickupCooldown: 1
   fixLineRendererIfNeeded: 1
-  spellData: {fileID: 11400000, guid: 926ef706055d98e4fad18626844e0f07, type: 2}
+  spellData: {fileID: 11400000, guid: 9b62fbe85dd930f428323c5a7c8196d2, type: 2}
 --- !u!82 &-8340363054373902278
 AudioSource:
   m_ObjectHideFlags: 0
@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 3928292970709921665}
   - component: {fileID: 4696770049037580002}
   m_Layer: 3
-  m_Name: bat
+  m_Name: BOOM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -374,7 +374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.43, y: -1.243}
+  m_AnchoredPosition: {x: 0.66, y: -1.11}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &3928292970709921665
@@ -446,7 +446,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: bat
+  m_text: BOOM
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -512,7 +512,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 9.033504, y: 0.7616575, z: 9.757368, w: 3.1269886}
+  m_margin: {x: 8.83796, y: 0.7616575, z: 9.5919075, w: 3.1269886}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0

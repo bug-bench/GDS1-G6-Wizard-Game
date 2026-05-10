@@ -47,7 +47,10 @@ public class SelfExplosionSpell : SpellBehavior
         transform.position = caster.transform.position;
         
         // 2. 第一帧瞬间进行物理范围检测，结算伤害和击退
+        // 改用 HitLayer（也就是 targetLayer），不再只打特定层，避免层级没设对导致打不到人
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(caster.transform.position, explosionRadius, targetLayer);
+
+        bool hasHitSomeone = false;
 
         foreach (var col in hitColliders)
         {
@@ -56,12 +59,28 @@ public class SelfExplosionSpell : SpellBehavior
             PlayerCombat targetCombat = col.GetComponentInParent<PlayerCombat>();
             if (targetCombat != null)
             {
+                // 获取目标的根节点（受力点）
+                GameObject rootObj = targetCombat.gameObject;
+
                 // 击退方向：从玩家向外辐射
-                Vector2 knockbackDir = (targetCombat.transform.position - caster.transform.position).normalized;
+                Vector2 knockbackDir = (rootObj.transform.position - caster.transform.position).normalized;
+                
+                // 如果两个人完全重叠，给一个随机方向防止报错或无法推开
+                if (knockbackDir == Vector2.zero) 
+                {
+                    knockbackDir = Random.insideUnitCircle.normalized;
+                }
+
                 Vector2 knockbackVector = knockbackDir * knockbackForce;
 
                 targetCombat.TakeDamage(damage, -1, knockbackVector);
+                hasHitSomeone = true;
             }
+        }
+
+        if (!hasHitSomeone)
+        {
+            Debug.LogWarning("自爆法术没有检测到任何可受击目标。请检查 SelfExplosionPrefab 上的 Target Layer 是否勾选了敌人的 Layer！");
         }
 
         EnsureLineRenderer();

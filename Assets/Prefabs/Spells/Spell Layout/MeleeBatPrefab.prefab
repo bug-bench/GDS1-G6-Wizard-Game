@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MeleeSwingSpell
   damage: 20
   swingDuration: 0.25
-  knockbackForce: 100
+  knockbackForce: 20
   hitLayer:
     serializedVersion: 2
     m_Bits: 4294967295

@@ -249,16 +249,23 @@ public class PlayerCombat : MonoBehaviour
     {
         if (equippedMainWeaponRenderer != null)
         {
-            // 只有当法术是近战挥击（MeleeSwingSpell）时，才在手上常驻显示
-            bool isMeleeWeapon = false;
-            if (currentAttackSpell != null && currentAttackSpell.spellPrefab != null)
+            // 找出哪个槽位装着近战武器
+            SpellData meleeSpellToDisplay = null;
+
+            if (currentAttackSpell != null && currentAttackSpell.spellPrefab != null && 
+                currentAttackSpell.spellPrefab.GetComponentInChildren<MeleeSwingSpell>(true) != null)
             {
-                isMeleeWeapon = currentAttackSpell.spellPrefab.GetComponentInChildren<MeleeSwingSpell>(true) != null;
+                meleeSpellToDisplay = currentAttackSpell;
+            }
+            else if (currentMovementSpell != null && currentMovementSpell.spellPrefab != null && 
+                     currentMovementSpell.spellPrefab.GetComponentInChildren<MeleeSwingSpell>(true) != null)
+            {
+                meleeSpellToDisplay = currentMovementSpell;
             }
 
-            if (isMeleeWeapon && hideWeaponTimer <= 0f)
+            if (meleeSpellToDisplay != null && hideWeaponTimer <= 0f)
             {
-                equippedMainWeaponRenderer.sprite = currentAttackSpell.GetIcon();
+                equippedMainWeaponRenderer.sprite = meleeSpellToDisplay.GetIcon();
                 equippedMainWeaponRenderer.enabled = true;
                 
                 // 重置为其在手里的闲置姿势
@@ -527,6 +534,7 @@ public class PlayerCombat : MonoBehaviour
             CleanupHeldMovementEffects(applyReleaseCooldown: false);
             SpellData temp = currentMovementSpell;
             currentMovementSpell = nearestPickup.spellData;
+            UpdateWeaponVisuals();
             
             nearestPickup.OnPickedUp();
             DropSpell(temp);
@@ -574,8 +582,12 @@ public class PlayerCombat : MonoBehaviour
 
         playerStats.TakeDamage(damage);
 
+        // 加强对受力的响应（如果被赋予了巨大的击退力，强制清除当前速度并施加冲量）
         if (playerRb != null && knockbackWorldDir.sqrMagnitude > 0.0001f)
-            playerRb.AddForce(knockbackWorldDir.normalized * hitKnockbackImpulse, ForceMode2D.Impulse);
+        {
+            playerRb.linearVelocity = Vector2.zero; // 先清零速度，防止原有动能抵消击退
+            playerRb.AddForce(knockbackWorldDir, ForceMode2D.Impulse);
+        }
 
         if (_invincibilityBlinkTargets != null && _invincibilityBlinkTargets.Length > 0)
         {
