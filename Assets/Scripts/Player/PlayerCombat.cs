@@ -14,6 +14,14 @@ public class PlayerCombat : MonoBehaviour
     public SpellData currentAttackSpell;
     public SpellData currentMovementSpell;
 
+    [Header("Visual Weapon")]
+    public SpriteRenderer equippedMainWeaponRenderer; // 拖入玩家手部专门用于显示常驻武器的 SpriteRenderer
+    [Tooltip("手持武器在闲置状态下的默认偏移位置和旋转，以免和身体重叠太丑")]
+    public Vector3 weaponIdleLocalPosition = new Vector3(0.5f, 0, 0);
+    public Vector3 weaponIdleLocalRotation = new Vector3(0, 0, -30f);
+    
+    private float hideWeaponTimer = 0f;
+
     [Header("Drop Settings")]
     public float dropForce = 8f;
 
@@ -228,6 +236,50 @@ public class PlayerCombat : MonoBehaviour
     {
         if (attackCDTimer > 0f) attackCDTimer -= Time.deltaTime;
         if (movementCDTimer > 0f) movementCDTimer -= Time.deltaTime;
+
+        if (hideWeaponTimer > 0f)
+        {
+            hideWeaponTimer -= Time.deltaTime;
+            if (equippedMainWeaponRenderer != null && hideWeaponTimer <= 0f)
+                UpdateWeaponVisuals();
+        }
+    }
+
+    public void UpdateWeaponVisuals()
+    {
+        if (equippedMainWeaponRenderer != null)
+        {
+            // 只有当法术是近战挥击（MeleeSwingSpell）时，才在手上常驻显示
+            bool isMeleeWeapon = false;
+            if (currentAttackSpell != null && currentAttackSpell.spellPrefab != null)
+            {
+                isMeleeWeapon = currentAttackSpell.spellPrefab.GetComponentInChildren<MeleeSwingSpell>(true) != null;
+            }
+
+            if (isMeleeWeapon && hideWeaponTimer <= 0f)
+            {
+                equippedMainWeaponRenderer.sprite = currentAttackSpell.GetIcon();
+                equippedMainWeaponRenderer.enabled = true;
+                
+                // 重置为其在手里的闲置姿势
+                equippedMainWeaponRenderer.transform.localPosition = weaponIdleLocalPosition;
+                equippedMainWeaponRenderer.transform.localRotation = Quaternion.Euler(weaponIdleLocalRotation);
+            }
+            else
+            {
+                equippedMainWeaponRenderer.sprite = null;
+                equippedMainWeaponRenderer.enabled = false;
+            }
+        }
+    }
+
+    public void HideWeaponVisualFor(float duration)
+    {
+        hideWeaponTimer = duration;
+        if (equippedMainWeaponRenderer != null)
+        {
+            equippedMainWeaponRenderer.enabled = false;
+        }
     }
 
     /// <summary>
@@ -349,6 +401,7 @@ public class PlayerCombat : MonoBehaviour
         if (currentAttackSpell == null)
         {
             currentAttackSpell = newSpell;
+            UpdateWeaponVisuals();
             Debug.Log("主武器(左键) Main: " + newSpell.spellName);
             return true;
         }
@@ -444,6 +497,7 @@ public class PlayerCombat : MonoBehaviour
             CleanupHeldAttackEffects(applyReleaseCooldown: false);
             SpellData temp = currentAttackSpell;
             currentAttackSpell = nearestPickup.spellData;
+            UpdateWeaponVisuals();
             
             nearestPickup.OnPickedUp();
             DropSpell(temp);
@@ -534,11 +588,11 @@ public class PlayerCombat : MonoBehaviour
         {
             if (attackerIndex >= 0)
                 GameData.RecordKill(attackerIndex);
-            if (p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
+            if (p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
             {
                 Die();
             }
-            else if (!isKnockedDown && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
+            else if (!isKnockedDown && p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
             {
                 CollectManager cm = FindAnyObjectByType<CollectManager>();
                 if (cm != null)
@@ -555,7 +609,7 @@ public class PlayerCombat : MonoBehaviour
                 }
             }
         }
-        else if (playerStats.health > 0 && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
+        else if (playerStats.health > 0 && p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
         {
             CollectManager cm = FindAnyObjectByType<CollectManager>();
             int ri = Random.Range(1, 4);
