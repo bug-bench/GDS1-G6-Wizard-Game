@@ -1,5 +1,7 @@
+
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CollectManager : MonoBehaviour
 {
@@ -11,18 +13,23 @@ public class CollectManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        foreach (var player in GameData.players)
-        {
-            players.Add(player.playerGameObject);
-            PlayerCollectTracker.Add(player.playerGameObject, 0);
-        }
+        
+    }
+
+    public void SetupPlayer(GameObject player)
+    {
+        players.Add(player);
+        PlayerCollectTracker.Add(player, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Phase2Collect")) return;
+        CollectPickupSpawner cps = FindFirstObjectByType<CollectPickupSpawner>();
         if (TimerEnded == true)
         {
+            cps.StopSpawning();
             CollectPickup[] remainingPickups = FindObjectsByType<CollectPickup>(FindObjectsSortMode.None);
             foreach (CollectPickup pickup in remainingPickups)
             {
@@ -90,4 +97,6 @@ public class CollectManager : MonoBehaviour
     {
         PlayerCollectTracker[player] += 1;
     }
+
+    
 }

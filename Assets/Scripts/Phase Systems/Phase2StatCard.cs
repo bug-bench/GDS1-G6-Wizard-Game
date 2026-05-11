@@ -7,15 +7,19 @@ public class Phase2StatCard : MonoBehaviour
     [Header("UI References")]
     public TextMeshProUGUI playerLabel;
     public TextMeshProUGUI healthText;
-    public TextMeshProUGUI strengthText;
-    public TextMeshProUGUI speedText;
+
+    [Header("Player Portrait")]
+    public Image playerPortrait;
+
+    [Header("Health Bar")]
+    public RectTransform healthBarOuter;
+    public Image healthBarInner;
+    public float baseBarWidth;
 
     [Header("Spell Slots")]
-    public Image firstSpellSlot;       // assign in Inspector
-    public Image secondSpellSlot;        // assign in Inspector
-
-    // Shown when slot is empty
-    public Sprite emptySlotSprite;    // assign a grey placeholder in Inspector
+    public Image firstSpellSlot;
+    public Image secondSpellSlot;
+    public Sprite emptySlotSprite;
 
     private PlayerStats stats;
     private PlayerCombat combat;
@@ -27,15 +31,28 @@ public class Phase2StatCard : MonoBehaviour
         UseHexColor.HexColor("D4A83A"),
     };
 
+    void Awake()
+    {
+        // Capture the bar's designed width as the baseline for 100 HP
+        if (healthBarOuter != null)
+            baseBarWidth = healthBarOuter.sizeDelta.x;
+    }
+
     public void Init(PlayerStats playerStats, PlayerData data)
     {
-        stats = playerStats;
+        stats  = playerStats;
         combat = playerStats.GetComponent<PlayerCombat>();
 
         if (data != null)
         {
             GetComponent<Image>().color = colors[data.colorIndex];
             playerLabel.text = $"P{data.playerIndex + 1}";
+
+            if (playerPortrait != null && data.playerSprite != null)
+            {
+                playerPortrait.sprite = data.playerSprite;
+                playerPortrait.color  = colors[data.colorIndex];
+            }
         }
 
         UpdateDisplay();
@@ -49,15 +66,29 @@ public class Phase2StatCard : MonoBehaviour
 
     private void UpdateDisplay()
     {
-        // Stats
-        healthText.text = $"{Mathf.RoundToInt(stats.CurrentHealth())}";
-        strengthText.text = $"{Mathf.RoundToInt(stats.CurrentStrength())}";
-        speedText.text = $"{Mathf.RoundToInt(stats.CurrentSpeed())}";
+        float current = stats.CurrentHealth();
+        float max     = stats.MaxHealth;
 
-        // Spell icons — update every frame so equip/drop reflects instantly
+        healthText.text = $"{Mathf.RoundToInt(current)} / {Mathf.RoundToInt(max)}";
+
+        if (healthBarOuter != null)
+        {
+            float scale = max / 100f;
+            healthBarOuter.sizeDelta = new Vector2(baseBarWidth * scale, healthBarOuter.sizeDelta.y);
+        }
+
+        if (healthBarInner != null)
+        {
+            healthBarInner.rectTransform.anchorMin = Vector2.zero;
+            healthBarInner.rectTransform.anchorMax = Vector2.one;
+            healthBarInner.rectTransform.offsetMin = Vector2.zero;
+            healthBarInner.rectTransform.offsetMax = Vector2.zero;
+            healthBarInner.fillAmount = Mathf.Clamp01(current / max);
+        }
+
         if (combat != null)
         {
-            SetSlotIcon(firstSpellSlot, combat.currentAttackSpell);
+            SetSlotIcon(firstSpellSlot,  combat.currentAttackSpell);
             SetSlotIcon(secondSpellSlot, combat.currentMovementSpell);
         }
     }
@@ -65,18 +96,16 @@ public class Phase2StatCard : MonoBehaviour
     private void SetSlotIcon(Image slot, SpellData spell)
     {
         if (slot == null) return;
-
         Sprite icon = spell?.GetIcon();
-
         if (icon != null)
         {
             slot.sprite = icon;
-            slot.color = spell.GetIconColor(); // use the prefab's sprite color
+            slot.color  = spell.GetIconColor();
         }
         else
         {
             slot.sprite = emptySlotSprite;
-            slot.color = new Color(1, 1, 1, 0.3f);
+            slot.color  = new Color(1, 1, 1, 0.3f);
         }
     }
 }

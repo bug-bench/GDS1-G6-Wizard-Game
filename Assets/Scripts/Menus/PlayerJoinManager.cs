@@ -9,12 +9,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayerJoinManager : MonoBehaviour
 {
-    [Tooltip("与 UI 颜色数量、分屏格子一致；超过则拒绝加入（防止 PlayerInputManager 未设上限时塞进第 5 人）。 — Match UI colors / split-screen slots; reject extra joins if PlayerInputManager has no cap.")]
     [SerializeField] int maxPlayers = 4;
+    [SerializeField] int minPlayers = 2;
 
     public GameObject cardPrefab;
     public Transform cardContainer;
-    [Tooltip("若为 false，PlayerSpawner 会关掉每人子相机，SplitScreenCamera 不会生效（曾导致大厅进关卡后始终全屏单相机）。 — If false, PlayerSpawner disables per-player cameras; SplitScreenCamera never runs (looks like split screen is broken).")]
     public bool useSplitScreen = true;
     [SerializeField] string scene = "Phase1";
     private List<PlayerCard> playerCards = new List<PlayerCard>();
@@ -36,7 +35,7 @@ public class PlayerJoinManager : MonoBehaviour
     {
         if (gameStarting) return;
         if (playerCards.Count == 0) return;
-        if (playerCards.Count < 2) return; 
+        if (playerCards.Count < minPlayers) return; 
 
         foreach (var card in playerCards)
             if (!card.isReady) return;

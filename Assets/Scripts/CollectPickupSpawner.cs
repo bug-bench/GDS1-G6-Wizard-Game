@@ -11,9 +11,10 @@ public class CollectPickupSpawner : MonoBehaviour
     public Vector2 Spawncenter;
     public Vector2 SpawnSize = new Vector2(10F, 10F);
 
-    public int numberToSpawn = 30;
+    public int startingPickups = 10;
 
     public float respawnDelay = 3f;
+    private bool spawning = true;
 
     //spawn distance so no overlay
     public float DistancebetweenStats = 1f;
@@ -21,25 +22,33 @@ public class CollectPickupSpawner : MonoBehaviour
     public int maxattempts = 20;
     void Start()
     {
-        SpawnPickups();
-    }
-
-
-    void SpawnPickups()
-    {
-        for (int i = 0; i < numberToSpawn; i++)
+        for (int i = 0; i < startingPickups; i++)
         {
             SpawnSinglePickup();
         }
+        StartCoroutine(SpawnOverTime());
     }
+
+    IEnumerator SpawnOverTime()
+    {
+        while (spawning)
+        {
+            yield return new WaitForSeconds(respawnDelay);
+            SpawnSinglePickup();
+        }
+    }
+
+    public void StopSpawning()
+    {
+        spawning = false;
+    }
+    
     void SpawnSinglePickup()
     {
         Vector2 randomPosition = Vector2.zero;
         bool foundValidPosition = false;
         for (int i = 0; i < maxattempts; i++)
         {
-
-
              randomPosition = new Vector2(
                     Random.Range(Spawncenter.x - SpawnSize.x / 2f, Spawncenter.x + SpawnSize.x / 2f),
                     Random.Range(Spawncenter.y - SpawnSize.y / 2f, Spawncenter.y + SpawnSize.y / 2f)
@@ -74,21 +83,11 @@ public class CollectPickupSpawner : MonoBehaviour
 
         GameObject newPickup = Instantiate(pickup, randomPosition, Quaternion.identity);
 
-        // StatPickUp pickup = newStats.GetComponent<StatPickUp>();
-        // if (pickup != null)
-        // {
-        //     pickup.SetSpawner(this);
-        // }
-    }
-
-    public void RespawnPickups()
-    {
-        StartCoroutine(RespawnCoroutine());
-    }
-    IEnumerator RespawnCoroutine()
-    {
-        yield return new WaitForSeconds(respawnDelay);
-        SpawnSinglePickup();
+        CollectPickup collectPickup = newPickup.GetComponent<CollectPickup>();
+        if (collectPickup != null)
+        {
+            collectPickup.SetSpawner(this);
+        }
     }
 
     private void OnDrawGizmosSelected()

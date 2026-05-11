@@ -12,11 +12,41 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private string mainMenuScene = "MainMenu";
 
     public static bool IsPaused { get; private set; }
+    public static float LastUnpauseTime { get; private set; }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // Reset pause state every time a new scene loads
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (IsPaused)
+        {
+            IsPaused = false;
+            Time.timeScale = 1f;
+            if (pausePanel != null)
+                pausePanel.SetActive(false);
+        }
+
+        // Never pause on main menu or lobby
+        if (scene.name == mainMenuScene || scene.name == "Lobby")
+        {
+            IsPaused = false;
+            Time.timeScale = 1f;
+        }
+    }
 
     private void Update()
     {
         if (SceneManager.GetActiveScene().name == mainMenuScene) return;
-         
+
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             TogglePause();
 
@@ -32,10 +62,12 @@ public class PauseMenu : MonoBehaviour
 
     public void TogglePause()
     {
-        Debug.Log($"TogglePause called, IsPaused becoming: {!IsPaused}\n{System.Environment.StackTrace}");
         IsPaused = !IsPaused;
         pausePanel.SetActive(IsPaused);
         Time.timeScale = IsPaused ? 0f : 1f;
+
+        if (!IsPaused)
+            LastUnpauseTime = Time.unscaledTime;
 
         if (IsPaused)
         {
@@ -57,7 +89,7 @@ public class PauseMenu : MonoBehaviour
     public void OnMainMenuPressed()
     {
         IsPaused = false;
-        pausePanel.SetActive(false); // ADD THIS
+        pausePanel.SetActive(false);
         Time.timeScale = 1f;
         GameData.players.Clear();
         GameData.winnerIndex = -1;

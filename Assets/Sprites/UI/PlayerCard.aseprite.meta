@@ -170,6 +170,27 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
+  - name: PlayerCard_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 4, y: 4, z: 4, w: 4}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 108
+      width: 64
+      height: 96
+    spriteID: 336052838071948d1a15dd553d010727
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
   tileSetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -184,7 +205,7 @@ ScriptedImporter:
     layerType: 0
     blendMode: 0
     cells:
-    - name: PlayerCard
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -193,6 +214,15 @@ ScriptedImporter:
         width: 64
         height: 96
       spriteId: d234fa3afa6934340b08c32e488f8fda
+    - name: Frame_1
+      frameIndex: 1
+      additiveSortOrder: 0
+      cellRect:
+        x: 0
+        y: 0
+        width: 64
+        height: 96
+      spriteId: d3ee0c899c44c4674880ee21754ceb96
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -239,4 +269,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 64, y: 96}
-  previousTextureSize: {x: 128, y: 128}
+  previousTextureSize: {x: 128, y: 256}
