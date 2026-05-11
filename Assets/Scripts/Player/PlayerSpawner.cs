@@ -17,14 +17,23 @@ public class PlayerSpawner : MonoBehaviour
     {
         if (GameData.players.Count == 0 || GameData.players[0].playerGameObject == null)
         {
-            
             SpawnAllPlayers();
         }
         else
         {
-            
             SpawnExistingPlayers();
         }
+    }
+
+    private Vector3 GetRandomSpawnPosition(int fallbackIndex)
+    {
+        if (spawnPoints != null && spawnPoints.Length > 0)
+        {
+            int randomIndex = Random.Range(0, spawnPoints.Length);
+            return spawnPoints[randomIndex].position;
+        }
+
+        return new Vector3(fallbackIndex * 2, 0, 0);
     }
 
     private void SpawnAllPlayers()
@@ -33,9 +42,7 @@ public class PlayerSpawner : MonoBehaviour
         {
             var data = GameData.players[i];
 
-            Vector3 spawnPos = spawnPoints != null && i < spawnPoints.Length
-                ? spawnPoints[i].position
-                : new Vector3(i * 2, 0, 0);
+            Vector3 spawnPos = GetRandomSpawnPosition(i);
 
             if (data.device == null)
             {
@@ -54,12 +61,14 @@ public class PlayerSpawner : MonoBehaviour
             playerInput.transform.position = spawnPos;
 
             var sr = playerInput.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null) {
+            if (sr != null)
+            {
                 sr.color = colors[data.colorIndex];
-                data.playerSprite = sr.sprite; // save sprite 
+                data.playerSprite = sr.sprite; // Save Sprite
             }
 
-            // 更新战斗脚本里的原始颜色，防止闪烁后变回白色
+             // 更新战斗脚本里的原始颜色，防止闪烁后变回白色
+             // Update the original colors in the battle script to prevent them from reverting to white after flickering.
             var combat = playerInput.GetComponent<PlayerCombat>();
             if (combat != null)
             {
@@ -83,7 +92,6 @@ public class PlayerSpawner : MonoBehaviour
             if (controller != null)
                 controller.Init(data);
 
-            // ADD THIS
             Phase2StatCard card = playerInput.GetComponentInChildren<Phase2StatCard>();
             if (card != null)
             {
@@ -95,10 +103,11 @@ public class PlayerSpawner : MonoBehaviour
                 Debug.LogWarning($"Player {data.playerIndex} has no Phase2StatCard in children");
             }
         }
+
         Debug.Log($"PlayerSpawner — useSplitScreen: {GameData.useSplitScreen}");
     }
 
-    void SpawnExistingPlayers()
+    private void SpawnExistingPlayers()
     {
         for (int i = 0; i < GameData.players.Count; i++)
         {
@@ -106,9 +115,7 @@ public class PlayerSpawner : MonoBehaviour
 
             if (data.playerGameObject == null) continue;
 
-            Vector3 spawnPos = spawnPoints != null && i < spawnPoints.Length
-                ? spawnPoints[i].position
-                : new Vector3(i * 2, 0, 0);
+            Vector3 spawnPos = GetRandomSpawnPosition(i);
 
             data.playerGameObject.transform.position = spawnPos;
             data.playerGameObject.SetActive(true);
