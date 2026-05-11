@@ -56,6 +56,7 @@ public class Phase2StatCard : MonoBehaviour
         }
 
         UpdateDisplay();
+        GetComponent<SpellCooldownUI>()?.Init(combat);
     }
 
     private void Update()
