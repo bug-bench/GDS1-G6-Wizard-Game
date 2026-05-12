@@ -27,7 +27,7 @@ public class StatScreenUI : MonoBehaviour
     {
         healthRow?.Setup("Health",      new Color(0.87f, 0.19f, 0.19f));
         speedRow?.Setup("Speed",        new Color(0.22f, 0.53f, 0.93f));
-        strengthRow?.Setup("Strength",  new Color(0.93f, 0.35f, 0.22f));
+        strengthRow?.Setup("Attack",  new Color(0.93f, 0.35f, 0.22f));
         defenseRow?.Setup("Defense",    new Color(0.22f, 0.85f, 0.45f));
         sizeRow?.Setup("Size",          new Color(0.75f, 0.22f, 0.93f));
         focusRow?.Setup("Focus",        new Color(0.93f, 0.78f, 0.22f));

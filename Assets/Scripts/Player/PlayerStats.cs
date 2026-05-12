@@ -209,7 +209,7 @@ public class PlayerStats : MonoBehaviour
                 // 增加移速 / Increase movement speed
                 IncreaseSpeed(amount);
                 break;
-            case "Strength":
+            case "Attack":
                 // 增加法强 / Increase spell power
                 IncreaseStrength(amount);
                 break;

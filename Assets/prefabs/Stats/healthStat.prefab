@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357fd28129afb784ab4313f32f1544d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatPickUp
-  statName: HP
+  statName: Health
   amount: 10
 --- !u!82 &3678895563837324167
 AudioSource:
