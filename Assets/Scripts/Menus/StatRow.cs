@@ -17,7 +17,7 @@ public class StatRow : MonoBehaviour
     public void SetValue(float value)
     {
         if (valueText != null)
-            valueText.text = value.ToString("F1");
+            valueText.text = Mathf.RoundToInt(value).ToString();
     }
 
     public void SetBarFill(float normalized)
