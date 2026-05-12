@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject pausePanel;
 
     [SerializeField] private string mainMenuScene = "MainMenu";
+    [SerializeField] private string lobbyScene = "Lobby";
 
     public static bool IsPaused { get; private set; }
     public static float LastUnpauseTime { get; private set; }
@@ -36,7 +37,7 @@ public class PauseMenu : MonoBehaviour
         }
 
         // Never pause on main menu or lobby
-        if (scene.name == mainMenuScene || scene.name == "Lobby")
+        if (scene.name == mainMenuScene || scene.name == lobbyScene)
         {
             IsPaused = false;
             Time.timeScale = 1f;
@@ -46,6 +47,7 @@ public class PauseMenu : MonoBehaviour
     private void Update()
     {
         if (SceneManager.GetActiveScene().name == mainMenuScene) return;
+        if (SceneManager.GetActiveScene().name == lobbyScene) return;
 
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             TogglePause();

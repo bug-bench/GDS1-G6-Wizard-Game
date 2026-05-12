@@ -30,35 +30,25 @@ public class StatPickUp : MonoBehaviour
         if (playerstats != null)
         {
             playerstats.ModifyStat(statName, amount);
+            playerstats.IncrementStatCount(statName);
             playerstats.RegisterPickup(statName);
 
-            FloatingStatSpawner spawner2 = other.GetComponent<FloatingStatSpawner>();
-            Debug.Log($"FloatingStatSpawner found: {spawner2 != null}, statName: {statName}, amount: {amount}");
-            spawner2?.ShowFloatingText(statName, amount);
-
-            other.GetComponent<FloatingStatSpawner>()?.ShowFloatingText(statName, amount);
+            other.GetComponent<FloatingStatSpawner>()?.ShowFloatingText(statName, 1);
 
             if (pickupSound != null)
             {
-
-
                 pickupSound.Play();
-
                 GetComponent<SpriteRenderer>().enabled = false;
                 GetComponent<Collider2D>().enabled = false;
-
                 Destroy(gameObject, pickupSound.clip.length);
             }
             else
             {
                 Destroy(gameObject);
             }
+
             if (spawner != null)
-            {
                 spawner.RespawnStats();
-            }
-
-
         }
     }
 }
