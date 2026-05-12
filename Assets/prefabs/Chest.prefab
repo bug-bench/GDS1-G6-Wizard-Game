@@ -120,7 +120,6 @@ MonoBehaviour:
   maxdrops: 3
   SpellPrefabs:
   - {fileID: 2848393363742389300, guid: 23a8d69e8996230439fdf358611bec50, type: 3}
-  - {fileID: 2848393363742389300, guid: f26e7b5623dd50643ae1bcf8f81c2b7f, type: 3}
   - {fileID: 2848393363742389300, guid: 48c445da198fa884399f1c14dd326d03, type: 3}
   - {fileID: 2848393363742389300, guid: 035e076c079a88d4b960a59fbe06015b, type: 3}
   - {fileID: 2848393363742389300, guid: 50396253bc42e3340a24f0351eb7bfcf, type: 3}
