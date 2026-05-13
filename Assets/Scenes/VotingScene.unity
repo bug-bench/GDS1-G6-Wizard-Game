@@ -190,9 +190,6 @@ MonoBehaviour:
   - minigameName: Survival
     sceneName: Phase2Survival
     useSplitScreen: 0
-  - minigameName: Wizard Staff
-    sceneName: Phase2Collect
-    useSplitScreen: 1
   votingLogic: {fileID: 104901605}
   selectionAnimator: {fileID: 104901607}
   options: []
