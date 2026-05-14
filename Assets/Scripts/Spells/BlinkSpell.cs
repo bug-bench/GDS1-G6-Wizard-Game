@@ -97,7 +97,7 @@ public class BlinkSpell : SpellBehavior
         // 默认检测 wall 层，如果没有设置则使用 DefaultRaycastLayers
         int mask = obstacleLayer.value == 0 ? LayerMask.GetMask("wall") : obstacleLayer.value;
         if (mask == 0) mask = Physics2D.DefaultRaycastLayers;
-
+/*
         // 1. 检查目标落点是否安全 (落点碰撞检测)
         // 使用 OverlapCircle 确保落点有足够的空间 (半径 0.25f)
         bool isDestinationClear = true;
@@ -116,16 +116,16 @@ public class BlinkSpell : SpellBehavior
         {
             return desiredEnd;
         }
-
+      */
         // 2. 如果落点不安全（在墙里），说明墙太厚或者直接点到了墙上
         // 此时退回到射线击中墙壁的前面，防止卡在墙里
         Vector2 rayOrigin = start + dir * castInset;
         float rayLen = Mathf.Max(0.01f, pathLen - castInset);
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(rayOrigin, dir, rayLen, mask);
-        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, dir, rayLen, mask);
+        //System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
-        foreach (RaycastHit2D hit in hits)
+       /* foreach (RaycastHit2D hit in hits)
         {
             if (hit.collider == null) continue;
             if (hit.collider.isTrigger) continue; // 忽略触发器
@@ -133,7 +133,12 @@ public class BlinkSpell : SpellBehavior
             
             return hit.point - dir * wallBuffer;
         }
+       */
 
+        if(hit.collider != null && !hit.collider.isTrigger && !IsColliderOnCaster(caster,hit.collider))
+        {
+            return hit.point - dir * wallBuffer;
+        }
         return desiredEnd;
     }
 }
