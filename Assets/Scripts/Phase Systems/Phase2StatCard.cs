@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class Phase2StatCard : MonoBehaviour
 {
@@ -14,7 +15,15 @@ public class Phase2StatCard : MonoBehaviour
     [Header("Health Bar")]
     public RectTransform healthBarOuter;
     public Image healthBarInner;
-    public float baseBarWidth;
+    private float baseBarWidth;
+
+    [Header("Overflow FX")]
+    public float overflowThreshold     = 150f;
+    public float superSaiyanThreshold  = 200f;
+    public Color normalBarColor        = new Color(0.91f, 0.19f, 0.19f);
+    public Color normalOuterColor      = new Color(0.4f, 0.05f, 0.05f);
+    public Color superSaiyanColor      = new Color(1f, 0.95f, 0.2f);
+    public Color superSaiyanOuterColor = new Color(0.8f, 0.6f, 0f);
 
     [Header("Spell Slots")]
     public Image firstSpellSlot;
@@ -23,6 +32,9 @@ public class Phase2StatCard : MonoBehaviour
 
     private PlayerStats stats;
     private PlayerCombat combat;
+    private float shakeTimer      = 0f;
+    private Vector2 barOriginalPos;
+    private bool barPosInitialized = false;
 
     private Color[] colors = {
         UseHexColor.HexColor("C2453A"),
@@ -33,9 +45,23 @@ public class Phase2StatCard : MonoBehaviour
 
     void Awake()
     {
-        // Capture the bar's designed width as the baseline for 100 HP
         if (healthBarOuter != null)
             baseBarWidth = healthBarOuter.sizeDelta.x;
+    }
+
+    void Start()
+    {
+        StartCoroutine(InitBarPos());
+    }
+
+    IEnumerator InitBarPos()
+    {
+        yield return null; // wait one frame for layout to settle
+        if (healthBarOuter != null)
+        {
+            barOriginalPos     = healthBarOuter.anchoredPosition;
+            barPosInitialized  = true;
+        }
     }
 
     public void Init(PlayerStats playerStats, PlayerData data)
@@ -56,6 +82,7 @@ public class Phase2StatCard : MonoBehaviour
         }
 
         UpdateDisplay();
+        GetComponent<SpellCooldownUI>()?.Init(combat);
     }
 
     private void Update()
@@ -71,10 +98,48 @@ public class Phase2StatCard : MonoBehaviour
 
         healthText.text = $"{Mathf.RoundToInt(current)} / {Mathf.RoundToInt(max)}";
 
-        if (healthBarOuter != null)
+        if (healthBarOuter != null && barPosInitialized)
         {
-            float scale = max / 100f;
-            healthBarOuter.sizeDelta = new Vector2(baseBarWidth * scale, healthBarOuter.sizeDelta.y);
+            // Only overflow past threshold
+            float effectiveScale = max >= overflowThreshold
+                ? max / overflowThreshold
+                : 1f;
+
+            healthBarOuter.sizeDelta = new Vector2(
+                baseBarWidth * effectiveScale,
+                healthBarOuter.sizeDelta.y
+            );
+
+            Image outerImg = healthBarOuter.GetComponent<Image>();
+
+            if (max >= superSaiyanThreshold)
+            {
+                Debug.Log($"SUPER SAIYAN — max: {max}");
+
+                float pulse = (Mathf.Sin(Time.time * 8f) + 1f) / 2f;
+
+                if (healthBarInner != null)
+                    healthBarInner.color = Color.Lerp(normalBarColor, superSaiyanColor, pulse);
+
+                if (outerImg != null)
+                    outerImg.color = Color.Lerp(normalOuterColor, superSaiyanOuterColor, pulse);
+
+                shakeTimer += Time.deltaTime;
+                float shakeX = Mathf.Sin(shakeTimer * 40f) * 3f;
+                float shakeY = Mathf.Sin(shakeTimer * 37f) * 2f;
+                healthBarOuter.anchoredPosition = barOriginalPos + new Vector2(shakeX, shakeY);
+            }
+            else
+            {
+                if (healthBarInner != null)
+                    healthBarInner.color = normalBarColor;
+
+                if (outerImg != null)
+                    outerImg.color = normalOuterColor;
+
+                healthBarOuter.anchoredPosition = barOriginalPos;
+                shakeTimer = 0f;
+            }
         }
 
         if (healthBarInner != null)

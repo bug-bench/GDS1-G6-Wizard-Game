@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCombat : MonoBehaviour
 {
+    
     [Header("Stats")]
     //public int health = 100;
     public bool isKnockedDown = false;
@@ -13,6 +14,12 @@ public class PlayerCombat : MonoBehaviour
     [Header("Equipped Spells (双槽位 / Dual Slots)")]
     public SpellData currentAttackSpell;
     public SpellData currentMovementSpell;
+
+    // Add these anywhere in PlayerCombat.cs
+    public float AttackCDTimer    => attackCDTimer;
+    public float MovementCDTimer  => movementCDTimer;
+    public float AttackCDTotal    => currentAttackSpell  != null ? currentAttackSpell.cooldownTime  : 1f;
+    public float MovementCDTotal  => currentMovementSpell != null ? currentMovementSpell.cooldownTime : 1f;
 
     [Header("Drop Settings")]
     public float dropForce = 8f;
@@ -71,6 +78,7 @@ public class PlayerCombat : MonoBehaviour
     private InputAction castMainAction;
     private InputAction castSubAction;
     private PlayerStats playerStats;
+
     void Awake()
     {
         controller = GetComponent<PlayerController>();
