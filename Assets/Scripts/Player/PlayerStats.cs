@@ -19,6 +19,9 @@ public class PlayerStats : MonoBehaviour
     [Tooltip("移动速度。数值越高跑得越快，但惯性（刹车距离）也会变大。\nMovement speed. Higher value means faster movement, but also increases inertia (stopping distance).")]
     public float speed = 5f;
 
+    [Tooltip("减速度（刹车能力）。数值越高，停下得越快（惯性越小）。\nDeceleration (braking power). Higher value means faster stopping (less inertia).")]
+    public float deceleration = 50f;
+
     [Tooltip("法术强度（力量）。直接附加到法术的基础伤害上（总伤害 = 法术伤害 + Strength）。\nSpell power (Strength). Added directly to base spell damage (Total Damage = Spell Damage + Strength).")]
     public float strength = 10f;
 

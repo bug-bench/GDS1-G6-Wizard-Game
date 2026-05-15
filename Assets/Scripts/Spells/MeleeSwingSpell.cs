@@ -28,6 +28,9 @@ public class MeleeSwingSpell : SpellBehavior
     // 记录已经打到过的人，防止一棒子造成多次伤害
     private HashSet<GameObject> hitTargets = new HashSet<GameObject>();
 
+    private float currentStartAngle;
+    private float currentEndAngle;
+
     public override void Execute(GameObject caster, Transform firePoint)
     {
         casterRef = caster;
@@ -36,18 +39,29 @@ public class MeleeSwingSpell : SpellBehavior
         transform.SetParent(firePoint);
         transform.localPosition = Vector3.zero;
 
-        // 自动修正贴图偏移（推出去）
+        // 根据朝向镜像挥击角度
+        bool facingLeft = firePoint.up.x < 0;
+        currentStartAngle = facingLeft ? -startAngle : startAngle;
+        currentEndAngle = facingLeft ? -endAngle : endAngle;
+
+        // 自动修正贴图偏移（推出去）和翻转
         SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
-        if (sr != null && sr.gameObject != this.gameObject)
+        if (sr != null)
         {
-            sr.transform.localPosition = new Vector3(0, hitOffset, 0);
-        }
-        else if (sr != null && sr.gameObject == this.gameObject)
-        {
-            Debug.LogWarning("你的棒球棍贴图和 MeleeSwingSpell 脚本挂在了同一个物体上！这会导致它原地打转。");
+            if (sr.gameObject != this.gameObject)
+            {
+                sr.transform.localPosition = new Vector3(0, hitOffset, 0);
+            }
+            else
+            {
+                Debug.LogWarning("你的棒球棍贴图和 MeleeSwingSpell 脚本挂在了同一个物体上！这会导致它原地打转。");
+            }
+
+            // 解决朝左时武器上下颠倒的问题
+            sr.flipX = facingLeft;
         }
         
-        transform.localRotation = Quaternion.Euler(0, 0, startAngle);
+        transform.localRotation = Quaternion.Euler(0, 0, currentStartAngle);
         Destroy(gameObject, swingDuration);
     }
 
@@ -60,7 +74,7 @@ public class MeleeSwingSpell : SpellBehavior
         
         // 挥击的平滑动画
         float easeT = t * t * (3f - 2f * t);
-        float currentAngle = Mathf.Lerp(startAngle, endAngle, easeT);
+        float currentAngle = Mathf.Lerp(currentStartAngle, currentEndAngle, easeT);
         transform.localRotation = Quaternion.Euler(0, 0, currentAngle);
 
         // 每帧主动进行球形伤害检测（最靠谱的近战检测方式，不需要挂Collider2D）
@@ -107,14 +121,6 @@ public class MeleeSwingSpell : SpellBehavior
 
     private void Start()
     {
-        if (casterRef != null)
-        {
-            PlayerCombat combat = casterRef.GetComponent<PlayerCombat>();
-            if (combat != null)
-            {
-                combat.HideWeaponVisualFor(swingDuration);
-            }
-        }
     }
 
     private void OnDrawGizmosSelected()

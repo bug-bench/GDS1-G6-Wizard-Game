@@ -15,14 +15,6 @@ public class PlayerCombat : MonoBehaviour
     public SpellData currentAttackSpell;
     public SpellData currentMovementSpell;
 
-    [Header("Visual Weapon")]
-    public SpriteRenderer equippedMainWeaponRenderer; // 拖入玩家手部专门用于显示常驻武器的 SpriteRenderer
-    [Tooltip("手持武器在闲置状态下的默认偏移位置和旋转，以免和身体重叠太丑")]
-    public Vector3 weaponIdleLocalPosition = new Vector3(0.5f, 0, 0);
-    public Vector3 weaponIdleLocalRotation = new Vector3(0, 0, -30f);
-    
-    private float hideWeaponTimer = 0f;
-
     // CD properties for UI
     public float AttackCDTimer    => attackCDTimer;
     public float MovementCDTimer  => movementCDTimer;
@@ -93,11 +85,6 @@ public class PlayerCombat : MonoBehaviour
         playerStats = GetComponent<PlayerStats>();
         playerRb = GetComponent<Rigidbody2D>();
         BuildInvincibilityBlinkTargets();
-    }
-
-    void Start()
-    {
-        UpdateWeaponVisuals();
     }
 
     void BuildInvincibilityBlinkTargets()
@@ -249,57 +236,6 @@ public class PlayerCombat : MonoBehaviour
     {
         if (attackCDTimer > 0f) attackCDTimer -= Time.deltaTime;
         if (movementCDTimer > 0f) movementCDTimer -= Time.deltaTime;
-
-        if (hideWeaponTimer > 0f)
-        {
-            hideWeaponTimer -= Time.deltaTime;
-            if (equippedMainWeaponRenderer != null && hideWeaponTimer <= 0f)
-                UpdateWeaponVisuals();
-        }
-    }
-
-    public void UpdateWeaponVisuals()
-    {
-        if (equippedMainWeaponRenderer != null)
-        {
-            // 找出哪个槽位装着近战武器
-            SpellData meleeSpellToDisplay = null;
-
-            if (currentAttackSpell != null && currentAttackSpell.spellPrefab != null && 
-                currentAttackSpell.spellPrefab.GetComponentInChildren<MeleeSwingSpell>(true) != null)
-            {
-                meleeSpellToDisplay = currentAttackSpell;
-            }
-            else if (currentMovementSpell != null && currentMovementSpell.spellPrefab != null && 
-                     currentMovementSpell.spellPrefab.GetComponentInChildren<MeleeSwingSpell>(true) != null)
-            {
-                meleeSpellToDisplay = currentMovementSpell;
-            }
-
-            if (meleeSpellToDisplay != null && hideWeaponTimer <= 0f)
-            {
-                equippedMainWeaponRenderer.sprite = meleeSpellToDisplay.GetIcon();
-                equippedMainWeaponRenderer.enabled = true;
-                
-                // 重置为其在手里的闲置姿势
-                equippedMainWeaponRenderer.transform.localPosition = weaponIdleLocalPosition;
-                equippedMainWeaponRenderer.transform.localRotation = Quaternion.Euler(weaponIdleLocalRotation);
-            }
-            else
-            {
-                equippedMainWeaponRenderer.sprite = null;
-                equippedMainWeaponRenderer.enabled = false;
-            }
-        }
-    }
-
-    public void HideWeaponVisualFor(float duration)
-    {
-        hideWeaponTimer = duration;
-        if (equippedMainWeaponRenderer != null)
-        {
-            equippedMainWeaponRenderer.enabled = false;
-        }
     }
 
     /// <summary>
@@ -421,7 +357,6 @@ public class PlayerCombat : MonoBehaviour
         if (currentAttackSpell == null)
         {
             currentAttackSpell = newSpell;
-            UpdateWeaponVisuals();
             Debug.Log("主武器(左键) Main: " + newSpell.spellName);
             return true;
         }
@@ -429,7 +364,6 @@ public class PlayerCombat : MonoBehaviour
         if (currentMovementSpell == null)
         {
             currentMovementSpell = newSpell;
-            UpdateWeaponVisuals();
             Debug.Log("副武器(右键) Sub: " + newSpell.spellName);
             return true;
         }
@@ -518,7 +452,6 @@ public class PlayerCombat : MonoBehaviour
             CleanupHeldAttackEffects(applyReleaseCooldown: false);
             SpellData temp = currentAttackSpell;
             currentAttackSpell = nearestPickup.spellData;
-            UpdateWeaponVisuals();
             
             nearestPickup.OnPickedUp();
             DropSpell(temp);
@@ -548,7 +481,6 @@ public class PlayerCombat : MonoBehaviour
             CleanupHeldMovementEffects(applyReleaseCooldown: false);
             SpellData temp = currentMovementSpell;
             currentMovementSpell = nearestPickup.spellData;
-            UpdateWeaponVisuals();
             
             nearestPickup.OnPickedUp();
             DropSpell(temp);
