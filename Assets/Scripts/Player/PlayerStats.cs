@@ -39,6 +39,8 @@ public class PlayerStats : MonoBehaviour
     public bool isStunned => Time.time < stunEndTime;
     public bool isRooted => Time.time < rootEndTime;
 
+    private Dictionary<string, int> statPickupCounts = new Dictionary<string, int>();
+
     void Start()
     {
         p1s = FindFirstObjectByType<Phase1Script>();
@@ -59,6 +61,20 @@ public class PlayerStats : MonoBehaviour
     {
         collectedPickups.Add(pickupID);
         Debug.Log(gameObject.name + " picked up: " + pickupID);
+    }
+
+    // Add at the top with other private fields
+    // Add this public method
+    public int GetStatPickupCount(string statName)
+    {
+        return statPickupCounts.TryGetValue(statName, out int count) ? count : 0;
+    }
+
+    public void IncrementStatCount(string statName)
+    {
+        if (!statPickupCounts.ContainsKey(statName))
+            statPickupCounts[statName] = 0;
+        statPickupCounts[statName]++;
     }
 
     // =====================
@@ -193,7 +209,7 @@ public class PlayerStats : MonoBehaviour
                 // 增加移速 / Increase movement speed
                 IncreaseSpeed(amount);
                 break;
-            case "Strength":
+            case "Attack":
                 // 增加法强 / Increase spell power
                 IncreaseStrength(amount);
                 break;

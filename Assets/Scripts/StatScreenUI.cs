@@ -20,22 +20,17 @@ public class StatScreenUI : MonoBehaviour
     [Header("Timing")]
     public float animDuration = 1.2f;
 
-    // Treat these as the max values for bar scaling
-    private const float MAX_HEALTH   = 200f;
-    private const float MAX_SPEED    = 15f;
-    private const float MAX_STRENGTH = 30f;
-    private const float MAX_DEFENSE  = 100f;
-    private const float MAX_SIZE     = 3f;
-    private const float MAX_FOCUS    = 0.9f;
+    [Header("Max pickup counts for bar scaling")]
+    public float maxPickups = 20f;
 
     void Start()
     {
-        healthRow?.Setup("Health",      new Color(0.87f, 0.19f, 0.19f)); // red
-        speedRow?.Setup("Speed",        new Color(0.22f, 0.53f, 0.93f)); // blue
-        strengthRow?.Setup("Strength",  new Color(0.93f, 0.35f, 0.22f)); // orange
-        defenseRow?.Setup("Defense",    new Color(0.22f, 0.85f, 0.45f)); // green
-        sizeRow?.Setup("Size",          new Color(0.75f, 0.22f, 0.93f)); // purple
-        focusRow?.Setup("Focus",        new Color(0.93f, 0.78f, 0.22f)); // yellow
+        healthRow?.Setup("Health",      new Color(0.87f, 0.19f, 0.19f));
+        speedRow?.Setup("Speed",        new Color(0.22f, 0.53f, 0.93f));
+        strengthRow?.Setup("Attack",  new Color(0.93f, 0.35f, 0.22f));
+        defenseRow?.Setup("Defense",    new Color(0.22f, 0.85f, 0.45f));
+        sizeRow?.Setup("Size",          new Color(0.75f, 0.22f, 0.93f));
+        focusRow?.Setup("Focus",        new Color(0.93f, 0.78f, 0.22f));
     }
 
     public void Show(PlayerStats stats, System.Action onComplete)
@@ -51,45 +46,42 @@ public class StatScreenUI : MonoBehaviour
 
     IEnumerator AnimateStats(PlayerStats stats, System.Action onComplete)
     {
-        var rows = new List<(StatRow row, float value, float max)>
+        var rows = new List<(StatRow row, float value)>
         {
-            (healthRow,   stats.health,           MAX_HEALTH),
-            (speedRow,    stats.speed,             MAX_SPEED),
-            (strengthRow, stats.strength,          MAX_STRENGTH),
-            (defenseRow,  stats.defense,           MAX_DEFENSE),
-            (sizeRow,     stats.sizeMultiplier,    MAX_SIZE),
-            (focusRow,    stats.cooldownReduction, MAX_FOCUS),
+            (healthRow,   stats.GetStatPickupCount("Health")),
+            (speedRow,    stats.GetStatPickupCount("Speed")),
+            (strengthRow, stats.GetStatPickupCount("Strength")),
+            (defenseRow,  stats.GetStatPickupCount("Defense")),
+            (sizeRow,     stats.GetStatPickupCount("Size")),
+            (focusRow,    stats.GetStatPickupCount("Focus")),
         };
 
-        // Set values and zero bars
-        foreach (var (row, value, max) in rows)
+        foreach (var (row, value) in rows)
         {
             if (row == null) continue;
             row.SetValue(value);
             row.SetBarFill(0f);
         }
 
-        // Animate all bars simultaneously
         float elapsed = 0f;
         while (elapsed < animDuration)
         {
             elapsed += Time.deltaTime;
             float t = Mathf.SmoothStep(0f, 1f, elapsed / animDuration);
 
-            foreach (var (row, value, max) in rows)
+            foreach (var (row, value) in rows)
             {
                 if (row == null) continue;
-                row.SetBarFill(Mathf.Clamp01(value / max) * t);
+                row.SetBarFill(Mathf.Clamp01(value / maxPickups) * t);
             }
 
             yield return null;
         }
 
-        // Snap to final values
-        foreach (var (row, value, max) in rows)
+        foreach (var (row, value) in rows)
         {
             if (row == null) continue;
-            row.SetBarFill(Mathf.Clamp01(value / max));
+            row.SetBarFill(Mathf.Clamp01(value / maxPickups));
         }
 
         yield return new WaitForSeconds(2f);

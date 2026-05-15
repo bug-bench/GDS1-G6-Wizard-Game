@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357fd28129afb784ab4313f32f1544d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatPickUp
-  name: Strength
+  statName: Attack
   amount: 5
 --- !u!82 &-3753941847050402834
 AudioSource:
