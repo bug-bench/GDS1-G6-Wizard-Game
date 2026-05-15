@@ -191,7 +191,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""63b0f4c3-b9e0-44e8-9337-a7bb2f831a82"",
-                    ""path"": ""<AndroidGamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
