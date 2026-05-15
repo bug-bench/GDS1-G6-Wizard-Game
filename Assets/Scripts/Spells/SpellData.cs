@@ -23,13 +23,13 @@ public class SpellData : ScriptableObject
         if (pickupPrefab != null)
         {
             var sr = pickupPrefab.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null && sr.sprite != null) return sr.sprite;
+            if (sr != null && sr.sprite != null && sr.sprite.name != "Square" && sr.sprite.name != "UISprite") return sr.sprite;
         }
         // use spellPrefab as fallback if no icon is assigned
         if (spellPrefab != null)
         {
             var sr = spellPrefab.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null && sr.sprite != null) return sr.sprite;
+            if (sr != null && sr.sprite != null && sr.sprite.name != "Square" && sr.sprite.name != "UISprite") return sr.sprite;
         }
 
         return null;

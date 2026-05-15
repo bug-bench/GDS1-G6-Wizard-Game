@@ -6,6 +6,10 @@ public class SpellProjectile : MonoBehaviour
     public float damage = 1f;
     public float lifeTime = 3f;
 
+    [Header("Knockback Settings")]
+    [Tooltip("击退力。如果是火球/冰球，设置合适的击退（例如 10 到 20）")]
+    public float knockbackForce = 15f;
+
     [Header("Status Effects on Hit")]
     [Tooltip("命中附加的燃烧总伤害 — Total burn damage applied on hit.")]
     public int applyBurnDamage = 0;
@@ -131,13 +135,11 @@ public class SpellProjectile : MonoBehaviour
                 var casterInput = caster.GetComponent<UnityEngine.InputSystem.PlayerInput>();
                 int attackerIndex = casterInput != null ? casterInput.playerIndex : -1;
 
-                Rigidbody2D trb = target.GetComponent<Rigidbody2D>();
-                Vector2 victimPos = trb != null ? trb.position : (Vector2)target.transform.position;
-                Vector2 knockFromProjectile = victimPos - (Vector2)transform.position;
-                if (knockFromProjectile.sqrMagnitude < 1e-6f)
-                    knockFromProjectile = (Vector2)transform.up;
+                // 子弹的击退方向最好是子弹的飞行方向，而不是从子弹中心向外排斥（否则打到碰撞体边缘会把人往侧面甚至反向推）
+                Vector2 knockDirection = (Vector2)transform.up;
 
-                target.TakeDamage(Mathf.RoundToInt(totalDamage), attackerIndex, knockFromProjectile.normalized);
+                // 传入方向乘以击退力
+                target.TakeDamage(Mathf.RoundToInt(totalDamage), attackerIndex, knockDirection.normalized * knockbackForce);
 
                 PlayerStats targetStats = target.GetComponent<PlayerStats>();
                 if (targetStats != null)

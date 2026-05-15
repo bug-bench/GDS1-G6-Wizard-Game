@@ -15,7 +15,7 @@ public class PlayerCombat : MonoBehaviour
     public SpellData currentAttackSpell;
     public SpellData currentMovementSpell;
 
-    // Add these anywhere in PlayerCombat.cs
+    // CD properties for UI
     public float AttackCDTimer    => attackCDTimer;
     public float MovementCDTimer  => movementCDTimer;
     public float AttackCDTotal    => currentAttackSpell  != null ? currentAttackSpell.cooldownTime  : 1f;
@@ -528,8 +528,12 @@ public class PlayerCombat : MonoBehaviour
 
         playerStats.TakeDamage(damage);
 
+        // 加强对受力的响应（如果被赋予了巨大的击退力，强制清除当前速度并施加冲量）
         if (playerRb != null && knockbackWorldDir.sqrMagnitude > 0.0001f)
-            playerRb.AddForce(knockbackWorldDir.normalized * hitKnockbackImpulse, ForceMode2D.Impulse);
+        {
+            playerRb.linearVelocity = Vector2.zero; // 先清零速度，防止原有动能抵消击退
+            playerRb.AddForce(knockbackWorldDir, ForceMode2D.Impulse);
+        }
 
         if (_invincibilityBlinkTargets != null && _invincibilityBlinkTargets.Length > 0)
         {
@@ -542,11 +546,11 @@ public class PlayerCombat : MonoBehaviour
         {
             if (attackerIndex >= 0)
                 GameData.RecordKill(attackerIndex);
-            if (p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
+            if (p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
             {
                 Die();
             }
-            else if (!isKnockedDown && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
+            else if (!isKnockedDown && p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
             {
                 CollectManager cm = FindAnyObjectByType<CollectManager>();
                 if (cm != null)
@@ -563,7 +567,7 @@ public class PlayerCombat : MonoBehaviour
                 }
             }
         }
-        else if (playerStats.health > 0 && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
+        else if (playerStats.health > 0 && p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Collect")
         {
             CollectManager cm = FindAnyObjectByType<CollectManager>();
             int ri = Random.Range(1, 4);
