@@ -85,9 +85,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingLayerID: -439740341
+  m_SortingLayer: 5
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6512412375670681614, guid: 061e3882b25844577b3078134e6e0746, type: 3}
   m_Color: {r: 0.05345905, g: 0.24629162, b: 1, a: 1}
@@ -369,8 +369,8 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -439740341
+  m_SortingLayer: 5
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -634,6 +634,10 @@ PrefabInstance:
     - target: {fileID: 2103083875384750114, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
       propertyPath: m_Name
       value: InteractPrompt
+      objectReference: {fileID: 0}
+    - target: {fileID: 6780938445123336170, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1388449611
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
