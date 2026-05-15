@@ -1,135 +1,255 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class StatSpawner : MonoBehaviour
 {
-    public GameObject AttackSprite;
-    public GameObject HealthSprite;
-    public GameObject MovementSprite;
-    public GameObject FocusSprite;
-    public GameObject SizeSprite;
-    public GameObject DefenseSprite;
-    //public GameObject Spell;
-    public Tilemap groundTilemap;
+    [Header("Stat Prefabs")]
+    [SerializeField] private GameObject AttackSprite;
+    [SerializeField] private GameObject HealthSprite;
+    [SerializeField] private GameObject MovementSprite;
+    [SerializeField] private GameObject FocusSprite;
+    [SerializeField] private GameObject SizeSprite;
+    [SerializeField] private GameObject DefenseSprite;
 
+    [Header("Tilemaps")]
+    [SerializeField] private Tilemap groundTilemap;
 
-    public Vector2 Spawncenter;
-    public Vector2 SpawnSize = new Vector2(10F, 10F);
+    [Tooltip("Optional")]
+    [SerializeField] private Tilemap spawnWeightTilemap;
 
-    public int numberToSpawn = 30;
+    [Header("Weight Settings")]
+    [SerializeField] private int normalTileWeight = 5;
 
-    public float respawnDelay = 3f;
+    [Tooltip("Lower = rarer, higher = more common.")]
+    [SerializeField] private int paintedTileWeight = 1;
 
-    //spawn distance so no overlay
-    public float DistancebetweenStats = 1f;
-    public LayerMask statLayer;
-    public int maxattempts = 20;
-    void Start()
+    [Header("Edge Prevention")]
+    [SerializeField] private int edgeBufferTiles = 1;
+
+    [Header("Spawn Settings")]
+    [SerializeField] private int numberToSpawn = 30;
+    [SerializeField] private float respawnDelay = 3f;
+
+    [Header("Spacing")]
+    [SerializeField] private float distanceBetweenStats = 1f;
+    [SerializeField] private LayerMask statLayer;
+    [SerializeField] private int maxAttempts = 30;
+
+    private GameObject[] statPrefabs;
+
+    private List<WeightedSpawnPoint> validSpawnPoints = new List<WeightedSpawnPoint>();
+
+    private class WeightedSpawnPoint
     {
+        public Vector3 worldPosition;
+        public int weight;
+
+        public WeightedSpawnPoint(Vector3 worldPosition, int weight)
+        {
+            this.worldPosition = worldPosition;
+            this.weight = weight;
+        }
+    }
+
+    private void Awake()
+    {
+        statPrefabs = new GameObject[]
+        {
+            AttackSprite,
+            HealthSprite,
+            MovementSprite,
+            SizeSprite,
+            FocusSprite,
+            DefenseSprite
+        };
+    }
+
+    private void Start()
+    {
+        CacheValidSpawnTiles();
         SpawnStats();
     }
 
+    private void CacheValidSpawnTiles()
+    {
+        validSpawnPoints.Clear();
 
-    void SpawnStats()
+        if (groundTilemap == null)
+        {
+            Debug.LogError("StatSpawner: Ground Tilemap is missing.");
+            return;
+        }
+
+        BoundsInt bounds = groundTilemap.cellBounds;
+
+        foreach (Vector3Int cellPosition in bounds.allPositionsWithin)
+        {
+            if (!groundTilemap.HasTile(cellPosition))
+                continue;
+
+            if (IsTooCloseToEdge(cellPosition))
+                continue;
+
+            int weight = normalTileWeight;
+
+            if (spawnWeightTilemap != null && spawnWeightTilemap.HasTile(cellPosition))
+            {
+                weight = paintedTileWeight;
+            }
+
+            if (weight <= 0)
+                continue;
+
+            Vector3 worldPosition = groundTilemap.GetCellCenterWorld(cellPosition);
+            validSpawnPoints.Add(new WeightedSpawnPoint(worldPosition, weight));
+        }
+
+        Debug.Log($"StatSpawner: Cached {validSpawnPoints.Count} valid spawn points.");
+    }
+
+    private bool IsTooCloseToEdge(Vector3Int cellPosition)
+    {
+        if (edgeBufferTiles <= 0)
+            return false;
+
+        for (int x = -edgeBufferTiles; x <= edgeBufferTiles; x++)
+        {
+            for (int y = -edgeBufferTiles; y <= edgeBufferTiles; y++)
+            {
+                Vector3Int checkPosition = new Vector3Int(
+                    cellPosition.x + x,
+                    cellPosition.y + y,
+                    cellPosition.z
+                );
+
+                if (!groundTilemap.HasTile(checkPosition))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void SpawnStats()
     {
         for (int i = 0; i < numberToSpawn; i++)
         {
-            SpawnSingleStats();
+            SpawnSingleStat();
         }
     }
-    void SpawnSingleStats()
+
+    private void SpawnSingleStat()
     {
-        Vector2 randomPosition = Vector2.zero;
-        bool foundValidPosition = false;
-        for (int i = 0; i < maxattempts; i++)
+        if (validSpawnPoints.Count == 0)
         {
+            Debug.LogWarning("StatSpawner: No valid spawn points found.");
+            return;
+        }
 
+        Vector3 spawnPosition = Vector3.zero;
+        bool foundValidPosition = false;
 
-             randomPosition = new Vector2(
-                    Random.Range(Spawncenter.x - SpawnSize.x / 2f, Spawncenter.x + SpawnSize.x / 2f),
-                    Random.Range(Spawncenter.y - SpawnSize.y / 2f, Spawncenter.y + SpawnSize.y / 2f)
-                );
+        for (int i = 0; i < maxAttempts; i++)
+        {
+            spawnPosition = GetRandomWeightedSpawnPosition();
 
-            // check if tile exists
-            bool hasTile = true;
-            if (groundTilemap != null)
-            {
-                Vector3Int cellPos = groundTilemap.WorldToCell(randomPosition);
-                hasTile = groundTilemap.HasTile(cellPos);
-            }
+            Collider2D hit = Physics2D.OverlapCircle(
+                spawnPosition,
+                distanceBetweenStats,
+                statLayer
+            );
 
-            Collider2D hit = Physics2D.OverlapCircle(randomPosition, DistancebetweenStats, statLayer);
-
-            if(hit == null && hasTile)
+            if (hit == null)
             {
                 foundValidPosition = true;
                 break;
             }
-
         }
-        
+
         if (!foundValidPosition)
         {
+            Debug.LogWarning("StatSpawner: Could not find a free spawn position.");
             return;
         }
 
-        int randomStat = Random.Range(0, 4);
-
-        GameObject prefabToSpawn = null;
-        
-
-        switch (randomStat)
-        {
-            case 0:
-                prefabToSpawn = AttackSprite;
-                break;
-            case 1:
-                prefabToSpawn = HealthSprite;
-                break;
-            case 2:
-                prefabToSpawn = MovementSprite;
-                break;
-            case 3:                
-                prefabToSpawn = SizeSprite;
-                break;
-            case 4:
-                prefabToSpawn = FocusSprite;
-                break;
-            case 5:
-                prefabToSpawn = DefenseSprite;
-                break;
-        }
+        GameObject prefabToSpawn = statPrefabs[Random.Range(0, statPrefabs.Length)];
 
         if (prefabToSpawn == null)
         {
-            Debug.LogWarning($"StatSpawner: The prefab for randomStat {randomStat} is missing! Please assign it in the Inspector.");
+            Debug.LogWarning("StatSpawner: One of the stat prefabs is missing.");
             return;
         }
 
-        GameObject newStats = Instantiate(prefabToSpawn, randomPosition, Quaternion.identity);
+        GameObject newStat = Instantiate(
+            prefabToSpawn,
+            spawnPosition,
+            Quaternion.identity
+        );
 
-        StatPickUp pickup = newStats.GetComponent<StatPickUp>();
+        StatPickUp pickup = newStat.GetComponent<StatPickUp>();
+
         if (pickup != null)
         {
             pickup.SetSpawner(this);
         }
     }
 
+    private Vector3 GetRandomWeightedSpawnPosition()
+    {
+        int totalWeight = 0;
+
+        foreach (WeightedSpawnPoint point in validSpawnPoints)
+        {
+            totalWeight += point.weight;
+        }
+
+        int randomWeight = Random.Range(0, totalWeight);
+
+        foreach (WeightedSpawnPoint point in validSpawnPoints)
+        {
+            randomWeight -= point.weight;
+
+            if (randomWeight < 0)
+            {
+                return point.worldPosition;
+            }
+        }
+
+        return validSpawnPoints[0].worldPosition;
+    }
+
     public void RespawnStats()
     {
         StartCoroutine(RespawnCoroutine());
     }
-    IEnumerator RespawnCoroutine()
+
+    private IEnumerator RespawnCoroutine()
     {
         yield return new WaitForSeconds(respawnDelay);
-        SpawnSingleStats();
+        SpawnSingleStat();
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(Spawncenter, SpawnSize);
-    }
+        if (groundTilemap == null)
+            return;
 
+        Gizmos.color = Color.green;
+
+        foreach (Vector3Int cellPosition in groundTilemap.cellBounds.allPositionsWithin)
+        {
+            if (!groundTilemap.HasTile(cellPosition))
+                continue;
+
+            if (Application.isPlaying && IsTooCloseToEdge(cellPosition))
+                continue;
+
+            Vector3 worldPosition = groundTilemap.GetCellCenterWorld(cellPosition);
+            Gizmos.DrawWireSphere(worldPosition, 0.1f);
+        }
+    }
 }

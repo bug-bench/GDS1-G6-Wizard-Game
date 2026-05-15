@@ -153,9 +153,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingLayerID: -439740341
+  m_SortingLayer: 5
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6512412375670681614, guid: 061e3882b25844577b3078134e6e0746, type: 3}
   m_Color: {r: 0.9764706, g: 0.89882773, b: 0.15686274, a: 1}
@@ -368,7 +368,7 @@ GameObject:
   - component: {fileID: 3928292970709921665}
   - component: {fileID: 4696770049037580002}
   m_Layer: 3
-  m_Name: Blink
+  m_Name: Fire Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -437,8 +437,8 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -439740341
+  m_SortingLayer: 5
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -462,9 +462,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'fire
-
-    ball'
+  m_text: fireball
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -634,6 +632,10 @@ PrefabInstance:
     - target: {fileID: 2103083875384750114, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
       propertyPath: m_Name
       value: InteractPrompt
+      objectReference: {fileID: 0}
+    - target: {fileID: 6780938445123336170, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1388449611
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

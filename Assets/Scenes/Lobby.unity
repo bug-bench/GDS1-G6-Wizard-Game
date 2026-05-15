@@ -528,7 +528,7 @@ MonoBehaviour:
   cardPrefab: {fileID: 6367834551410800005, guid: 2a06c7d997dcd4161a2183dbaa623c0d, type: 3}
   cardContainer: {fileID: 200389504}
   useSplitScreen: 1
-  scene: Phase1
+  scene: Phase1(new)
 --- !u!1 &527777866
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,6 +738,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
   pausePanel: {fileID: 1036621001}
   mainMenuScene: MainMenu
+  lobbyScene: Lobby
 --- !u!1 &614384174
 GameObject:
   m_ObjectHideFlags: 0

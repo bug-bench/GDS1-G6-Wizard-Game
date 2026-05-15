@@ -48,7 +48,7 @@ public class Phase1Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Phase1"))
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Phase1(new)"))
         {
             currentPhase = 2;
         }

@@ -1,94 +1,242 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class SpellSpawner : MonoBehaviour
 {
-    public GameObject[] spellPrefab;
+    [Header("Spell Prefabs")]
+    [SerializeField] private GameObject[] spellPrefab;
 
+    [Header("Tilemaps")]
+    [SerializeField] private Tilemap groundTilemap;
 
-    public Vector2 Spawncenter;
-    public Vector2 SpawnSize = new Vector2(10F, 10F);
+    [Tooltip("Optional")]
+    [SerializeField] private Tilemap spawnWeightTilemap;
 
+    [Header("Weight Settings")]
+    [SerializeField] private int normalTileWeight = 5;
 
-    public int numberToSpawn = 4;
+    [Tooltip("Lower = rarer, higher = more common.")]
+    [SerializeField] private int paintedTileWeight = 1;
 
-    public float respawnDelay = 10f;
+    [Header("Edge Prevention")]
+    [SerializeField] private int edgeBufferTiles = 1;
 
+    [Header("Spawn Settings")]
+    [SerializeField] private int numberToSpawn = 4;
+    [SerializeField] private float respawnDelay = 10f;
 
+    [Header("Spacing")]
+    [SerializeField] private float distanceBetweenSpells = 1f;
+    [SerializeField] private LayerMask spellLayer;
+    [SerializeField] private int maxAttempts = 20;
 
-    public float DistancebetweenStats = 1f;
-    public LayerMask statLayer;
-    public int maxattempts = 20;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private List<WeightedSpawnPoint> validSpawnPoints = new List<WeightedSpawnPoint>();
+
+    private class WeightedSpawnPoint
     {
+        public Vector3 worldPosition;
+        public int weight;
+
+        public WeightedSpawnPoint(Vector3 worldPosition, int weight)
+        {
+            this.worldPosition = worldPosition;
+            this.weight = weight;
+        }
+    }
+
+    private void Start()
+    {
+        CacheValidSpawnTiles();
         SpawnSpells();
     }
 
-   void SpawnSpells()
+    private void CacheValidSpawnTiles()
     {
-        for(int i = 0; i <numberToSpawn; i++)
+        validSpawnPoints.Clear();
+
+        if (groundTilemap == null)
+        {
+            Debug.LogError("SpellSpawner: Ground Tilemap is missing.");
+            return;
+        }
+
+        BoundsInt bounds = groundTilemap.cellBounds;
+
+        foreach (Vector3Int cellPosition in bounds.allPositionsWithin)
+        {
+            if (!groundTilemap.HasTile(cellPosition))
+                continue;
+
+            if (IsTooCloseToEdge(cellPosition))
+                continue;
+
+            int weight = normalTileWeight;
+
+            if (spawnWeightTilemap != null && spawnWeightTilemap.HasTile(cellPosition))
+            {
+                weight = paintedTileWeight;
+            }
+
+            if (weight <= 0)
+                continue;
+
+            Vector3 worldPosition = groundTilemap.GetCellCenterWorld(cellPosition);
+            validSpawnPoints.Add(new WeightedSpawnPoint(worldPosition, weight));
+        }
+
+        Debug.Log($"SpellSpawner: Cached {validSpawnPoints.Count} valid spawn points.");
+    }
+
+    private bool IsTooCloseToEdge(Vector3Int cellPosition)
+    {
+        if (edgeBufferTiles <= 0)
+            return false;
+
+        for (int x = -edgeBufferTiles; x <= edgeBufferTiles; x++)
+        {
+            for (int y = -edgeBufferTiles; y <= edgeBufferTiles; y++)
+            {
+                Vector3Int checkPosition = new Vector3Int(
+                    cellPosition.x + x,
+                    cellPosition.y + y,
+                    cellPosition.z
+                );
+
+                if (!groundTilemap.HasTile(checkPosition))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void SpawnSpells()
+    {
+        for (int i = 0; i < numberToSpawn; i++)
         {
             SpawnSingleSpell();
         }
     }
-    void SpawnSingleSpell()
+
+    private void SpawnSingleSpell()
     {
-        Vector2 randomPosition = Vector2.zero;
+        if (validSpawnPoints.Count == 0)
+        {
+            Debug.LogWarning("SpellSpawner: No valid spawn points found.");
+            return;
+        }
+
+        if (spellPrefab == null || spellPrefab.Length == 0)
+        {
+            Debug.LogWarning("SpellSpawner: No spell prefabs assigned.");
+            return;
+        }
+
+        Vector3 spawnPosition = Vector3.zero;
         bool foundValidPosition = false;
 
-        for (int i = 0; i < maxattempts; i++)
+        for (int i = 0; i < maxAttempts; i++)
         {
+            spawnPosition = GetRandomWeightedSpawnPosition();
 
-
-            randomPosition = new Vector2(
-                   Random.Range(Spawncenter.x - SpawnSize.x / 2f, Spawncenter.x + SpawnSize.x / 2f),
-                   Random.Range(Spawncenter.y - SpawnSize.y / 2f, Spawncenter.y + SpawnSize.y / 2f)
-               );
-
-            Collider2D hit = Physics2D.OverlapCircle(randomPosition, DistancebetweenStats, statLayer);
+            Collider2D hit = Physics2D.OverlapCircle(
+                spawnPosition,
+                distanceBetweenSpells,
+                spellLayer
+            );
 
             if (hit == null)
             {
                 foundValidPosition = true;
                 break;
             }
+        }
 
-
-
+        if (!foundValidPosition)
+        {
+            Debug.LogWarning("SpellSpawner: Could not find a free spawn position.");
+            return;
         }
 
         int randomIndex = Random.Range(0, spellPrefab.Length);
         GameObject prefabToSpawn = spellPrefab[randomIndex];
 
-        GameObject newSpell = Instantiate(prefabToSpawn, randomPosition, Quaternion.identity);
+        if (prefabToSpawn == null)
+        {
+            Debug.LogWarning("SpellSpawner: One of the spell prefabs is missing.");
+            return;
+        }
+
+        GameObject newSpell = Instantiate(
+            prefabToSpawn,
+            spawnPosition,
+            Quaternion.identity
+        );
 
         SpellPickup pickup = newSpell.GetComponent<SpellPickup>();
 
-        if(pickup != null)
+        if (pickup != null)
         {
             pickup.SetSpawner(this);
         }
     }
 
- 
+    private Vector3 GetRandomWeightedSpawnPosition()
+    {
+        int totalWeight = 0;
 
+        foreach (WeightedSpawnPoint point in validSpawnPoints)
+        {
+            totalWeight += point.weight;
+        }
+
+        int randomWeight = Random.Range(0, totalWeight);
+
+        foreach (WeightedSpawnPoint point in validSpawnPoints)
+        {
+            randomWeight -= point.weight;
+
+            if (randomWeight < 0)
+            {
+                return point.worldPosition;
+            }
+        }
+
+        return validSpawnPoints[0].worldPosition;
+    }
 
     public void RespawnSpell()
     {
         StartCoroutine(RespawnCoroutine());
     }
-    IEnumerator RespawnCoroutine()
+
+    private IEnumerator RespawnCoroutine()
     {
         yield return new WaitForSeconds(respawnDelay);
         SpawnSingleSpell();
     }
 
-
-
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(Spawncenter, SpawnSize);
+        if (groundTilemap == null)
+            return;
+
+        Gizmos.color = Color.cyan;
+
+        foreach (Vector3Int cellPosition in groundTilemap.cellBounds.allPositionsWithin)
+        {
+            if (!groundTilemap.HasTile(cellPosition))
+                continue;
+
+            if (Application.isPlaying && IsTooCloseToEdge(cellPosition))
+                continue;
+
+            Vector3 worldPosition = groundTilemap.GetCellCenterWorld(cellPosition);
+            Gizmos.DrawWireSphere(worldPosition, 0.1f);
+        }
     }
 }

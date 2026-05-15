@@ -31,7 +31,7 @@ public class FloatingStatText : MonoBehaviour
             transform.localPosition += new Vector3(0f, floatSpeed * Time.deltaTime, 0f);
             Vector3 after = transform.localPosition;
 
-            Debug.Log($"Before: {before.y}, After: {after.y}, floatSpeed: {floatSpeed}, dt: {Time.deltaTime}");
+            // Debug.Log($"Before: {before.y}, After: {after.y}, floatSpeed: {floatSpeed}, dt: {Time.deltaTime}");
 
             label.color = new Color(startColor.r, startColor.g, startColor.b, 1f - t);
             yield return null;

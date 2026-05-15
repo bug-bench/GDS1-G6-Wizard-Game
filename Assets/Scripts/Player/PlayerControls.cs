@@ -180,10 +180,21 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""303c0033-bd6c-49db-b426-8b26420ad9e9"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
+                    ""action"": ""CastMain"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""63b0f4c3-b9e0-44e8-9337-a7bb2f831a82"",
+                    ""path"": ""<AndroidGamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""CastMain"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -268,10 +279,21 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""34ff0914-2077-47e7-995c-2a35b04b8391"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
+                    ""action"": ""CastSub"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7e6d37ac-76f8-4b65-bad7-c223660bf8cc"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""CastSub"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
