@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("基础起步加速度。有输入时每秒增加的速度量；越小起步越慢。 — Base acceleration.")]
     public float moveAcceleration = 60f;
     [Range(1f, 200f)]
-    [Tooltip("基础刹车减速度。无输入时每秒减少的速率（越小滑得越远）。 — Base deceleration.")]
+    [Tooltip("基础刹车减速度（如果 PlayerStats 没有值则用这个兜底）。无输入时每秒减少的速率（越小滑得越远）。 — Base deceleration.")]
     public float moveDeceleration = 50f;
 
     [Range(0f, 1f)]
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
        
 
         playerStats = GetComponent<PlayerStats>();
-        currentDeceleration = moveDeceleration;
+        currentDeceleration = playerStats != null ? playerStats.deceleration : moveDeceleration;
     }
 
     public void ApplySprintMultiplier(float multiplier)
@@ -113,6 +113,9 @@ public class PlayerController : MonoBehaviour
             
             Vector2 v = rb.linearVelocity;
             float dt = Time.fixedDeltaTime;
+
+            // 动态读取 PlayerStats 中的减速度
+            if (playerStats != null) currentDeceleration = playerStats.deceleration;
 
             // 惯性越大，实际的加减速度越小（起步更肉，滑得更远）
             float actualAccel = moveAcceleration / inertiaMultiplier;

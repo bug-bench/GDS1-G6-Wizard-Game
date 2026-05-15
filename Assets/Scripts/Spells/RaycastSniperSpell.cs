@@ -12,6 +12,8 @@ public class RaycastSniperSpell : SpellBehavior
     [Header("激光 / 狙击数值 — Laser / Sniper")]
     public int damage = 50;
     public float range = 100f;
+    [Tooltip("击退力。激光也可以把人推开（比如 20 到 40）")]
+    public float knockbackForce = 25f;
     public LayerMask layerToHit;
 
     [Tooltip("从发射点沿朝向前移一点再射线，避免火点在碰撞体内部时先打到自己。 — Inset ray start along aim so fire point inside colliders does not hit self first.")]
@@ -141,7 +143,7 @@ public class RaycastSniperSpell : SpellBehavior
                     var srcInput = damageSource.GetComponent<UnityEngine.InputSystem.PlayerInput>();
                     int attackerIndex = srcInput != null ? srcInput.playerIndex : -1;
 
-                    target.TakeDamage(total, attackerIndex, dir);
+                    target.TakeDamage(total, attackerIndex, dir * knockbackForce);
                 }
                 break;
             }
