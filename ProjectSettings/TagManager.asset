@@ -70,5 +70,8 @@ TagManager:
   - name: UI
     uniqueID: 2906517685
     locked: 0
+  - name: crowd
+    uniqueID: 3878212633
+    locked: 0
   m_RenderingLayers:
   - Default
