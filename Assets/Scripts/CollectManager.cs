@@ -10,6 +10,7 @@ public class CollectManager : MonoBehaviour
     protected bool TimerEnded = false;
     private List<GameObject> players = new List<GameObject>();
     private Dictionary<GameObject, int> PlayerCollectTracker = new Dictionary<GameObject, int>();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -98,5 +99,26 @@ public class CollectManager : MonoBehaviour
         PlayerCollectTracker[player] += 1;
     }
 
-    
+    public int GetPlayerScore(GameObject player)
+    {
+        if (PlayerCollectTracker.ContainsKey(player))
+            return PlayerCollectTracker[player];
+
+        return 0;
+    }
+
+    public Dictionary<GameObject, int> GetScores()
+    {
+        return PlayerCollectTracker;
+    }
+
+    public List<KeyValuePair<GameObject, int>> GetRankings()
+    {
+        List<KeyValuePair<GameObject, int>> rankings =
+            new List<KeyValuePair<GameObject, int>>(PlayerCollectTracker);
+
+        rankings.Sort((a, b) => b.Value.CompareTo(a.Value));
+
+        return rankings;
+    }
 }

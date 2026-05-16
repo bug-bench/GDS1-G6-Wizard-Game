@@ -7,17 +7,20 @@ public class OptionUI : MonoBehaviour
     public string minigameName;
     public string sceneName;
     public Transform markerContainer;
-    public TMP_Text votesText;
+    public TMP_Text descriptionText;
     public TMP_Text nameText;
     int voteCount;
 
-    public void Setup(string name, string scene)
+    public void Setup(MinigameData data)
     {
-        minigameName = name;
-        sceneName = scene;
+        minigameName = data.minigameName;
+        sceneName = data.sceneName;
 
         if (nameText != null)
-            nameText.text = name;
+            nameText.text = minigameName;
+
+        if (descriptionText != null)
+            descriptionText.text = data.description;
 
         SetVotes(0);
     }
@@ -25,12 +28,5 @@ public class OptionUI : MonoBehaviour
     public void SetVotes(int count)
     {
         voteCount = count;
-        UpdateVotes();
-    }
-
-    void UpdateVotes()
-    {
-        if (votesText != null)
-            votesText.text = voteCount.ToString();
     }
 }

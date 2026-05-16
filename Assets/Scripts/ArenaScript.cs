@@ -13,6 +13,8 @@ public class ArenaScript : MonoBehaviour
     private List<GameObject> playersAlive = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
 
+    private bool isEnding = false;
+
     void Start()
     {
         StartCoroutine(FindPlayersNextFrame());
@@ -20,8 +22,9 @@ public class ArenaScript : MonoBehaviour
 
     void Update()
     {
-        if (gameWon)
+        if (gameWon && !isEnding)
         {
+            isEnding = true;
             foreach (GameObject player in players)
             {
                 SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
@@ -135,14 +138,16 @@ public class ArenaScript : MonoBehaviour
 
         var alivePlayers = GetAlivePlayers();
 
-        if (alivePlayers.Count == 1)
+        if (alivePlayers.Count == 1 && !isEnding)
         {
+            isEnding = true;
             GameObject winner = alivePlayers[0];
             Debug.Log("Winner: " + winner.name);
             EndGame(winner);
         }
-        else if (alivePlayers.Count == 0)
+        else if (alivePlayers.Count == 0 && !isEnding)
         {
+            isEnding = true;
             Debug.Log("Draw!");
             EndGame(playersEliminated);
         }
