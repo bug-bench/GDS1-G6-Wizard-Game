@@ -187,12 +187,15 @@ MonoBehaviour:
   - minigameName: Arena
     sceneName: Phase2Arena
     useSplitScreen: 0
+    description: Last player standing
   - minigameName: Survival
     sceneName: Phase2Survival
     useSplitScreen: 0
+    description: Dodge and Survive
   - minigameName: Wizard Staff
     sceneName: Phase2Collect
     useSplitScreen: 1
+    description: Collect the most gold!
   votingLogic: {fileID: 104901605}
   selectionAnimator: {fileID: 104901607}
   options: []

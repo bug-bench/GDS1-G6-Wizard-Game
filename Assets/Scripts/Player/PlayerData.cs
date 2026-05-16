@@ -15,15 +15,31 @@ public class PlayerData
     // Combat stats
     public int kills;
     public float damageDealt;
+
+    public static class PlayerColors
+    {
+        public static Color GetColor(int i)
+        {
+            Color[] colors =
+            {
+                new Color32(255, 80, 80, 255),
+                new Color32(80, 140, 255, 255),
+                new Color32(80, 220, 120, 255),
+                new Color32(255, 220, 80, 255)
+            };
+
+            return colors[i % colors.Length];
+        }
+    }
 }
 
 public static class GameData
 {
     public static List<PlayerData> players = new List<PlayerData>();
+
     public static bool useSplitScreen = true;
     public static int winnerIndex = -1; // set before loading win scene
     public static string selectedMinigame = "";
-
 
     public static void AddSpell(int playerIndex, string spellName)
     {

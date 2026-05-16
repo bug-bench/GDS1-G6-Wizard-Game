@@ -38,7 +38,7 @@ public class VotingManager : MonoBehaviour
         {
             GameObject obj = Instantiate(optionPrefab, container);
             OptionUI option = obj.GetComponent<OptionUI>();
-            option.Setup(game.minigameName, game.sceneName);
+            option.Setup(game);
             options.Add(option);
         }
     }

@@ -6,7 +6,9 @@ using UnityEngine.InputSystem;
 
 public class SurvivalScript : MonoBehaviour
 {
-    [SerializeField] private string winScene = "WinScene";
+    [SerializeField] private GameObject resultsPanel;
+    [SerializeField] private UnityEngine.UI.Image winnerImage;
+    [SerializeField] private TMPro.TextMeshProUGUI winnerText;
 
     private List<GameObject> players = new List<GameObject>();
     private List<GameObject> playersAlive = new List<GameObject>();
@@ -179,21 +181,46 @@ public class SurvivalScript : MonoBehaviour
 
     void EndGame(GameObject winner)
     {
-        if (winner != null)
+        if (winner == null)
         {
-            var input = winner.GetComponent<PlayerInput>();
-            GameData.winnerIndex = input != null ? input.playerIndex : 0;
+            Debug.Log("No winner (draw)");
+            resultsPanel.SetActive(true);
+            winnerText.text = "DRAW";
+            winnerImage.enabled = false;
+            return;
         }
-        else
+
+        var data = GameData.players.Find(p => p.playerGameObject == winner);
+
+        if (data == null)
         {
-            GameData.winnerIndex = -1;
+            Debug.LogError("Winner data not found in GameData");
+            return;
         }
+
+        GameData.winnerIndex = data.playerIndex;
+
+        Debug.Log($"Winner: P{data.playerIndex + 1}");
+
+        // freeze game
+        Time.timeScale = 0f;
 
         foreach (var p in GameData.players)
         {
-            Debug.Log($"Survival Ended - Player {p.playerIndex} kills: {p.kills}, damage: {p.damageDealt}");
+            var input = p.playerGameObject.GetComponent<PlayerInput>();
+            if (input != null) input.DeactivateInput();
+
+            var rb = p.playerGameObject.GetComponent<Rigidbody2D>();
+            if (rb != null) rb.linearVelocity = Vector2.zero;
         }
 
-        SceneManager.LoadScene(winScene);
+        // show UI
+        resultsPanel.SetActive(true);
+
+        winnerText.text = $"P{data.playerIndex + 1} WINS!";
+
+        // image + color
+        winnerImage.sprite = data.playerSprite;
+        winnerImage.color = PlayerData.PlayerColors.GetColor(data.colorIndex);
     }
 }
