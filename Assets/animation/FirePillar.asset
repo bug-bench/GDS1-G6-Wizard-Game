@@ -12,7 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13b75c95f34a00d4e8c04f76b73312e6, type: 3}
   m_Name: FirePillar
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AnimatedTile
-  m_AnimatedSprites: []
+  m_AnimatedSprites:
+  - {fileID: 844271697, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: -1546328825, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: -1437291922, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: -186484049, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: 1722079147, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: -220784672, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: 153363244, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
   m_MinSpeed: 1
   m_MaxSpeed: 1
   m_AnimationStartTime: 0
