@@ -10,10 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13b75c95f34a00d4e8c04f76b73312e6, type: 3}
-  m_Name: fireTiles
+  m_Name: FireTile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AnimatedTile
   m_AnimatedSprites:
-  - {fileID: 0}
+  - {fileID: -2000919361, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: -422898920, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: 390308375, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: -257043317, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: -954213506, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: -908081878, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
+  - {fileID: -1089026003, guid: b1a199e9fa22c19468f6d9da705be99c, type: 3}
   m_MinSpeed: 1
   m_MaxSpeed: 1
   m_AnimationStartTime: 0
