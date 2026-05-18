@@ -136,19 +136,13 @@ public class InteractableChest : MonoBehaviour
 
         }
 
-        StartCoroutine(OpenRoutine());
+       
 
        
 
 
     }
 
-    IEnumerator OpenRoutine()
-    {
-        yield return new WaitForSeconds(1.6f);
-
-        BreakObject();
-
-    }
+    
 
 }
