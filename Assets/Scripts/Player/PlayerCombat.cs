@@ -541,6 +541,7 @@ public class PlayerCombat : MonoBehaviour
                 StopCoroutine(hitFeedbackRoutine);
             hitFeedbackRoutine = StartCoroutine(HitInvincibilityVisualRoutine());
         }
+        Phase1Script p1s = FindFirstObjectByType<Phase1Script>();
         Phase2Script p2scr = FindFirstObjectByType<Phase2Script>();
         if (playerStats.health <= 0)
         {
