@@ -7,7 +7,7 @@
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Pickup, Water, UI, hazards, wall, player, Spells
 - Active game object:
-  - Name: CollectPickup
+  - Name: FocusStat
   - Tag: Untagged
-  - Layer: Default
+  - Layer: Pickup
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

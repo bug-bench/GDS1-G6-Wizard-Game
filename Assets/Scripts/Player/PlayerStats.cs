@@ -247,6 +247,49 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    void RemoveStat(string statName)
+    {
+        switch (statName)
+        {
+            case "Health":
+                MaxHealth -= 10f;
+                health = Mathf.Min(health, MaxHealth);
+                break;
+            case "Speed":
+                speed -= 1f;
+                speed = Mathf.Max(1f, speed);
+                break;
+            case "Attack":
+                strength -= 5f;
+                strength = Mathf.Max(1f, strength);
+                break;
+            case "Defense":
+                defense -= 1f;
+                defense = Mathf.Max(0f, defense);
+                break;
+            case "Size":
+                sizeMultiplier -= 1f;
+                sizeMultiplier = Mathf.Max(1f, sizeMultiplier);
+                break;
+            case "Focus":
+                cooldownReduction -= 1f;
+                cooldownReduction = Mathf.Max(1f, cooldownReduction);
+
+                strength += 10f;
+                break;
+            case "Friction":
+                deceleration -= 1f;
+                deceleration = Mathf.Max(1f, deceleration);
+                break;
+            case "Range":
+                //modify this if we switch back to range stat
+                break;
+            default:
+                Debug.LogWarning("Invalid stat removal: " + statName);
+                break;
+        }
+    }
+
     // =====================
     // PHASE ONE DEATH/DROP HANDLING
     // =====================
@@ -299,6 +342,7 @@ public class PlayerStats : MonoBehaviour
             string droppedPickup = lastCollectedPickups[index];
 
             lastCollectedPickups.RemoveAt(index);
+            RemoveStat(droppedPickup);
 
             GameObject pickupPrefab = pickupHolder.GetPickupReference(droppedPickup);
 
