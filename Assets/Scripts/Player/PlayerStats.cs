@@ -6,7 +6,9 @@ using System.Collections.Generic;
 
 public class PlayerStats : MonoBehaviour
 {
-    private List<string> collectedPickups = new List<string>();
+    [SerializeField] private PickupPrefabHolder pickupHolder;
+    [SerializeField] private float dropForce = 5f;
+    private List<string> lastCollectedPickups = new List<string>();
     private Phase1Script p1s;
     private Phase2Script p2s;
 
@@ -54,7 +56,15 @@ public class PlayerStats : MonoBehaviour
             Debug.LogError("EventManager (Phase1Script) not found in scene!");
         }
     }
-    
+
+    void Update()
+    {
+        if (pickupHolder == null)
+        {
+            pickupHolder = FindFirstObjectByType<PickupPrefabHolder>();
+        }
+    }
+
 
     // =====================
     // PICKUP HANDLING
@@ -62,7 +72,8 @@ public class PlayerStats : MonoBehaviour
 
     public void RegisterPickup(string pickupID)
     {
-        collectedPickups.Add(pickupID);
+        lastCollectedPickups.Add(pickupID);
+
         Debug.Log(gameObject.name + " picked up: " + pickupID);
     }
 
@@ -236,6 +247,49 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    void RemoveStat(string statName)
+    {
+        switch (statName)
+        {
+            case "Health":
+                MaxHealth -= 10f;
+                health = Mathf.Min(health, MaxHealth);
+                break;
+            case "Speed":
+                speed -= 1f;
+                speed = Mathf.Max(1f, speed);
+                break;
+            case "Attack":
+                strength -= 5f;
+                strength = Mathf.Max(1f, strength);
+                break;
+            case "Defense":
+                defense -= 1f;
+                defense = Mathf.Max(0f, defense);
+                break;
+            case "Size":
+                sizeMultiplier -= 1f;
+                sizeMultiplier = Mathf.Max(1f, sizeMultiplier);
+                break;
+            case "Focus":
+                cooldownReduction -= 1f;
+                cooldownReduction = Mathf.Max(1f, cooldownReduction);
+
+                strength += 10f;
+                break;
+            case "Friction":
+                deceleration -= 1f;
+                deceleration = Mathf.Max(1f, deceleration);
+                break;
+            case "Range":
+                //modify this if we switch back to range stat
+                break;
+            default:
+                Debug.LogWarning("Invalid stat removal: " + statName);
+                break;
+        }
+    }
+
     // =====================
     // PHASE ONE DEATH/DROP HANDLING
     // =====================
@@ -266,22 +320,71 @@ public class PlayerStats : MonoBehaviour
 
     void DropRandomPickups()
     {
-        if (collectedPickups.Count == 0)
+        if (lastCollectedPickups.Count == 0)
         {
             Debug.Log("No pickups to drop.");
             return;
         }
 
-        int dropCount = Random.Range(2, 4);
+        if (pickupHolder == null)
+        {
+            Debug.LogWarning("PickupPrefabHolder is missing!");
+            return;
+        }
+
+        int dropCount = Random.Range(2, 5);
 
         for (int i = 0; i < dropCount; i++)
         {
-            if (collectedPickups.Count == 0) break;
+            if (lastCollectedPickups.Count == 0) break;
 
-            int index = Random.Range(0, collectedPickups.Count);
-            string droppedPickup = collectedPickups[index];
+            int index = Random.Range(0, lastCollectedPickups.Count);
+            string droppedPickup = lastCollectedPickups[index];
 
-            collectedPickups.RemoveAt(index);
+            lastCollectedPickups.RemoveAt(index);
+            RemoveStat(droppedPickup);
+
+            GameObject pickupPrefab = pickupHolder.GetPickupReference(droppedPickup);
+
+            if (pickupPrefab == null)
+            {
+                Debug.LogWarning("No prefab found for pickup: " + droppedPickup);
+                continue;
+            }
+
+            Vector2 offset = Random.insideUnitCircle * 1f;
+
+            GameObject spawnedPickup = Instantiate(
+                pickupPrefab,
+                (Vector2)transform.position + offset,
+                Quaternion.identity
+            );
+
+            Rigidbody2D rb = spawnedPickup.GetComponent<Rigidbody2D>();
+
+            if (rb != null)
+            {
+                Vector2 force = Random.insideUnitCircle * dropForce;
+                rb.AddForce(force, ForceMode2D.Impulse);
+            }
+
+            StatPickUp statPickUp = spawnedPickup.GetComponent<StatPickUp>();
+
+            if (statPickUp != null)
+            {
+                statPickUp.RegisterLastPlayer(gameObject);
+                statPickUp.StartDrop();
+            }
+
+            if (statPickupCounts.ContainsKey(droppedPickup))
+            {
+                statPickupCounts[droppedPickup]--;
+
+                if (statPickupCounts[droppedPickup] <= 0)
+                {
+                    statPickupCounts.Remove(droppedPickup);
+                }
+            }
 
             Debug.Log(gameObject.name + " dropped: " + droppedPickup);
         }

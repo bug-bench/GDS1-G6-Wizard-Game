@@ -76,6 +76,21 @@ public class CollectManager : MonoBehaviour
             }
             
         }
+        else
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                //instantiate a collectible at the player's location
+                
+                GameObject NewPickup = DropPickup(player.transform.position);
+                CollectPickup colp = NewPickup.GetComponent<CollectPickup>();
+                if (colp != null)
+                {
+                    colp.RegisterLastPlayer(player);
+                    colp.StartDrop();
+                }
+            }
+        }
     }
 
     GameObject DropPickup(Vector2 position)
