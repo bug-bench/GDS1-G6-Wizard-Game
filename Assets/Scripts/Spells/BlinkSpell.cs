@@ -12,6 +12,12 @@ public class BlinkSpell : SpellBehavior
     public float blinkDistance = 4f;
     public LayerMask obstacleLayer;
 
+    [Tooltip("会阻挡闪现的 Sorting Layer 名称 — Sorting Layer names that block blink.")]
+    public string[] blockingSortingLayers;
+
+    [Tooltip("闪现路径检测半径，应该接近玩家碰撞体大小 — Blink path check radius, should roughly match player collider size.")]
+    public float blinkCastRadius = 0.25f;
+
     [Tooltip("撞墙时终点离墙皮留的空隙 — Gap from wall surface when stopping on hit.")]
     public float wallBuffer = 0.2f;
 
@@ -70,14 +76,6 @@ public class BlinkSpell : SpellBehavior
             caster.transform.position = p;
         }
 
-        // 取消闪现后的硬直 (Removed self stun after blink)
-        // if (selfStunDuration > 0f)
-        // {
-        //     PlayerStats stats = caster.GetComponent<PlayerStats>();
-        //     if (stats != null)
-        //         stats.ApplyStun(selfStunDuration);
-        // }
-
         Destroy(gameObject);
     }
 
@@ -86,6 +84,42 @@ public class BlinkSpell : SpellBehavior
         if (casterRoot == null || col == null) return false;
         Transform t = col.transform;
         return t == casterRoot.transform || t.IsChildOf(casterRoot.transform);
+    }
+
+    bool IsSortingLayerBlocked(Collider2D col)
+    {
+        if (blockingSortingLayers == null || blockingSortingLayers.Length == 0)
+            return false;
+
+        Renderer renderer = col.GetComponentInParent<Renderer>();
+
+        if (renderer == null)
+            return false;
+
+        for (int i = 0; i < blockingSortingLayers.Length; i++)
+        {
+            if (renderer.sortingLayerName == blockingSortingLayers[i])
+                return true;
+        }
+
+        return false;
+    }
+
+    bool IsPhysicsLayerBlocked(Collider2D col, int mask)
+    {
+        int objectLayerMask = 1 << col.gameObject.layer;
+        return (mask & objectLayerMask) != 0;
+    }
+
+    bool IsBlockingCollider(Collider2D col, int mask)
+    {
+        if (col == null) return false;
+        if (col.isTrigger) return false; // 忽略触发器 — Ignore triggers
+
+        bool blockedByPhysicsLayer = IsPhysicsLayerBlocked(col, mask);
+        bool blockedBySortingLayer = IsSortingLayerBlocked(col);
+
+        return blockedByPhysicsLayer || blockedBySortingLayer;
     }
 
     Vector2 ResolvePathEnd(GameObject caster, Vector2 start, Vector2 dir, Vector2 desiredEnd)
@@ -97,48 +131,59 @@ public class BlinkSpell : SpellBehavior
         // 默认检测 wall 层，如果没有设置则使用 DefaultRaycastLayers
         int mask = obstacleLayer.value == 0 ? LayerMask.GetMask("wall") : obstacleLayer.value;
         if (mask == 0) mask = Physics2D.DefaultRaycastLayers;
-/*
-        // 1. 检查目标落点是否安全 (落点碰撞检测)
-        // 使用 OverlapCircle 确保落点有足够的空间 (半径 0.25f)
-        bool isDestinationClear = true;
-        Collider2D[] overlaps = Physics2D.OverlapCircleAll(desiredEnd, 0.25f, mask);
-        foreach (var col in overlaps)
-        {
-            if (col != null && !col.isTrigger && !IsColliderOnCaster(caster, col))
-            {
-                isDestinationClear = false;
-                break;
-            }
-        }
 
-        // 如果落点安全（没有卡在墙里），允许直接闪现过去（实现穿墙）
-        if (isDestinationClear)
-        {
-            return desiredEnd;
-        }
-      */
-        // 2. 如果落点不安全（在墙里），说明墙太厚或者直接点到了墙上
         // 此时退回到射线击中墙壁的前面，防止卡在墙里
         Vector2 rayOrigin = start + dir * castInset;
         float rayLen = Mathf.Max(0.01f, pathLen - castInset);
 
-        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, dir, rayLen, mask);
-        //System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+        // 使用 CircleCast 而不是 Raycast，因为玩家有体积，单条射线可能会从墙边缝隙穿过去
+        // Use CircleCast instead of Raycast because the player has size, and a thin ray can miss wall edges/gaps.
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(
+            rayOrigin,
+            blinkCastRadius,
+            dir,
+            rayLen,
+            Physics2D.DefaultRaycastLayers
+        );
 
-       /* foreach (RaycastHit2D hit in hits)
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (RaycastHit2D hit in hits)
         {
             if (hit.collider == null) continue;
             if (hit.collider.isTrigger) continue; // 忽略触发器
             if (IsColliderOnCaster(caster, hit.collider)) continue;
-            
-            return hit.point - dir * wallBuffer;
-        }
-       */
 
-        if(hit.collider != null && !hit.collider.isTrigger && !IsColliderOnCaster(caster,hit.collider))
-        {
-            return hit.point - dir * wallBuffer;
+            // 如果物体在阻挡 Physics Layer 或 Sorting Layer 上，就停在它前面
+            // If object is on a blocking Physics Layer or Sorting Layer, stop before it.
+            if (IsBlockingCollider(hit.collider, mask))
+            {
+                // CircleCast 使用 centroid 会比 hit.point 更适合作为玩家的新位置
+                // CircleCast centroid is better than hit.point for placing the player body safely.
+                return hit.centroid - dir * wallBuffer;
+            }
         }
+
+        // 最后检查落点是否直接卡进墙里，防止目标点在障碍物内部
+        // Final check: make sure the destination itself is not inside a wall/object.
+        Collider2D[] destinationHits = Physics2D.OverlapCircleAll(
+            desiredEnd,
+            blinkCastRadius,
+            Physics2D.DefaultRaycastLayers
+        );
+
+        foreach (Collider2D col in destinationHits)
+        {
+            if (col == null) continue;
+            if (col.isTrigger) continue;
+            if (IsColliderOnCaster(caster, col)) continue;
+
+            if (IsBlockingCollider(col, mask))
+            {
+                return start;
+            }
+        }
+
         return desiredEnd;
     }
 }
