@@ -241,6 +241,9 @@ public class PlayerStats : MonoBehaviour
                 // 负面效果：获得减 CD 的同时，小幅降低法强 (Trade-off: gain CDR but lose a bit of spell power)
                 DecreaseStrength(amount * 10f); 
                 break;
+            case "Friction":
+                deceleration += amount;
+                break;
             default:
                 Debug.LogWarning("Invalid stat name: " + statName);
                 break;
