@@ -250,7 +250,7 @@ MonoBehaviour:
   isKnockedDown: 0
   firePoint: {fileID: 2102165188656464589}
   currentAttackSpell: {fileID: 0}
-  currentMovementSpell: {fileID: 11400000, guid: b7da106697a4c9344bb2a08fa380dd25, type: 2}
+  currentMovementSpell: {fileID: 0}
   dropForce: 8
   spellSpawnForwardInset: 0.28
   hitKnockbackImpulse: 7
@@ -280,7 +280,6 @@ MonoBehaviour:
   canMove: 1
   moveAcceleration: 9.1
   moveDeceleration: 30
-  inertiaSpeedFactor: 0
   rotationPivot: {fileID: 2102165188656464589}
   playerSprite: {fileID: 2897870944537500475}
   iceAccelerationMultiplier: 0.3
@@ -297,10 +296,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43519ea8279634a43b0d000e800a6916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  pickupHolder: {fileID: 0}
+  dropForce: 5
   health: 100
   MaxHealth: 100
   speed: 5
-  deceleration: 50
+  deceleration: 10
   strength: 5
   defense: 0
   sizeMultiplier: 1

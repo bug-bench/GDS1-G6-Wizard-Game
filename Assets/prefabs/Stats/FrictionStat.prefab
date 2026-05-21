@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -6978858300845863675}
   - component: {fileID: -8982298130053556738}
   m_Layer: 3
-  m_Name: DefenseStat
+  m_Name: FrictionStat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,8 +84,8 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 5286022630224976828, guid: d7e176997bfd3594eae0da1577bc258c, type: 3}
-  m_Color: {r: 0.913414, g: 1, b: 0, a: 1}
+  m_Sprite: {fileID: 7722084950913193814, guid: d7e176997bfd3594eae0da1577bc258c, type: 3}
+  m_Color: {r: 0.67122424, g: 0, b: 0.9716981, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -128,8 +128,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.0107795}
-  m_Radius: 0.44071254
+  m_Offset: {x: 0, y: -0.0022461016}
+  m_Radius: 0.41690806
 --- !u!114 &-6978858300845863675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357fd28129afb784ab4313f32f1544d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatPickUp
-  statName: Defense
+  statName: Friction
   amount: 1
 --- !u!82 &-8982298130053556738
 AudioSource:

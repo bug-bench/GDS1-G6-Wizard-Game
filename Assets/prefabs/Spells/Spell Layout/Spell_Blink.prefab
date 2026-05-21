@@ -47,7 +47,10 @@ MonoBehaviour:
   blinkDistance: 4
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 128
-  wallBuffer: 0.2
+    m_Bits: 1152
+  blockingSortingLayers:
+  - WalkingInFront
+  - WalkingInFront
+  wallBuffer: 0
   castInset: 0.05
   selfStunDuration: 0.5
