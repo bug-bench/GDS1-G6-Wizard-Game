@@ -51,6 +51,9 @@ MonoBehaviour:
   blockingSortingLayers:
   - WalkingInFront
   - WalkingInFront
+  blinkCastRadius: 0.25
   wallBuffer: 0
   castInset: 0.05
   selfStunDuration: 0.5
+  blinkTrailPrefab: {fileID: 1846830241575162027, guid: ad73801af38b95d49bb3a5745e03f9b9, type: 3}
+  trailLifetime: 3

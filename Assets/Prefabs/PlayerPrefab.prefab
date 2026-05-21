@@ -250,7 +250,7 @@ MonoBehaviour:
   isKnockedDown: 0
   firePoint: {fileID: 2102165188656464589}
   currentAttackSpell: {fileID: 0}
-  currentMovementSpell: {fileID: 0}
+  currentMovementSpell: {fileID: 11400000, guid: b7da106697a4c9344bb2a08fa380dd25, type: 2}
   dropForce: 8
   spellSpawnForwardInset: 0.28
   hitKnockbackImpulse: 7

@@ -27,6 +27,9 @@ public class BlinkSpell : SpellBehavior
     [Tooltip("闪现落地后的硬直时间（眩晕，无法移动施法） — Stun duration applied to self after blinking.")]
     public float selfStunDuration = 0f;
 
+    public GameObject blinkTrailPrefab;
+    public float trailLifetime = 0.3f;
+
     public override void Execute(GameObject caster, Transform firePoint)
     {
         Vector2 casterPos = caster.transform.position;
@@ -64,6 +67,28 @@ public class BlinkSpell : SpellBehavior
 
         Vector2 desiredEnd = casterPos + dir * travelDist;
         Vector2 finalPos = ResolvePathEnd(caster, casterPos, dir, desiredEnd);
+
+
+
+        if (blinkTrailPrefab != null)
+        {
+            Vector2 middle = (casterPos + finalPos) / 2f;
+
+            GameObject trail = Instantiate(
+                blinkTrailPrefab,
+                middle,
+                Quaternion.identity
+            );
+
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            trail.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+            float distance = Vector2.Distance(casterPos, finalPos);
+
+            Vector3 scale = trail.transform.localScale;
+            scale.x = distance;
+            trail.transform.localScale = scale;
+        }
 
         Rigidbody2D rb = caster.GetComponent<Rigidbody2D>();
         if (rb != null)

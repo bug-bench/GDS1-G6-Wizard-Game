@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3863542222730054851}
   - component: {fileID: 3863542222730054849}
   - component: {fileID: 3863542222730054850}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Frame02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3863542223517440125}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -87,7 +86,7 @@ GameObject:
   - component: {fileID: 3863542222879484991}
   - component: {fileID: 3863542222879484989}
   - component: {fileID: 3863542222879484990}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Frame06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +106,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3863542223517440125}
-  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -163,7 +161,7 @@ GameObject:
   - component: {fileID: 3863542223517440125}
   - component: {fileID: 3863542223517440114}
   - component: {fileID: 3863542223517440124}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: ElectricLightning01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +175,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3863542223517440126}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -189,8 +187,7 @@ RectTransform:
   - {fileID: 3863542224114385161}
   - {fileID: 3863542222879484991}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -206,7 +203,7 @@ CanvasRenderer:
   m_CullTransparentMesh: 0
 --- !u!95 &3863542223517440124
 Animator:
-  serializedVersion: 4
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -220,10 +217,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3863542223907426752
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +234,7 @@ GameObject:
   - component: {fileID: 3863542223907426759}
   - component: {fileID: 3863542223907426757}
   - component: {fileID: 3863542223907426758}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Frame03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -255,7 +254,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3863542223517440125}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -311,7 +309,7 @@ GameObject:
   - component: {fileID: 3863542224114385161}
   - component: {fileID: 3863542224114385167}
   - component: {fileID: 3863542224114385160}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Frame05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +329,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3863542223517440125}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -387,7 +384,7 @@ GameObject:
   - component: {fileID: 3863542224581585686}
   - component: {fileID: 3863542224581585684}
   - component: {fileID: 3863542224581585685}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Frame04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -407,7 +404,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3863542223517440125}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -463,7 +459,7 @@ GameObject:
   - component: {fileID: 3863542224738811981}
   - component: {fileID: 3863542224738811971}
   - component: {fileID: 3863542224738811980}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Frame01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -483,7 +479,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3863542223517440125}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
