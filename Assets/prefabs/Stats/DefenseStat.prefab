@@ -81,7 +81,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2140086693
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 5286022630224976828, guid: d7e176997bfd3594eae0da1577bc258c, type: 3}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357fd28129afb784ab4313f32f1544d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatPickUp
-  statName: Defence
+  statName: Defense
   amount: 1
 --- !u!82 &-8982298130053556738
 AudioSource:
