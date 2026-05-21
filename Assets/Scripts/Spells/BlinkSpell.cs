@@ -27,8 +27,10 @@ public class BlinkSpell : SpellBehavior
     [Tooltip("闪现落地后的硬直时间（眩晕，无法移动施法） — Stun duration applied to self after blinking.")]
     public float selfStunDuration = 0f;
 
-    public GameObject blinkTrailPrefab;
-    public float trailLifetime = 0.3f;
+   
+    public GameObject afterImagePrefab;
+    public int afterImageCount = 5;
+    public float afterImageFadeTime = 0.25f;
 
     public override void Execute(GameObject caster, Transform firePoint)
     {
@@ -69,26 +71,8 @@ public class BlinkSpell : SpellBehavior
         Vector2 finalPos = ResolvePathEnd(caster, casterPos, dir, desiredEnd);
 
 
+        SpawnAfterImages(caster, casterPos, finalPos);
 
-        if (blinkTrailPrefab != null)
-        {
-            Vector2 middle = (casterPos + finalPos) / 2f;
-
-            GameObject trail = Instantiate(
-                blinkTrailPrefab,
-                middle,
-                Quaternion.identity
-            );
-
-            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            trail.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-            float distance = Vector2.Distance(casterPos, finalPos);
-
-            Vector3 scale = trail.transform.localScale;
-            scale.x = distance;
-            trail.transform.localScale = scale;
-        }
 
         Rigidbody2D rb = caster.GetComponent<Rigidbody2D>();
         if (rb != null)
@@ -210,5 +194,39 @@ public class BlinkSpell : SpellBehavior
         }
 
         return desiredEnd;
+    }
+
+    void SpawnAfterImages(GameObject caster, Vector2 start, Vector2 end)
+    {
+        if (afterImagePrefab == null) return;
+
+        SpriteRenderer casterSR = caster.GetComponentInChildren<SpriteRenderer>();
+        if (casterSR == null) return;
+
+        for (int i = 1; i <= afterImageCount; i++)
+        {
+            float t = i / (float)(afterImageCount + 1);
+            Vector2 pos = Vector2.Lerp(start, end, t);
+
+            GameObject img = Instantiate(afterImagePrefab, pos, caster.transform.rotation);
+
+            SpriteRenderer imgSR = img.GetComponent<SpriteRenderer>();
+            if (imgSR != null)
+            {
+                imgSR.sprite = casterSR.sprite;
+                imgSR.flipX = casterSR.flipX;
+                imgSR.flipY = casterSR.flipY;
+                imgSR.sortingLayerID = casterSR.sortingLayerID;
+                imgSR.sortingOrder = casterSR.sortingOrder - 1;
+
+                Color c = imgSR.color;
+                c.a = Mathf.Lerp(0.15f, 0.6f, 1f - t);
+                imgSR.color = c;
+            }
+
+            AfterImage fade = img.GetComponent<AfterImage>();
+            if (fade != null)
+                fade.fadeTime = afterImageFadeTime;
+        }
     }
 }
