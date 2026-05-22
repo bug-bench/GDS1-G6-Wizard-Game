@@ -78,6 +78,7 @@ public class PlayerCombat : MonoBehaviour
     private InputAction castMainAction;
     private InputAction castSubAction;
     private PlayerStats playerStats;
+    private SpellAudioSystem spellAudio;
 
     float GetEffectiveCooldownFor(SpellData data)
     {
@@ -92,6 +93,9 @@ public class PlayerCombat : MonoBehaviour
         controller = GetComponent<PlayerController>();
         playerStats = GetComponent<PlayerStats>();
         playerRb = GetComponent<Rigidbody2D>();
+        spellAudio = GetComponent<SpellAudioSystem>();
+        if (spellAudio == null)
+            spellAudio = gameObject.AddComponent<SpellAudioSystem>();
         BuildInvincibilityBlinkTargets();
     }
 
@@ -264,6 +268,9 @@ public class PlayerCombat : MonoBehaviour
             activeMainSpell = null;
         }
 
+        if (hadTracked && currentAttackSpell != null)
+            spellAudio?.PlayRelease(currentAttackSpell, firePoint);
+
         if (applyReleaseCooldown && currentAttackSpell != null && currentAttackSpell.cooldownStartsOnRelease
             && (hadTracked || pendingMainReleaseCooldown))
             attackCDTimer = GetEffectiveCooldownFor(currentAttackSpell);
@@ -293,6 +300,9 @@ public class PlayerCombat : MonoBehaviour
         }
 
         DestroyAllReflectShieldsUnderRoot();
+
+        if (hadTracked && currentMovementSpell != null)
+            spellAudio?.PlayRelease(currentMovementSpell, firePoint);
 
         if (applyReleaseCooldown && currentMovementSpell != null && currentMovementSpell.cooldownStartsOnRelease
             && (hadTracked || pendingSubReleaseCooldown))
@@ -522,6 +532,8 @@ public class PlayerCombat : MonoBehaviour
 
         if (!data.cooldownStartsOnRelease)
             cdTimer = GetEffectiveCooldownFor(data);
+
+        spellAudio?.PlayCast(data, firePoint, spellObj);
         return behavior;
     }
 

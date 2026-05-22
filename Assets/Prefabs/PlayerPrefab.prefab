@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 918881291
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
@@ -303,7 +303,7 @@ MonoBehaviour:
   deceleration: 50
   strength: 5
   defense: 0
-  sizeMultiplier: 1
+  sizeMultiplier: 5
   cooldownReduction: 0
   IsAliveArena: 1
   stunEndTime: 0
@@ -698,7 +698,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 918881291
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3697190655261941169, guid: 0e4a97bd98cbf4b1fa8db15a731e4e9f, type: 3}

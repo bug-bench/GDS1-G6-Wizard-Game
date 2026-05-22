@@ -488,6 +488,10 @@ PrefabInstance:
       propertyPath: equippedMainWeaponRenderer
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2667297136540556624, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
+      propertyPath: strength
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2773116537761935081, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
       propertyPath: m_Name
       value: PlayerPrefab (1)

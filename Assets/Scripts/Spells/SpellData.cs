@@ -14,6 +14,12 @@ public class SpellData : ScriptableObject
     [Tooltip("勾选：按住副键期间不算冷却，松开副键后才开始 cooldown（疾跑、弧形盾等）。不勾选：按下瞬间进冷却（闪现等）。 — If true: cooldown starts on sub-button release (sprint, shield). If false: cooldown on press (blink, etc.).")]
     public bool cooldownStartsOnRelease;
 
+    [Header("Audio / 施法音效")]
+    [Tooltip("按下施法时播放 — Plays when cast starts.")]
+    public SpellCastAudioSettings castAudio;
+    [Tooltip("按住类技能松键或超时结束时播放（可选）— Optional when a held spell ends.")]
+    public SpellCastAudioSettings releaseAudio;
+
     [Header("FPS Drop System")]
     public GameObject pickupPrefab;
     public Sprite GetIcon()

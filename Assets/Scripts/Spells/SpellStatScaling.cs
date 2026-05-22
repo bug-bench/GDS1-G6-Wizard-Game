@@ -8,6 +8,24 @@ public static class SpellStatScaling
 {
     public const float MaxCooldownReduction = 0.9f;
 
+    static SpellScalingConfig runtimeFallback;
+
+    public static SpellScalingConfig ResolveConfig(PlayerStats stats)
+    {
+        if (stats != null && stats.scalingConfig != null)
+            return stats.scalingConfig;
+        if (SpellScalingConfigProvider.Active != null)
+            return SpellScalingConfigProvider.Active;
+
+        SpellScalingConfig fromResources = Resources.Load<SpellScalingConfig>("SpellScalingConfig");
+        if (fromResources != null)
+            return fromResources;
+
+        if (runtimeFallback == null)
+            runtimeFallback = ScriptableObject.CreateInstance<SpellScalingConfig>();
+        return runtimeFallback;
+    }
+
     public static float GetSizeScale(GameObject caster)
     {
         if (caster == null) return 1f;
@@ -18,7 +36,7 @@ public static class SpellStatScaling
     public static float GetSizeScale(PlayerStats stats)
     {
         if (stats == null) return 1f;
-        return Mathf.Max(1f, stats.sizeMultiplier);
+        return ResolveConfig(stats).ComputeSpellScale(stats.sizeMultiplier);
     }
 
     public static float GetEffectiveCooldown(PlayerStats stats, float baseCooldown)
