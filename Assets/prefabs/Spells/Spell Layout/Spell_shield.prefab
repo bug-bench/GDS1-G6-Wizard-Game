@@ -49,8 +49,10 @@ MonoBehaviour:
   segments: 36
   localCenterOffsetY: 0.5
   lineWidth: 0.08
-  arcColor: {r: 0.35, g: 0.75, b: 1, a: 0.95}
+  arcColor: {r: 0.4264151, g: 0.15367034, b: 0.36974564, a: 0.95}
   sortingOrder: 12
+  shieldVisualPrefab: {fileID: 5128976107769333880, guid: 82838b58d6e2b4e4d9075ae5a911d527, type: 3}
+  visualScale: 1.5
 --- !u!50 &3526696377543989448
 Rigidbody2D:
   serializedVersion: 5

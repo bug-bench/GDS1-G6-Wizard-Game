@@ -40,6 +40,17 @@ public class ReflectShieldSpell : SpellBehavior
     public Color arcColor = new Color(0.35f, 0.75f, 1f, 0.95f);
     public int sortingOrder = 12;
 
+
+    [Header("shield animation")]
+    public GameObject shieldVisualPrefab;
+    public float visualScale = 1f;
+    public Vector2 visualLocalOffset = new Vector2(0f, 0.25f);
+
+    public bool showLineRenderer = false;
+
+    GameObject activeShieldVisual;
+
+
     LineRenderer lineRenderer;
     EdgeCollider2D edgeCollider;
 
@@ -66,6 +77,7 @@ public class ReflectShieldSpell : SpellBehavior
         lineRenderer.startColor = arcColor;
         lineRenderer.endColor = arcColor;
         lineRenderer.sortingOrder = sortingOrder;
+        lineRenderer.enabled = showLineRenderer;
 
         edgeCollider = GetComponent<EdgeCollider2D>();
         if (edgeCollider == null)
@@ -97,10 +109,21 @@ public class ReflectShieldSpell : SpellBehavior
         // EdgeCollider2D 需要首尾相连来闭合碰撞
         edgePoints[segments] = edgePoints[0];
         edgeCollider.points = edgePoints;
+
+        if (shieldVisualPrefab != null && activeShieldVisual == null)
+        {
+            activeShieldVisual = Instantiate(shieldVisualPrefab, transform);
+            activeShieldVisual.transform.localPosition = visualLocalOffset;
+            activeShieldVisual.transform.localRotation = Quaternion.identity;
+            activeShieldVisual.transform.localScale = Vector3.one * visualScale;
+        }
     }
 
     public override void StopExecute()
     {
+        if (activeShieldVisual != null)
+            Destroy(activeShieldVisual);
+
         Destroy(gameObject);
     }
 
