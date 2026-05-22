@@ -1,43 +1,58 @@
 fileFormatVersion: 2
-guid: 9442638d4efd42b46a4dd6565424a0d6
+guid: 1951350fad5a56f4f9427d7370f726d9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2937912103407283272
-    second: IceVFX 1 Repeatable_0
+      213: -8298314036999463118
+    second: Holy VFX 02_0
   - first:
-      213: -4969676193942958089
-    second: IceVFX 1 Repeatable_1
+      213: 8540722057015563535
+    second: Holy VFX 02_1
   - first:
-      213: -2752706012691971032
-    second: IceVFX 1 Repeatable_2
+      213: 4010839835458003660
+    second: Holy VFX 02_2
   - first:
-      213: 4426986535507562079
-    second: IceVFX 1 Repeatable_3
+      213: 8192528919813170734
+    second: Holy VFX 02_3
   - first:
-      213: -7338746557343932665
-    second: IceVFX 1 Repeatable_4
+      213: 3680973379536239702
+    second: Holy VFX 02_4
   - first:
-      213: 2121323489530304963
-    second: IceVFX 1 Repeatable_5
+      213: 4948531963829235498
+    second: Holy VFX 02_5
   - first:
-      213: 959595360459687273
-    second: IceVFX 1 Repeatable_6
+      213: 7528335266166379902
+    second: Holy VFX 02_6
   - first:
-      213: 9016592951320014200
-    second: IceVFX 1 Repeatable_7
+      213: 3242952895826601786
+    second: Holy VFX 02_7
   - first:
-      213: -2634239317843360259
-    second: IceVFX 1 Repeatable_8
+      213: -5394183059694784215
+    second: Holy VFX 02_8
   - first:
-      213: -7184832548953209133
-    second: IceVFX 1 Repeatable_9
+      213: 2073994174595286638
+    second: Holy VFX 02_9
   - first:
-      213: 6735368463686487047
-    second: IceVFX 1 Repeatable_10
+      213: -5146990071162564675
+    second: Holy VFX 02_10
   - first:
-      213: -3279050014110943633
-    second: IceVFX 1 Repeatable_11
+      213: -845707468787247656
+    second: Holy VFX 02_11
+  - first:
+      213: 6867763821844287802
+    second: Holy VFX 02_12
+  - first:
+      213: -5251166947694083227
+    second: Holy VFX 02_13
+  - first:
+      213: -1843753861940825570
+    second: Holy VFX 02_14
+  - first:
+      213: -7156370598436946696
+    second: Holy VFX 02_15
+  - first:
+      213: -1357891867379734183
+    second: Holy VFX 02_16
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -84,7 +99,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -159,13 +174,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IceVFX 1 Repeatable_0
+      name: Holy VFX 02_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 8
-        width: 32
-        height: 14
+        x: 0
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,20 +189,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8b39617f1807a37d0800000000000000
-      internalID: -2937912103407283272
+      spriteID: 23f5206895776dc80800000000000000
+      internalID: -8298314036999463118
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IceVFX 1 Repeatable_1
+      name: Holy VFX 02_1
       rect:
         serializedVersion: 2
         x: 48
-        y: 9
-        width: 36
-        height: 13
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -196,86 +211,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7ff805305d9280bb0800000000000000
-      internalID: -4969676193942958089
+      spriteID: f0591cdc57db68670800000000000000
+      internalID: 8540722057015563535
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IceVFX 1 Repeatable_3
+      name: Holy VFX 02_2
       rect:
         serializedVersion: 2
-        x: 96
-        y: 9
-        width: 40
-        height: 17
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f5e8d528cc0df6d30800000000000000
-      internalID: 4426986535507562079
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IceVFX 1 Repeatable_4
-      rect:
-        serializedVersion: 2
-        x: 143
-        y: 5
-        width: 41
-        height: 21
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 70fd4e073e8872a90800000000000000
-      internalID: -7338746557343932665
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IceVFX 1 Repeatable_5
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 5
-        width: 40
-        height: 17
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3c955277974707d10800000000000000
-      internalID: 2121323489530304963
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IceVFX 1 Repeatable_6
-      rect:
-        serializedVersion: 2
-        x: 244
-        y: 8
+        x: 103
+        y: 0
         width: 32
-        height: 14
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -284,20 +233,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 965005c65ea215d00800000000000000
-      internalID: 959595360459687273
+      spriteID: cc2e57b749d59a730800000000000000
+      internalID: 4010839835458003660
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IceVFX 1 Repeatable_7
+      name: Holy VFX 02_3
       rect:
         serializedVersion: 2
-        x: 288
-        y: 8
+        x: 149
+        y: 0
         width: 36
-        height: 17
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -306,20 +255,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 87d68bb648f512d70800000000000000
-      internalID: 9016592951320014200
+      spriteID: e26249d85a5b1b170800000000000000
+      internalID: 8192528919813170734
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IceVFX 1 Repeatable_8
+      name: Holy VFX 02_5
       rect:
         serializedVersion: 2
-        x: 336
-        y: 9
-        width: 36
-        height: 16
+        x: 196
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -328,20 +277,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: df544961c4d417bd0800000000000000
-      internalID: -2634239317843360259
+      spriteID: a2f25b74a97bca440800000000000000
+      internalID: 4948531963829235498
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IceVFX 1 Repeatable_9
+      name: Holy VFX 02_7
       rect:
         serializedVersion: 2
-        x: 383
-        y: 9
-        width: 37
-        height: 13
+        x: 246
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -350,20 +299,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3d6caf41dd85a4c90800000000000000
-      internalID: -7184832548953209133
+      spriteID: a37a1131a78410d20800000000000000
+      internalID: 3242952895826601786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IceVFX 1 Repeatable_10
+      name: Holy VFX 02_8
       rect:
         serializedVersion: 2
-        x: 432
-        y: 9
-        width: 36
-        height: 13
+        x: 294
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -372,8 +321,184 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 70cc665aee5d87d50800000000000000
-      internalID: 6735368463686487047
+      spriteID: 921767936130425b0800000000000000
+      internalID: -5394183059694784215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Holy VFX 02_9
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 0
+        width: 33
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e664bfa96be48cc10800000000000000
+      internalID: 2073994174595286638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Holy VFX 02_11
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 46
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d59a03b9817344f0800000000000000
+      internalID: -845707468787247656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Holy VFX 02_13
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 10
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5630c62ab7b1027b0800000000000000
+      internalID: -5251166947694083227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Holy VFX 02_14
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 14
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1233c591aba966e0800000000000000
+      internalID: -1843753861940825570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Holy VFX 02_16
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 16
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95960718a8cc72de0800000000000000
+      internalID: -1357891867379734183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Holy VFX 02_18
+      rect:
+        serializedVersion: 2
+        x: 596
+        y: 15
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c274b6c64eebbab47879ea19c2bebe4c
+      internalID: 1329490911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Holy VFX 02_19
+      rect:
+        serializedVersion: 2
+        x: 644
+        y: 16
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e8991eed7d91e24cae3ec1675d3c91e
+      internalID: 350195420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Holy VFX 02_20
+      rect:
+        serializedVersion: 2
+        x: 695
+        y: 15
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91848f490cd5a2f4ca328b9f625fab23
+      internalID: -270428369
       vertices: []
       indices: 
       edges: []
@@ -382,7 +507,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: e1bf7b86f73295a43971ef4a5fee3bc5
+    spriteID: 58067ef510eac5e4d8a4883bf81ac620
     internalID: 0
     vertices: []
     indices: 
@@ -390,20 +515,31 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      IceVFX 1 Repeatable_0: -2937912103407283272
-      IceVFX 1 Repeatable_1: -4969676193942958089
-      IceVFX 1 Repeatable_10: 6735368463686487047
-      IceVFX 1 Repeatable_11: -3279050014110943633
-      IceVFX 1 Repeatable_2: -2752706012691971032
-      IceVFX 1 Repeatable_3: 4426986535507562079
-      IceVFX 1 Repeatable_4: -7338746557343932665
-      IceVFX 1 Repeatable_5: 2121323489530304963
-      IceVFX 1 Repeatable_6: 959595360459687273
-      IceVFX 1 Repeatable_7: 9016592951320014200
-      IceVFX 1 Repeatable_8: -2634239317843360259
-      IceVFX 1 Repeatable_9: -7184832548953209133
+      Holy VFX 02_0: -8298314036999463118
+      Holy VFX 02_1: 8540722057015563535
+      Holy VFX 02_10: -5146990071162564675
+      Holy VFX 02_11: -845707468787247656
+      Holy VFX 02_12: 6867763821844287802
+      Holy VFX 02_13: -5251166947694083227
+      Holy VFX 02_14: -1843753861940825570
+      Holy VFX 02_15: -7156370598436946696
+      Holy VFX 02_16: -1357891867379734183
+      Holy VFX 02_17: 769743184
+      Holy VFX 02_18: 1329490911
+      Holy VFX 02_19: 350195420
+      Holy VFX 02_2: 4010839835458003660
+      Holy VFX 02_20: -270428369
+      Holy VFX 02_3: 8192528919813170734
+      Holy VFX 02_4: 3680973379536239702
+      Holy VFX 02_5: 4948531963829235498
+      Holy VFX 02_6: 7528335266166379902
+      Holy VFX 02_7: 3242952895826601786
+      Holy VFX 02_8: -5394183059694784215
+      Holy VFX 02_9: 2073994174595286638
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -132,6 +132,10 @@ PrefabInstance:
       value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
+      propertyPath: currentAttackSpell
+      value: 
+      objectReference: {fileID: 11400000, guid: 062a8af9fc841c143912be5391436001, type: 2}
+    - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
       propertyPath: equippedMainWeaponRenderer
       value: 
       objectReference: {fileID: 0}
@@ -363,6 +367,14 @@ PrefabInstance:
     - target: {fileID: 659726391879868733, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 41
+      objectReference: {fileID: 0}
+    - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
+      propertyPath: currentAttackSpell
+      value: 
+      objectReference: {fileID: 11400000, guid: 062a8af9fc841c143912be5391436001, type: 2}
+    - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
+      propertyPath: currentMovementSpell
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
       propertyPath: equippedMainWeaponRenderer

@@ -22,6 +22,14 @@ public class RaycastSniperSpell : SpellBehavior
     [Header("视觉效果 — Visuals")]
     public float lineVisualDuration = 0.1f;
 
+    public bool showLineRenderer = false;
+    public GameObject VFXPrefab;
+    public float VFXLifetime = 0.15f;
+    public float VFXThickness = 1f;
+    public float VFXRotationOffset = 0f;
+    public float VFXLength = 1f;
+    public float startOffset = 0.6f;
+
     private LineRenderer lineRenderer;
     private GameObject myCaster;
 
@@ -47,7 +55,7 @@ public class RaycastSniperSpell : SpellBehavior
         GameObject damageSource = caster;
 
         if (lineRenderer != null)
-            lineRenderer.enabled = true;
+            lineRenderer.enabled = showLineRenderer;
 
         // 面板上 Layer 为 Nothing(0) 时，用默认可碰撞层，否则射线永远打不到东西 — If layer mask is Nothing (0), use default raycast layers or hits never register.
         int mask = layerToHit.value == 0 ? Physics2D.DefaultRaycastLayers : layerToHit.value;
@@ -56,7 +64,8 @@ public class RaycastSniperSpell : SpellBehavior
         const float reflectSkin = 0.02f;
         const int maxBounces = 12;
 
-        var linePts = new List<Vector3> { rawStart };
+        Vector2 visualStart = rawStart + dir * startOffset;
+        var linePts = new List<Vector3> { visualStart };
 
         for (int bounce = 0; bounce < maxBounces && budget > 0.001f; bounce++)
         {
@@ -157,10 +166,45 @@ public class RaycastSniperSpell : SpellBehavior
             for (int i = 0; i < linePts.Count; i++)
                 lineRenderer.SetPosition(i, linePts[i]);
         }
-
+        SpawnLaserVisual(linePts);
         StartCoroutine(HideLine());
     }
+    void SpawnLaserVisual(List<Vector3> points)
+    {
 
+        float segmentLength = VFXLength; 
+
+        for (int i = 0; i < points.Count - 1; i++)
+        {
+            Vector3 start = points[i];
+            Vector3 end = points[i + 1];
+
+            Vector3 dir = end - start;
+            float distance = dir.magnitude;
+
+            if (distance <= 0.01f)
+                continue;
+
+            Vector3 dirNormalized = dir.normalized;
+
+            int count = Mathf.CeilToInt(distance / segmentLength);
+
+            for (int j = 0; j < count; j++)
+            {
+                float t = (j + 0.5f) / count;
+                Vector3 pos = Vector3.Lerp(start, end, t);
+
+                GameObject visual = Instantiate(VFXPrefab, pos, Quaternion.identity);
+
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                visual.transform.rotation = Quaternion.Euler(0f, 0f, angle + VFXRotationOffset);
+
+                visual.transform.localScale = new Vector3(segmentLength, VFXThickness, 1f);
+
+                Destroy(visual, VFXLifetime);
+            }
+        }
+    }
     IEnumerator HideLine()
     {
         yield return new WaitForSeconds(lineVisualDuration);
