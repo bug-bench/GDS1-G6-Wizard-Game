@@ -76,7 +76,6 @@ public class destroyableObject : MonoBehaviour
         yield return new WaitForSeconds(delay);
         DropStats();
         DropSpells();
-
         Destroy(gameObject);
     }
 

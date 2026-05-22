@@ -37,6 +37,12 @@ public class SpellProjectile : MonoBehaviour
     /// </summary>
     bool IsUnderSpellPickup => GetComponentInParent<SpellPickup>() != null;
 
+
+    [Header("Hit VFX")]
+    public GameObject hitVFXPrefab;
+    public float hitVFXLifetime = 0.5f;
+    public bool rotateHitVFXToProjectile = true;
+
     void Awake()
     {
         if (IsUnderSpellPickup)
@@ -115,6 +121,7 @@ public class SpellProjectile : MonoBehaviour
         if (destroyobject != null)
         {
             destroyobject.takeDamage(totalDamage);
+            SpawnHitVFX(transform.position);
             Destroy(gameObject);
             return;
         }
@@ -149,7 +156,7 @@ public class SpellProjectile : MonoBehaviour
                     if (applySlowPercentage > 0f)
                         targetStats.ApplySpeedMultiplier(1f - applySlowPercentage, slowDuration);
                 }
-
+                SpawnHitVFX(transform.position);
                 Destroy(gameObject);
 
 
@@ -158,6 +165,7 @@ public class SpellProjectile : MonoBehaviour
         }
         else if (hitInfo.gameObject.layer == LayerMask.NameToLayer("wall") || HasTag(hitInfo, "Wall"))
         {
+            SpawnHitVFX(transform.position);
             Destroy(gameObject);
         }
 
@@ -165,6 +173,21 @@ public class SpellProjectile : MonoBehaviour
 
 
 
+    }
+
+    void SpawnHitVFX(Vector2 hitPosition)
+    {
+        if (hitVFXPrefab == null) return;
+
+        Quaternion rotation = Quaternion.identity;
+
+        if (rotateHitVFXToProjectile)
+        {
+            rotation = transform.rotation;
+        }
+
+        GameObject vfx = Instantiate(hitVFXPrefab, hitPosition, rotation);
+        Destroy(vfx, hitVFXLifetime);
     }
 
     /// <summary>
@@ -196,4 +219,8 @@ public class SpellProjectile : MonoBehaviour
             }
         }
     }
+
+
+
+    
 }
