@@ -23,6 +23,8 @@ public class BlinkSpell : SpellBehavior
 
     public override void Execute(GameObject caster, Transform firePoint)
     {
+        float blinkRange = blinkDistance * SpellStatScaling.GetSizeScale(caster);
+
         Vector2 casterPos = caster.transform.position;
         Vector2 dir;
         float travelDist;
@@ -41,19 +43,19 @@ public class BlinkSpell : SpellBehavior
             {
                 // 鼠标几乎在角色身上：按面朝方向闪一段，避免原地抽搐 — Mouse on character: blink along facing to avoid jitter.
                 dir = firePoint.up.normalized;
-                travelDist = blinkDistance;
+                travelDist = blinkRange;
             }
             else
             {
                 dir = toTarget / dist;
-                travelDist = Mathf.Min(blinkDistance, dist);
+                travelDist = Mathf.Min(blinkRange, dist);
             }
         }
         else
         {
             // 手柄：沿右摇杆瞄准方向，最大 blinkDistance — Gamepad: along right-stick aim, up to blinkDistance.
             dir = firePoint.up.normalized;
-            travelDist = blinkDistance;
+            travelDist = blinkRange;
         }
 
         Vector2 desiredEnd = casterPos + dir * travelDist;

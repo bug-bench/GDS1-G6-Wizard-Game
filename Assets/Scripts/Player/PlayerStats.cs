@@ -190,6 +190,11 @@ public class PlayerStats : MonoBehaviour
 
     public float CurrentStrength() { return strength; }
 
+    public float GetEffectiveCooldown(float baseCooldown)
+    {
+        return SpellStatScaling.GetEffectiveCooldown(this, baseCooldown);
+    }
+
     // =====================
     // GENERIC MODIFIER (用于吃豆人机制的统一接口 / Unified interface for Pac-Man style pickups)
     // =====================
@@ -217,7 +222,8 @@ public class PlayerStats : MonoBehaviour
                 IncreaseStrength(amount);
                 break;
             case "Defense":
-                // 增加护甲 / Increase armor
+            case "Defence":
+                // 增加护甲 / Increase armor（预制体拼写 Defence 也兼容）
                 defense += amount;
                 break;
             case "Size":

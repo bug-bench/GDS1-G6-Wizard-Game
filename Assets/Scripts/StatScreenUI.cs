@@ -50,7 +50,7 @@ public class StatScreenUI : MonoBehaviour
         {
             (healthRow,   stats.GetStatPickupCount("Health")),
             (speedRow,    stats.GetStatPickupCount("Speed")),
-            (strengthRow, stats.GetStatPickupCount("Strength")),
+            (strengthRow, stats.GetStatPickupCount("Attack")),
             (defenseRow,  stats.GetStatPickupCount("Defense")),
             (sizeRow,     stats.GetStatPickupCount("Size")),
             (focusRow,    stats.GetStatPickupCount("Focus")),

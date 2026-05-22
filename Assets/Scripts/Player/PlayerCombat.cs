@@ -18,8 +18,8 @@ public class PlayerCombat : MonoBehaviour
     // CD properties for UI
     public float AttackCDTimer    => attackCDTimer;
     public float MovementCDTimer  => movementCDTimer;
-    public float AttackCDTotal    => currentAttackSpell  != null ? currentAttackSpell.cooldownTime  : 1f;
-    public float MovementCDTotal  => currentMovementSpell != null ? currentMovementSpell.cooldownTime : 1f;
+    public float AttackCDTotal    => GetEffectiveCooldownFor(currentAttackSpell);
+    public float MovementCDTotal  => GetEffectiveCooldownFor(currentMovementSpell);
 
     [Header("Drop Settings")]
     public float dropForce = 8f;
@@ -78,6 +78,14 @@ public class PlayerCombat : MonoBehaviour
     private InputAction castMainAction;
     private InputAction castSubAction;
     private PlayerStats playerStats;
+
+    float GetEffectiveCooldownFor(SpellData data)
+    {
+        if (data == null) return 1f;
+        return playerStats != null
+            ? playerStats.GetEffectiveCooldown(data.cooldownTime)
+            : data.cooldownTime;
+    }
 
     void Awake()
     {
@@ -258,7 +266,7 @@ public class PlayerCombat : MonoBehaviour
 
         if (applyReleaseCooldown && currentAttackSpell != null && currentAttackSpell.cooldownStartsOnRelease
             && (hadTracked || pendingMainReleaseCooldown))
-            attackCDTimer = currentAttackSpell.cooldownTime;
+            attackCDTimer = GetEffectiveCooldownFor(currentAttackSpell);
         pendingMainReleaseCooldown = false;
     }
 
@@ -288,7 +296,7 @@ public class PlayerCombat : MonoBehaviour
 
         if (applyReleaseCooldown && currentMovementSpell != null && currentMovementSpell.cooldownStartsOnRelease
             && (hadTracked || pendingSubReleaseCooldown))
-            movementCDTimer = currentMovementSpell.cooldownTime;
+            movementCDTimer = GetEffectiveCooldownFor(currentMovementSpell);
         pendingSubReleaseCooldown = false;
     }
 
@@ -502,6 +510,7 @@ public class PlayerCombat : MonoBehaviour
         GameObject spellObj = Instantiate(data.spellPrefab, spawnPos, firePoint.rotation);
 
         SpellProjectile.RegisterWithCaster(spellObj, gameObject);
+        SpellStatScaling.ApplyProjectileSizeToTree(spellObj, gameObject);
 
         SpellBehavior behavior = spellObj.GetComponentInChildren<SpellBehavior>(true);
         if (behavior != null)
@@ -512,7 +521,7 @@ public class PlayerCombat : MonoBehaviour
         }
 
         if (!data.cooldownStartsOnRelease)
-            cdTimer = data.cooldownTime;
+            cdTimer = GetEffectiveCooldownFor(data);
         return behavior;
     }
 
