@@ -134,7 +134,7 @@ PrefabInstance:
     - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
       propertyPath: currentAttackSpell
       value: 
-      objectReference: {fileID: 11400000, guid: 062a8af9fc841c143912be5391436001, type: 2}
+      objectReference: {fileID: 11400000, guid: 681b6d07542439841baa4eebb34eff15, type: 2}
     - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
       propertyPath: equippedMainWeaponRenderer
       value: 
@@ -371,7 +371,7 @@ PrefabInstance:
     - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
       propertyPath: currentAttackSpell
       value: 
-      objectReference: {fileID: 11400000, guid: 062a8af9fc841c143912be5391436001, type: 2}
+      objectReference: {fileID: 11400000, guid: 681b6d07542439841baa4eebb34eff15, type: 2}
     - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
       propertyPath: currentMovementSpell
       value: 
