@@ -236,6 +236,11 @@ public class PlayerCombat : MonoBehaviour
     {
         if (attackCDTimer > 0f) attackCDTimer -= Time.deltaTime;
         if (movementCDTimer > 0f) movementCDTimer -= Time.deltaTime;
+
+        if (activeMainSpell != null && activeMainSpell.IsHoldDurationExceeded())
+            CleanupHeldAttackEffects(applyReleaseCooldown: true);
+        if (activeSubSpell != null && activeSubSpell.IsHoldDurationExceeded())
+            CleanupHeldMovementEffects(applyReleaseCooldown: true);
     }
 
     /// <summary>
@@ -500,7 +505,11 @@ public class PlayerCombat : MonoBehaviour
 
         SpellBehavior behavior = spellObj.GetComponentInChildren<SpellBehavior>(true);
         if (behavior != null)
+        {
             behavior.Execute(gameObject, firePoint);
+            if (behavior.maxHoldDuration > 0f)
+                behavior.BeginHoldDurationTracking();
+        }
 
         if (!data.cooldownStartsOnRelease)
             cdTimer = data.cooldownTime;
