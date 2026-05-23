@@ -46537,7 +46537,7 @@ GameObject:
   - component: {fileID: 1889717214}
   - component: {fileID: 1889717213}
   - component: {fileID: 1889717212}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: water/structures
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46642,8 +46642,8 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1215677499
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}

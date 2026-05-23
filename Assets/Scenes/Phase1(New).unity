@@ -457,8 +457,12 @@ PrefabInstance:
       objectReference: {fileID: 1030627244}
     - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
       propertyPath: numberToSpawn
-      value: 200
+      value: 250
       objectReference: {fileID: 0}
+    - target: {fileID: 6192172548154168603, guid: 33017cce987b5e84e812b71a41c6bc0f, type: 3}
+      propertyPath: FricitonSprite
+      value: 
+      objectReference: {fileID: 3689716220766011371, guid: 78264a54cbebf864abed6854ba9cd1c5, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -398211,7 +398215,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1685298354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406475,7 +406479,7 @@ PrefabInstance:
       objectReference: {fileID: 1030627244}
     - target: {fileID: 3732452471521756310, guid: e6797969b366f5e4baf40990cad0c793, type: 3}
       propertyPath: numberToSpawn
-      value: 55
+      value: 70
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
