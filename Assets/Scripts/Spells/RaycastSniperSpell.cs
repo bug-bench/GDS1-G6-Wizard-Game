@@ -209,7 +209,7 @@ public class RaycastSniperSpell : SpellBehavior
                 float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
                 visual.transform.rotation = Quaternion.Euler(0f, 0f, angle + VFXRotationOffset);
 
-                visual.transform.localScale = new Vector3(segmentLength, VFXThickness, 1f);
+                visual.transform.localScale = new Vector3(segmentLength, VFXThickness, 0.1f);
 
                 Destroy(visual, VFXLifetime);
             }
