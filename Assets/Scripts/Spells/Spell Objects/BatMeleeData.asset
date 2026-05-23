@@ -18,4 +18,18 @@ MonoBehaviour:
   spellPrefab: {fileID: 1882510872929584624, guid: 37f128619a6e62a47a25922c12b5a527, type: 3}
   icon: {fileID: 0}
   cooldownStartsOnRelease: 0
+  castAudio:
+    clip: {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
+    volume: 1
+    pitchMin: 0.95
+    pitchMax: 1.05
+    playAtWorldPosition: 0
+    spatialBlend: 0.35
+  releaseAudio:
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.95
+    pitchMax: 1.05
+    playAtWorldPosition: 0
+    spatialBlend: 0.35
   pickupPrefab: {fileID: 2848393363742389300, guid: 5bc6cd6e885f0c44b82c55da31b41c96, type: 3}

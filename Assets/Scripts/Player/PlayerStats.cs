@@ -31,8 +31,11 @@ public class PlayerStats : MonoBehaviour
     [Tooltip("护甲 / 防御力。使用 LOL 护甲公式：实际受到伤害 = 原始伤害 * (100 / (100 + Defense))。\nArmor / Defense. Uses LOL armor formula: Actual Damage Taken = Raw Damage * (100 / (100 + Defense)).")]
     public float defense = 0f;
 
-    [Tooltip("法术大小倍率。影响发射出的火球、火圈、激光的体积大小（默认 1.0）。\nSpell size multiplier. Affects the physical size of spawned fireballs, hazard areas, and lasers (Default 1.0).")]
+    [Tooltip("法术 Size 属性（默认 1.0，吃豆累加）。技能缩放公式见 SpellScalingConfig。\nRaw Size stat (default 1.0). See SpellScalingConfig for spell scale formula.")]
     public float sizeMultiplier = 1f;
+
+    [Tooltip("留空则用场景 SpellScalingConfigProvider 或 Resources/SpellScalingConfig。\nOptional override; otherwise uses global SpellScalingConfig.")]
+    public SpellScalingConfig scalingConfig;
 
     [Tooltip("冷却缩减 (Focus)。0.2 表示减少 20% 的技能冷却时间。最高生效 90%。\nCooldown reduction (Focus). 0.2 means 20% CD reduction. Capped at 90%.")]
     public float cooldownReduction = 0f;
@@ -219,6 +222,11 @@ public class PlayerStats : MonoBehaviour
 
     public float CurrentStrength() { return strength; }
 
+    public float GetEffectiveCooldown(float baseCooldown)
+    {
+        return SpellStatScaling.GetEffectiveCooldown(this, baseCooldown);
+    }
+
     // =====================
     // GENERIC MODIFIER (用于吃豆人机制的统一接口 / Unified interface for Pac-Man style pickups)
     // =====================
@@ -246,7 +254,8 @@ public class PlayerStats : MonoBehaviour
                 IncreaseStrength(amount);
                 break;
             case "Defense":
-                // 增加护甲 / Increase armor
+            case "Defence":
+                // 增加护甲 / Increase armor（预制体拼写 Defence 也兼容）
                 defense += amount;
                 break;
             case "Size":

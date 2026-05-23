@@ -18,8 +18,8 @@ public class PlayerCombat : MonoBehaviour
     // CD properties for UI
     public float AttackCDTimer    => attackCDTimer;
     public float MovementCDTimer  => movementCDTimer;
-    public float AttackCDTotal    => currentAttackSpell  != null ? currentAttackSpell.cooldownTime  : 1f;
-    public float MovementCDTotal  => currentMovementSpell != null ? currentMovementSpell.cooldownTime : 1f;
+    public float AttackCDTotal    => GetEffectiveCooldownFor(currentAttackSpell);
+    public float MovementCDTotal  => GetEffectiveCooldownFor(currentMovementSpell);
 
     [Header("Drop Settings")]
     public float dropForce = 8f;
@@ -68,6 +68,7 @@ public class PlayerCombat : MonoBehaviour
     public SpriteRenderer[] invincibilityBlinkSpriteRenderers;
 
     private float invincibleUntil;
+    private float knockbackUntil;
     private Rigidbody2D playerRb;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer[] _invincibilityBlinkTargets;
@@ -78,12 +79,24 @@ public class PlayerCombat : MonoBehaviour
     private InputAction castMainAction;
     private InputAction castSubAction;
     private PlayerStats playerStats;
+    private SpellAudioSystem spellAudio;
+
+    float GetEffectiveCooldownFor(SpellData data)
+    {
+        if (data == null) return 1f;
+        return playerStats != null
+            ? playerStats.GetEffectiveCooldown(data.cooldownTime)
+            : data.cooldownTime;
+    }
 
     void Awake()
     {
         controller = GetComponent<PlayerController>();
         playerStats = GetComponent<PlayerStats>();
         playerRb = GetComponent<Rigidbody2D>();
+        spellAudio = GetComponent<SpellAudioSystem>();
+        if (spellAudio == null)
+            spellAudio = gameObject.AddComponent<SpellAudioSystem>();
         BuildInvincibilityBlinkTargets();
     }
 
@@ -180,6 +193,7 @@ public class PlayerCombat : MonoBehaviour
 
     /// <summary>弹道等可查询：无敌期间不扣血且弹丸应穿过。 — True while post-hit i-frames are active.</summary>
     public bool IsInvincible => Time.time < invincibleUntil;
+    public bool IsInKnockback => Time.time < knockbackUntil;
 
     void OnEnable()
     {
@@ -236,6 +250,11 @@ public class PlayerCombat : MonoBehaviour
     {
         if (attackCDTimer > 0f) attackCDTimer -= Time.deltaTime;
         if (movementCDTimer > 0f) movementCDTimer -= Time.deltaTime;
+
+        if (activeMainSpell != null && activeMainSpell.IsHoldDurationExceeded())
+            CleanupHeldAttackEffects(applyReleaseCooldown: true);
+        if (activeSubSpell != null && activeSubSpell.IsHoldDurationExceeded())
+            CleanupHeldMovementEffects(applyReleaseCooldown: true);
     }
 
     /// <summary>
@@ -251,9 +270,12 @@ public class PlayerCombat : MonoBehaviour
             activeMainSpell = null;
         }
 
+        if (hadTracked && currentAttackSpell != null)
+            spellAudio?.PlayRelease(currentAttackSpell, firePoint);
+
         if (applyReleaseCooldown && currentAttackSpell != null && currentAttackSpell.cooldownStartsOnRelease
             && (hadTracked || pendingMainReleaseCooldown))
-            attackCDTimer = currentAttackSpell.cooldownTime;
+            attackCDTimer = GetEffectiveCooldownFor(currentAttackSpell);
         pendingMainReleaseCooldown = false;
     }
 
@@ -281,9 +303,12 @@ public class PlayerCombat : MonoBehaviour
 
         DestroyAllReflectShieldsUnderRoot();
 
+        if (hadTracked && currentMovementSpell != null)
+            spellAudio?.PlayRelease(currentMovementSpell, firePoint);
+
         if (applyReleaseCooldown && currentMovementSpell != null && currentMovementSpell.cooldownStartsOnRelease
             && (hadTracked || pendingSubReleaseCooldown))
-            movementCDTimer = currentMovementSpell.cooldownTime;
+            movementCDTimer = GetEffectiveCooldownFor(currentMovementSpell);
         pendingSubReleaseCooldown = false;
     }
 
@@ -497,13 +522,20 @@ public class PlayerCombat : MonoBehaviour
         GameObject spellObj = Instantiate(data.spellPrefab, spawnPos, firePoint.rotation);
 
         SpellProjectile.RegisterWithCaster(spellObj, gameObject);
+        SpellStatScaling.ApplyProjectileSizeToTree(spellObj, gameObject);
 
         SpellBehavior behavior = spellObj.GetComponentInChildren<SpellBehavior>(true);
         if (behavior != null)
+        {
             behavior.Execute(gameObject, firePoint);
+            if (behavior.maxHoldDuration > 0f)
+                behavior.BeginHoldDurationTracking();
+        }
 
         if (!data.cooldownStartsOnRelease)
-            cdTimer = data.cooldownTime;
+            cdTimer = GetEffectiveCooldownFor(data);
+
+        spellAudio?.PlayCast(data, firePoint, spellObj);
         return behavior;
     }
 
@@ -528,11 +560,12 @@ public class PlayerCombat : MonoBehaviour
 
         playerStats.TakeDamage(damage);
 
-        // 加强对受力的响应（如果被赋予了巨大的击退力，强制清除当前速度并施加冲量）
+        // 直接设速度并短暂锁定移动控制，否则 FixedUpdate 的高减速度会立刻把 AddForce 清掉。
         if (playerRb != null && knockbackWorldDir.sqrMagnitude > 0.0001f)
         {
-            playerRb.linearVelocity = Vector2.zero; // 先清零速度，防止原有动能抵消击退
-            playerRb.AddForce(knockbackWorldDir, ForceMode2D.Impulse);
+            playerRb.linearVelocity = knockbackWorldDir;
+            float kbDuration = Mathf.Clamp(0.12f + knockbackWorldDir.magnitude * 0.006f, 0.12f, 0.45f);
+            knockbackUntil = Mathf.Max(knockbackUntil, Time.time + kbDuration);
         }
 
         if (_invincibilityBlinkTargets != null && _invincibilityBlinkTargets.Length > 0)

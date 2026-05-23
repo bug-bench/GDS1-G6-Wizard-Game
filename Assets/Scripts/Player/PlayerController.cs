@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerData playerData;
     private PlayerStats playerStats;
+    private PlayerCombat playerCombat;
 
     private Vector2 rawAimInput; // 手柄右摇杆输入 — Raw right-stick aim input.
 
@@ -65,6 +66,7 @@ public class PlayerController : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         playerStats = GetComponent<PlayerStats>();
+        playerCombat = GetComponent<PlayerCombat>();
         currentDeceleration = playerStats != null ? playerStats.deceleration : moveDeceleration;
     }
 
@@ -94,6 +96,13 @@ public class PlayerController : MonoBehaviour
     {
         if (canMove)
         {
+            if (playerCombat != null && playerCombat.IsInKnockback)
+            {
+                if (playerStats == null || !playerStats.isStunned)
+                    HandleRotation();
+                return;
+            }
+
             // 使用加速度移动，而不是直接设置速度。
             // Move using acceleration instead of setting velocity directly.
             float baseSpeed = playerStats != null ? playerStats.speed : 5f;
