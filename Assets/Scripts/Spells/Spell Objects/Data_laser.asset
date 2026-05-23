@@ -16,4 +16,20 @@ MonoBehaviour:
   spellType: 0
   cooldownTime: 3
   spellPrefab: {fileID: 2571084152254884725, guid: 73b014fab7bf79a4bb5ba8ee6915839e, type: 3}
+  icon: {fileID: 0}
+  cooldownStartsOnRelease: 0
+  castAudio:
+    clip: {fileID: 8300000, guid: 81dbc2b345d4a4d8aa98f60aa04e5145, type: 3}
+    volume: 1
+    pitchMin: 0.95
+    pitchMax: 1.05
+    playAtWorldPosition: 0
+    spatialBlend: 0.35
+  releaseAudio:
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.95
+    pitchMax: 1.05
+    playAtWorldPosition: 0
+    spatialBlend: 0.35
   pickupPrefab: {fileID: 2848393363742389300, guid: 8b2c4a0d5b440224d984f5f3d6017ec0, type: 3}
