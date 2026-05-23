@@ -2166,7 +2166,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -683359161
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -67235,7 +67235,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1590860867
-  m_SortingLayer: 8
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -453481,7 +453481,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1313174457
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -455420,7 +455420,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -683359161
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
@@ -464705,6 +464705,14 @@ PrefabInstance:
       propertyPath: numberToSpawn
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 3732452471521756310, guid: e6797969b366f5e4baf40990cad0c793, type: 3}
+      propertyPath: spellPrefab.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732452471521756310, guid: e6797969b366f5e4baf40990cad0c793, type: 3}
+      propertyPath: 'spellPrefab.Array.data[6]'
+      value: 
+      objectReference: {fileID: 2848393363742389300, guid: 5bc6cd6e885f0c44b82c55da31b41c96, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
