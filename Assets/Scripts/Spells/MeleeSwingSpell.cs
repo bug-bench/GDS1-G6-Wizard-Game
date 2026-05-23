@@ -34,7 +34,8 @@ public class MeleeSwingSpell : SpellBehavior
     public override void Execute(GameObject caster, Transform firePoint)
     {
         casterRef = caster;
-        
+        SpellStatScaling.ApplyMeleeHitboxScale(this, SpellStatScaling.GetSizeScale(caster));
+
         // 1. 挂载到 firePoint 下，跟随玩家移动和朝向
         transform.SetParent(firePoint);
         transform.localPosition = Vector3.zero;

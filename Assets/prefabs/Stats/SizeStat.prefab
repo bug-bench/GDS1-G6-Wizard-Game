@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatPickUp
   statName: Size
-  amount: 1
+  amount: 0.1
 --- !u!82 &-8982298130053556738
 AudioSource:
   m_ObjectHideFlags: 0

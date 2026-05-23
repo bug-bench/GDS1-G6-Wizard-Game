@@ -7,6 +7,8 @@ using System.Collections;
 /// </summary>
 public class FlameDashSpell : SpellBehavior
 {
+    public const float DefaultMaxHoldDuration = 3f;
+
     [Header("冲刺数值 — Dash Tuning")]
     public float speedMultiplier = 2f;
 
@@ -19,6 +21,12 @@ public class FlameDashSpell : SpellBehavior
 
     private PlayerController controller;
     private Coroutine trailRoutine;
+
+    void Awake()
+    {
+        if (maxHoldDuration <= 0f)
+            maxHoldDuration = DefaultMaxHoldDuration;
+    }
 
     public override void Execute(GameObject caster, Transform firePoint)
     {

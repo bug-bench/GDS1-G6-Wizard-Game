@@ -7,6 +7,8 @@ using System.Collections;
 /// </summary>
 public class IceSlideSpell : SpellBehavior
 {
+    public const float DefaultMaxHoldDuration = 3f;
+
     [Header("滑行数值接口 — Ice Slide Tuning")]
     [Tooltip("滑行时的速度倍率 — Speed multiplier during slide.")]
     public float speedMultiplier = 2.5f;
@@ -16,6 +18,12 @@ public class IceSlideSpell : SpellBehavior
 
     private PlayerController controller;
     private float originalDeceleration;
+
+    void Awake()
+    {
+        if (maxHoldDuration <= 0f)
+            maxHoldDuration = DefaultMaxHoldDuration;
+    }
 
     public override void Execute(GameObject caster, Transform firePoint)
     {

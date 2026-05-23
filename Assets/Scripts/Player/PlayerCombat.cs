@@ -18,8 +18,8 @@ public class PlayerCombat : MonoBehaviour
     // CD properties for UI
     public float AttackCDTimer    => attackCDTimer;
     public float MovementCDTimer  => movementCDTimer;
-    public float AttackCDTotal    => currentAttackSpell  != null ? currentAttackSpell.cooldownTime  : 1f;
-    public float MovementCDTotal  => currentMovementSpell != null ? currentMovementSpell.cooldownTime : 1f;
+    public float AttackCDTotal    => GetEffectiveCooldownFor(currentAttackSpell);
+    public float MovementCDTotal  => GetEffectiveCooldownFor(currentMovementSpell);
 
     [Header("Drop Settings")]
     public float dropForce = 8f;
@@ -78,12 +78,24 @@ public class PlayerCombat : MonoBehaviour
     private InputAction castMainAction;
     private InputAction castSubAction;
     private PlayerStats playerStats;
+    private SpellAudioSystem spellAudio;
+
+    float GetEffectiveCooldownFor(SpellData data)
+    {
+        if (data == null) return 1f;
+        return playerStats != null
+            ? playerStats.GetEffectiveCooldown(data.cooldownTime)
+            : data.cooldownTime;
+    }
 
     void Awake()
     {
         controller = GetComponent<PlayerController>();
         playerStats = GetComponent<PlayerStats>();
         playerRb = GetComponent<Rigidbody2D>();
+        spellAudio = GetComponent<SpellAudioSystem>();
+        if (spellAudio == null)
+            spellAudio = gameObject.AddComponent<SpellAudioSystem>();
         BuildInvincibilityBlinkTargets();
     }
 
@@ -236,6 +248,11 @@ public class PlayerCombat : MonoBehaviour
     {
         if (attackCDTimer > 0f) attackCDTimer -= Time.deltaTime;
         if (movementCDTimer > 0f) movementCDTimer -= Time.deltaTime;
+
+        if (activeMainSpell != null && activeMainSpell.IsHoldDurationExceeded())
+            CleanupHeldAttackEffects(applyReleaseCooldown: true);
+        if (activeSubSpell != null && activeSubSpell.IsHoldDurationExceeded())
+            CleanupHeldMovementEffects(applyReleaseCooldown: true);
     }
 
     /// <summary>
@@ -251,9 +268,12 @@ public class PlayerCombat : MonoBehaviour
             activeMainSpell = null;
         }
 
+        if (hadTracked && currentAttackSpell != null)
+            spellAudio?.PlayRelease(currentAttackSpell, firePoint);
+
         if (applyReleaseCooldown && currentAttackSpell != null && currentAttackSpell.cooldownStartsOnRelease
             && (hadTracked || pendingMainReleaseCooldown))
-            attackCDTimer = currentAttackSpell.cooldownTime;
+            attackCDTimer = GetEffectiveCooldownFor(currentAttackSpell);
         pendingMainReleaseCooldown = false;
     }
 
@@ -281,9 +301,12 @@ public class PlayerCombat : MonoBehaviour
 
         DestroyAllReflectShieldsUnderRoot();
 
+        if (hadTracked && currentMovementSpell != null)
+            spellAudio?.PlayRelease(currentMovementSpell, firePoint);
+
         if (applyReleaseCooldown && currentMovementSpell != null && currentMovementSpell.cooldownStartsOnRelease
             && (hadTracked || pendingSubReleaseCooldown))
-            movementCDTimer = currentMovementSpell.cooldownTime;
+            movementCDTimer = GetEffectiveCooldownFor(currentMovementSpell);
         pendingSubReleaseCooldown = false;
     }
 
@@ -497,13 +520,20 @@ public class PlayerCombat : MonoBehaviour
         GameObject spellObj = Instantiate(data.spellPrefab, spawnPos, firePoint.rotation);
 
         SpellProjectile.RegisterWithCaster(spellObj, gameObject);
+        SpellStatScaling.ApplyProjectileSizeToTree(spellObj, gameObject);
 
         SpellBehavior behavior = spellObj.GetComponentInChildren<SpellBehavior>(true);
         if (behavior != null)
+        {
             behavior.Execute(gameObject, firePoint);
+            if (behavior.maxHoldDuration > 0f)
+                behavior.BeginHoldDurationTracking();
+        }
 
         if (!data.cooldownStartsOnRelease)
-            cdTimer = data.cooldownTime;
+            cdTimer = GetEffectiveCooldownFor(data);
+
+        spellAudio?.PlayCast(data, firePoint, spellObj);
         return behavior;
     }
 
