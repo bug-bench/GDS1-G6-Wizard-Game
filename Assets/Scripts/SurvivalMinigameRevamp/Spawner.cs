@@ -46,6 +46,9 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float minPatternTime = 10f;
     [SerializeField] private float maxPatternTime = 15f;
 
+    [Header("Startup")]
+    [SerializeField] private float startupDelay = 5f;
+
     private float currentRotation;
     private float strafeAngle;
     private float strafeDirection = 1f;
@@ -131,6 +134,8 @@ public class Spawner : MonoBehaviour
 
     private IEnumerator FireRoutine()
     {
+        yield return new WaitForSeconds(startupDelay);
+
         while (true)
         {
             FindClosestPlayer();
