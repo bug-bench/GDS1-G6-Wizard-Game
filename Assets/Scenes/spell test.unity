@@ -579,11 +579,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4136795166652012661, guid: 5bc6cd6e885f0c44b82c55da31b41c96, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.93
+      value: -9.21
       objectReference: {fileID: 0}
     - target: {fileID: 4136795166652012661, guid: 5bc6cd6e885f0c44b82c55da31b41c96, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.03
       objectReference: {fileID: 0}
     - target: {fileID: 4136795166652012661, guid: 5bc6cd6e885f0c44b82c55da31b41c96, type: 3}
       propertyPath: m_LocalPosition.z
@@ -617,6 +617,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4696770049037580002, guid: 5bc6cd6e885f0c44b82c55da31b41c96, type: 3}
+      propertyPath: m_text
+      value: 'Staff
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5472372880269138746, guid: 5bc6cd6e885f0c44b82c55da31b41c96, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1273137194770323464, guid: aa5863f32343f1c42848be195e8868d0, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

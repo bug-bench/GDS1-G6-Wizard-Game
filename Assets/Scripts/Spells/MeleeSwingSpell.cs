@@ -80,13 +80,23 @@ public class MeleeSwingSpell : SpellBehavior
         activeSlashVisual = Instantiate(slashVisualPrefab, transform);
 
         activeSlashVisual.transform.localPosition = slashLocalOffset;
-        activeSlashVisual.transform.localRotation = Quaternion.Euler(0f, 0f, slashRotationOffset);
-        activeSlashVisual.transform.localScale = new Vector3(slashLocalScale.x, slashLocalScale.y, 1f);
+
+        float finalRotation = facingLeft ? -slashRotationOffset : slashRotationOffset;
+        activeSlashVisual.transform.localRotation = Quaternion.Euler(0f, 0f, finalRotation);
+
+        Vector3 scale = new Vector3(slashLocalScale.x, slashLocalScale.y, 1f);
+
+        if (facingLeft)
+        {
+            scale.x *= -1f;
+        }
+
+        activeSlashVisual.transform.localScale = scale;
 
         SpriteRenderer slashSR = activeSlashVisual.GetComponentInChildren<SpriteRenderer>();
-        if (slashSR != null && flipSlashWhenFacingLeft)
+        if (slashSR != null)
         {
-            slashSR.flipX = facingLeft;
+            slashSR.flipX = false;
         }
     }
     private void Update()
