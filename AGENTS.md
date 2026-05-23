@@ -4,9 +4,9 @@
 - Active scene:
   - Name: Phase2Survival
   - Tags:
-    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController
+    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, SpawnPoint, wall
   - Layers:
-    - Default, TransparentFX, Ignore Raycast, Water, UI
+    - Default, TransparentFX, Ignore Raycast, Pickup, Water, UI, hazards, wall, player, Spells, Crate
 - Active game object:
   - Name: spawn area
   - Tag: Untagged
