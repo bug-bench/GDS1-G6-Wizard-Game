@@ -166,8 +166,8 @@ MonoBehaviour:
   lineVisualDuration: 0.1
   showLineRenderer: 0
   VFXPrefab: {fileID: 6189294275176017214, guid: a0a547e4ca35a224cbd2ea1c0b5239f6, type: 3}
-  VFXLifetime: 0.8
+  VFXLifetime: 0.6
   VFXThickness: 0.5
   VFXRotationOffset: 270
-  VFXLength: 0.6
+  VFXLength: 0.5
   startOffset: 0.5
