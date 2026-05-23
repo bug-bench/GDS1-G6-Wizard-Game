@@ -31,6 +31,15 @@ public class MeleeSwingSpell : SpellBehavior
     private float currentStartAngle;
     private float currentEndAngle;
 
+
+    public GameObject slashVisualPrefab;
+    public Vector2 slashLocalOffset = new Vector2(0f, 1f);
+    public Vector2 slashLocalScale = Vector2.one;
+    public float slashRotationOffset = 0f;
+    public bool flipSlashWhenFacingLeft = true;
+
+    private GameObject activeSlashVisual;
+
     public override void Execute(GameObject caster, Transform firePoint)
     {
         casterRef = caster;
@@ -60,11 +69,26 @@ public class MeleeSwingSpell : SpellBehavior
             // 解决朝左时武器上下颠倒的问题
             sr.flipX = facingLeft;
         }
-        
+        SpawnSlashVisual(facingLeft);
         transform.localRotation = Quaternion.Euler(0, 0, currentStartAngle);
         Destroy(gameObject, swingDuration);
     }
+    void SpawnSlashVisual(bool facingLeft)
+    {
+        if (slashVisualPrefab == null) return;
 
+        activeSlashVisual = Instantiate(slashVisualPrefab, transform);
+
+        activeSlashVisual.transform.localPosition = slashLocalOffset;
+        activeSlashVisual.transform.localRotation = Quaternion.Euler(0f, 0f, slashRotationOffset);
+        activeSlashVisual.transform.localScale = new Vector3(slashLocalScale.x, slashLocalScale.y, 1f);
+
+        SpriteRenderer slashSR = activeSlashVisual.GetComponentInChildren<SpriteRenderer>();
+        if (slashSR != null && flipSlashWhenFacingLeft)
+        {
+            slashSR.flipX = facingLeft;
+        }
+    }
     private void Update()
     {
         if (casterRef == null) return;
