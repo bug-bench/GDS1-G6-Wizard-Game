@@ -26,6 +26,22 @@ public class SurvivalScript : MonoBehaviour
 
     private Dictionary<GameObject, int> playerHits = new Dictionary<GameObject, int>();
 
+    [SerializeField]
+    private float hitInvulnerabilityTime = 0.75f;
+
+    [Header("Hit Feedback")]
+    [SerializeField] 
+    private Color hitFlashColor = Color.white;
+    [SerializeField] 
+    private int hitFlashBlinkCount = 2;
+    [SerializeField] 
+    private float hitFlashHalfDuration = 0.04f;
+    [SerializeField] 
+    private float invulnerabilityBlinkInterval = 0.12f;
+
+    private Dictionary<GameObject, float> playerInvulnerabilityTimers = new Dictionary<GameObject, float>();
+    private Dictionary<GameObject, Coroutine> playerFlashCoroutines = new Dictionary<GameObject, Coroutine>();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -52,6 +68,7 @@ public class SurvivalScript : MonoBehaviour
         {
             playersAlive.Add(p);
             playerHits[p] = 0;
+            playerInvulnerabilityTimers[p] = 0f;
         }
 
         hazards.Clear();
@@ -88,7 +105,20 @@ public class SurvivalScript : MonoBehaviour
 
         if (!playerHits.ContainsKey(player)) return;
 
+        if (Time.time < playerInvulnerabilityTimers[player]) return;
+
+        playerInvulnerabilityTimers[player] = Time.time + hitInvulnerabilityTime;
+
         playerHits[player]++;
+        if (playerFlashCoroutines.ContainsKey(player))
+        {
+            if (playerFlashCoroutines[player] != null)
+            {
+                StopCoroutine(playerFlashCoroutines[player]);
+            }
+        }
+
+        playerFlashCoroutines[player] = StartCoroutine(SurvivalHitFlashRoutine(player));
 
         Debug.Log($"{player.name} took hit " + $"{playerHits[player]}/{maxHits}");
 
@@ -96,6 +126,78 @@ public class SurvivalScript : MonoBehaviour
         {
             PlayerEliminated(player);
             player.SetActive(false);
+        }
+    }
+
+    //feedback on player hit by object
+    private IEnumerator SurvivalHitFlashRoutine(GameObject player)
+    {
+        if (player == null) yield break;
+
+        SpriteRenderer[] renderers = player.GetComponentsInChildren<SpriteRenderer>();
+
+        if (renderers.Length == 0) yield break;
+
+        Color[] originalColors = new Color[renderers.Length];
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            originalColors[i] = renderers[i].color;
+        }
+
+        for (int flash = 0; flash < hitFlashBlinkCount; flash++)
+        {
+            foreach (var sr in renderers)
+            {
+                if (sr != null)
+                {
+                    sr.color = hitFlashColor;
+                }
+            }
+
+            yield return new WaitForSeconds(hitFlashHalfDuration);
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                if (renderers[i] != null)
+                {
+                    renderers[i].color = originalColors[i];
+                }
+            }
+
+            yield return new WaitForSeconds(hitFlashHalfDuration);
+        }
+        while (player != null && playerInvulnerabilityTimers.ContainsKey(player) && Time.time < playerInvulnerabilityTimers[player])
+        {
+            foreach (var sr in renderers)
+            {
+                if (sr != null)
+                {
+                    Color c = sr.color;
+                    c.a = 0f;
+                    sr.color = c;
+                }
+            }
+
+            yield return new WaitForSeconds(invulnerabilityBlinkInterval);
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                if (renderers[i] != null)
+                {
+                    renderers[i].color = originalColors[i];
+                }
+            }
+
+            yield return new WaitForSeconds(invulnerabilityBlinkInterval);
+        }
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            if (renderers[i] != null)
+            {
+                renderers[i].color = originalColors[i];
+            }
         }
     }
 
