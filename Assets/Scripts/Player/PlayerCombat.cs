@@ -68,6 +68,7 @@ public class PlayerCombat : MonoBehaviour
     public SpriteRenderer[] invincibilityBlinkSpriteRenderers;
 
     private float invincibleUntil;
+    private float knockbackUntil;
     private Rigidbody2D playerRb;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer[] _invincibilityBlinkTargets;
@@ -192,6 +193,7 @@ public class PlayerCombat : MonoBehaviour
 
     /// <summary>弹道等可查询：无敌期间不扣血且弹丸应穿过。 — True while post-hit i-frames are active.</summary>
     public bool IsInvincible => Time.time < invincibleUntil;
+    public bool IsInKnockback => Time.time < knockbackUntil;
 
     void OnEnable()
     {
@@ -558,11 +560,12 @@ public class PlayerCombat : MonoBehaviour
 
         playerStats.TakeDamage(damage);
 
-        // 加强对受力的响应（如果被赋予了巨大的击退力，强制清除当前速度并施加冲量）
+        // 直接设速度并短暂锁定移动控制，否则 FixedUpdate 的高减速度会立刻把 AddForce 清掉。
         if (playerRb != null && knockbackWorldDir.sqrMagnitude > 0.0001f)
         {
-            playerRb.linearVelocity = Vector2.zero; // 先清零速度，防止原有动能抵消击退
-            playerRb.AddForce(knockbackWorldDir, ForceMode2D.Impulse);
+            playerRb.linearVelocity = knockbackWorldDir;
+            float kbDuration = Mathf.Clamp(0.12f + knockbackWorldDir.magnitude * 0.006f, 0.12f, 0.45f);
+            knockbackUntil = Mathf.Max(knockbackUntil, Time.time + kbDuration);
         }
 
         if (_invincibilityBlinkTargets != null && _invincibilityBlinkTargets.Length > 0)

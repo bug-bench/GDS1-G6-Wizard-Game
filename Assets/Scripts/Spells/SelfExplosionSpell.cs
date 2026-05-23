@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
@@ -21,6 +22,13 @@ public class SelfExplosionSpell : SpellBehavior
     private LineRenderer lineRenderer;
     private float timer;
     private float visualExplosionRadius;
+
+    static bool IsColliderOnCaster(GameObject casterRoot, Collider2D col)
+    {
+        if (casterRoot == null || col == null) return false;
+        Transform t = col.transform;
+        return t == casterRoot.transform || t.IsChildOf(casterRoot.transform);
+    }
 
     void EnsureLineRenderer()
     {
@@ -56,31 +64,26 @@ public class SelfExplosionSpell : SpellBehavior
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(caster.transform.position, scaledRadius, targetLayer);
 
         bool hasHitSomeone = false;
+        var hitTargets = new HashSet<PlayerCombat>();
 
         foreach (var col in hitColliders)
         {
-            if (col.gameObject == caster) continue; // 排除自己
+            if (IsColliderOnCaster(caster, col)) continue;
 
             PlayerCombat targetCombat = col.GetComponentInParent<PlayerCombat>();
-            if (targetCombat != null)
-            {
-                // 获取目标的根节点（受力点）
-                GameObject rootObj = targetCombat.gameObject;
+            if (targetCombat == null || hitTargets.Contains(targetCombat)) continue;
+            if (targetCombat.IsInvincible) continue;
 
-                // 击退方向：从玩家向外辐射
-                Vector2 knockbackDir = (rootObj.transform.position - caster.transform.position).normalized;
-                
-                // 如果两个人完全重叠，给一个随机方向防止报错或无法推开
-                if (knockbackDir == Vector2.zero) 
-                {
-                    knockbackDir = Random.insideUnitCircle.normalized;
-                }
+            hitTargets.Add(targetCombat);
+            GameObject rootObj = targetCombat.gameObject;
 
-                Vector2 knockbackVector = knockbackDir * knockbackForce;
+            Vector2 knockbackDir = (rootObj.transform.position - caster.transform.position).normalized;
+            if (knockbackDir == Vector2.zero)
+                knockbackDir = Random.insideUnitCircle.normalized;
 
-                targetCombat.TakeDamage(damage, -1, knockbackVector);
-                hasHitSomeone = true;
-            }
+            Vector2 knockbackVector = knockbackDir * knockbackForce;
+            targetCombat.TakeDamage(damage, -1, knockbackVector);
+            hasHitSomeone = true;
         }
 
         if (!hasHitSomeone)
