@@ -9,6 +9,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class ReflectShieldSpell : SpellBehavior
 {
+    public const float DefaultMaxHoldDuration = 3f;
+
     /// <summary>
     /// 持盾期间用于弹道/激光：身体 Trigger 可能与盾重叠，统一按「有盾则挡投射物」处理。
     /// While shield exists, treat as blocking projectiles/laser when body trigger would also fire.
@@ -42,6 +44,12 @@ public class ReflectShieldSpell : SpellBehavior
 
     LineRenderer lineRenderer;
     EdgeCollider2D edgeCollider;
+
+    void Awake()
+    {
+        if (maxHoldDuration <= 0f)
+            maxHoldDuration = DefaultMaxHoldDuration;
+    }
 
     void EnsureComponents()
     {

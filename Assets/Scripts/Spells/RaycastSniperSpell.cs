@@ -24,10 +24,17 @@ public class RaycastSniperSpell : SpellBehavior
 
     private LineRenderer lineRenderer;
     private GameObject myCaster;
+    private float baseLineStartWidth = 0.1f;
+    private float baseLineEndWidth = 0.1f;
 
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer != null)
+        {
+            baseLineStartWidth = lineRenderer.startWidth;
+            baseLineEndWidth = lineRenderer.endWidth;
+        }
     }
 
     static bool IsColliderOnCaster(GameObject caster, Collider2D col)
@@ -40,6 +47,9 @@ public class RaycastSniperSpell : SpellBehavior
     public override void Execute(GameObject caster, Transform firePoint)
     {
         myCaster = caster;
+
+        float sizeScale = SpellStatScaling.GetSizeScale(caster);
+        SpellStatScaling.ApplyLaserWidth(lineRenderer, baseLineStartWidth, baseLineEndWidth, sizeScale);
 
         Vector2 dir = firePoint.up.normalized;
         Vector2 rawStart = firePoint.position;

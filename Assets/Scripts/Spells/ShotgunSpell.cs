@@ -22,6 +22,7 @@ public class ShotgunSpell : SpellBehavior
 
             Vector3 pos = firePoint.position + rotation * Vector3.up * spawnForwardInset;
             GameObject pellet = Instantiate(pelletPrefab, pos, rotation);
+            SpellStatScaling.ApplyProjectileSize(pellet, caster);
             SpellProjectile.RegisterWithCaster(pellet, caster);
         }
 

@@ -2,10 +2,18 @@ using UnityEngine;
 
 public class SprintSpell : SpellBehavior
 {
+    public const float DefaultMaxHoldDuration = 3f;
+
     [Header("疾跑数值接口 — Sprint Tuning")]
     public float speedMultiplier = 2f;
 
     private PlayerController controller;
+
+    void Awake()
+    {
+        if (maxHoldDuration <= 0f)
+            maxHoldDuration = DefaultMaxHoldDuration;
+    }
 
     public override void Execute(GameObject caster, Transform firePoint)
     {

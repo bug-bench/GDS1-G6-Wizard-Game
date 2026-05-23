@@ -16,6 +16,7 @@ public class BasicProjectileSpell : SpellBehavior
     {
         Vector3 pos = firePoint.position + firePoint.up * spawnForwardInset;
         GameObject proj = Instantiate(projectilePrefab, pos, firePoint.rotation);
+        SpellStatScaling.ApplyProjectileSize(proj, caster);
         SpellProjectile.RegisterWithCaster(proj, caster);
         Destroy(gameObject);
     }
