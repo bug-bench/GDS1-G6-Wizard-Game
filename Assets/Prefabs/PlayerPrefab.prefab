@@ -304,7 +304,8 @@ MonoBehaviour:
   deceleration: 10
   strength: 5
   defense: 0
-  sizeMultiplier: 5
+  sizeMultiplier: 1
+  scalingConfig: {fileID: 0}
   cooldownReduction: 0
   IsAliveArena: 1
   stunEndTime: 0
