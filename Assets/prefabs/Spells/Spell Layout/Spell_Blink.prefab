@@ -51,6 +51,10 @@ MonoBehaviour:
   blockingSortingLayers:
   - WalkingInFront
   - WalkingInFront
+  blinkCastRadius: 0.25
   wallBuffer: 0
   castInset: 0.05
   selfStunDuration: 0.5
+  afterImagePrefab: {fileID: 3504796317370007493, guid: 09c239ef0960db04d90356750096afea, type: 3}
+  afterImageCount: 5
+  afterImageFadeTime: 0.25

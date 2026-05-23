@@ -2046,7 +2046,7 @@ GameObject:
   - component: {fileID: 369967659}
   - component: {fileID: 369967658}
   - component: {fileID: 369967657}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455302,7 +455302,7 @@ GameObject:
   - component: {fileID: 2078666813}
   - component: {fileID: 2078666812}
   - component: {fileID: 2078666811}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ice hazard
   m_TagString: Untagged
   m_Icon: {fileID: 0}

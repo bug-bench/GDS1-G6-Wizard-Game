@@ -80,4 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlameDashSpell
   speedMultiplier: 2
   fireTrailPrefab: {fileID: 4985203713322938708, guid: e34f0fc01c7b52742b5bdae1dec2c070, type: 3}
-  spawnInterval: 0.05
+  spawnInterval: 0.04
+  fireTrailRotationOffset: 90
+  flipFireWhenFacingLeft: 0
+  useFlipY: 1
