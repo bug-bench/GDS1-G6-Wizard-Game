@@ -156,12 +156,12 @@ TextureImporter:
       name: Coin Sheet_0
       rect:
         serializedVersion: 2
-        x: 2
+        x: 0
         y: 16
-        width: 12
+        width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -178,12 +178,12 @@ TextureImporter:
       name: Coin Sheet_1
       rect:
         serializedVersion: 2
-        x: 2
-        y: 0
-        width: 12
+        x: 16
+        y: 16
+        width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -200,12 +200,12 @@ TextureImporter:
       name: Coin Sheet_2
       rect:
         serializedVersion: 2
-        x: 19
+        x: 32
         y: 16
-        width: 10
+        width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -222,12 +222,12 @@ TextureImporter:
       name: Coin Sheet_3
       rect:
         serializedVersion: 2
-        x: 33
-        y: 3
-        width: 14
-        height: 29
+        x: 48
+        y: 16
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -244,12 +244,12 @@ TextureImporter:
       name: Coin Sheet_4
       rect:
         serializedVersion: 2
-        x: 49
-        y: 2
-        width: 15
-        height: 30
+        x: 64
+        y: 16
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -266,12 +266,12 @@ TextureImporter:
       name: Coin Sheet_5
       rect:
         serializedVersion: 2
-        x: 66
-        y: 11
-        width: 9
-        height: 21
+        x: 80
+        y: 16
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -288,12 +288,12 @@ TextureImporter:
       name: Coin Sheet_6
       rect:
         serializedVersion: 2
-        x: 75
-        y: 3
-        width: 20
-        height: 29
+        x: 96
+        y: 16
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -310,12 +310,12 @@ TextureImporter:
       name: Coin Sheet_7
       rect:
         serializedVersion: 2
-        x: 99
+        x: 112
         y: 16
-        width: 10
+        width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -332,12 +332,12 @@ TextureImporter:
       name: Coin Sheet_8
       rect:
         serializedVersion: 2
-        x: 114
-        y: 16
-        width: 12
+        x: 0
+        y: 0
+        width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -354,12 +354,12 @@ TextureImporter:
       name: Coin Sheet_9
       rect:
         serializedVersion: 2
-        x: 18
-        y: 5
-        width: 10
-        height: 9
+        x: 16
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -372,11 +372,99 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Coin Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28e1818bb84a81e4489cc1f44af43d41
+      internalID: -963059935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Coin Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 672a4983e4bc72b418faf0a870d7d519
+      internalID: -1148440006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Coin Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1aad8cd9de254704f9a83fa9422e5097
+      internalID: 1669345783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Coin Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac7c05e7e55364e4bb167a7fe4760c10
+      internalID: 1413715237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b5a2c4d333e62494ea601966ca40a9ac
     internalID: 0
     vertices: []
     indices: 
@@ -384,10 +472,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Coin Sheet_0: -7761106982459970301
       Coin Sheet_1: 4468539843122745391
+      Coin Sheet_10: -963059935
+      Coin Sheet_11: -1148440006
+      Coin Sheet_12: 1669345783
+      Coin Sheet_13: 1413715237
       Coin Sheet_2: 4136904896835088515
       Coin Sheet_3: -1251942299344888882
       Coin Sheet_4: -4091679110240172174

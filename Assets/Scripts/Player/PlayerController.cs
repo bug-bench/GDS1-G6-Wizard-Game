@@ -10,8 +10,8 @@ public class PlayerController : MonoBehaviour
     //
 
     /// <summary>
-    /// 开局移速，疾跑等效果只在此基础上乘算，避免多次 *= 叠加速。
-    /// Base move speed from stats; sprint multiplies this only, avoiding stacked *= runaway speed.
+    /// 基础移动速度，冲刺只会乘在这个速度上。
+    /// Base move speed; sprint multiplies this value.
     /// </summary>
     //public float BaseMoveSpeed { get; private set; }
 
@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Aiming Settings")]
     [Range(0f, 0.95f)]
-    [Tooltip("手柄瞄准死区，防止摇杆漂移。 — Gamepad aim deadzone to ignore stick drift.")]
+    [Tooltip("手柄瞄准死区，防止摇杆漂移。 — Gamepad aim deadzone.")]
     public float gamepadAimDeadzone = 0.2f;
 
     [HideInInspector] public Vector2 moveInput;
@@ -28,15 +28,12 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement feel (PUBG-style / 惯性加速)")]
     [Range(1f, 200f)]
-    [Tooltip("基础起步加速度。有输入时每秒增加的速度量；越小起步越慢。 — Base acceleration.")]
+    [Tooltip("移动加速度，数值越高起步越快。 — Movement acceleration.")]
     public float moveAcceleration = 60f;
-    [Range(1f, 200f)]
-    [Tooltip("基础刹车减速度（如果 PlayerStats 没有值则用这个兜底）。无输入时每秒减少的速率（越小滑得越远）。 — Base deceleration.")]
-    public float moveDeceleration = 50f;
 
-    [Range(0f, 1f)]
-    [Tooltip("【新增】速度对惯性的正相关影响系数。速度越快，惯性越大（加减速变慢，滑得更远）。设为0则惯性固定。")]
-    public float inertiaSpeedFactor = 0.15f;
+    [Range(1f, 200f)]
+    [Tooltip("基础减速度，数值越高停得越快。 — Base deceleration.")]
+    public float moveDeceleration = 50f;
 
     private Rigidbody2D rb;
     private PlayerInput playerInput;
@@ -45,13 +42,13 @@ public class PlayerController : MonoBehaviour
     private PlayerData playerData;
     private PlayerStats playerStats;
 
-    private Vector2 rawAimInput; // 临时存储手柄右摇杆的原始数据 — Raw right-stick aim before deadzone.
+    private Vector2 rawAimInput; // 手柄右摇杆输入 — Raw right-stick aim input.
 
     [Header("Rotation")]
-    public Transform rotationPivot;   
+    public Transform rotationPivot;
     public Transform playerSprite;
 
-    //Ice harzard 
+    // 冰面状态 — Ice state.
     private bool onIce = false;
 
     public float iceAccelerationMultiplier = 0.3f;
@@ -61,12 +58,11 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
-        myCam = GetComponentInChildren<Camera>(); // 寻找属于这个玩家自己的摄像机 — This player's child camera (split-screen).
+        myCam = GetComponentInChildren<Camera>(); // 玩家自己的摄像机 — This player's camera.
 
-        // 确保 Z 轴旋转锁死，防止万向节死锁导致的后空翻 — Freeze Z rotation to avoid physics flip from gimbal issues.
+        // 锁定旋转，防止物理翻转。
+        // Lock rotation to prevent physics flipping.
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-       
 
         playerStats = GetComponent<PlayerStats>();
         currentDeceleration = playerStats != null ? playerStats.deceleration : moveDeceleration;
@@ -82,13 +78,13 @@ public class PlayerController : MonoBehaviour
         sprintMultiplier = 1f;
     }
 
-    // Input System 自动调用的移动方法 (WASD 或 左摇杆) — Send Messages: move (WASD or left stick).
+    // 移动输入方法 — Movement input method.
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
     }
 
-    // Input System 自动调用的瞄准方法 (对应 Aim Action，通常是右摇杆) — Send Messages: aim (usually right stick).
+    // 瞄准输入方法 — Aim input method.
     void OnAim(InputValue value)
     {
         rawAimInput = value.Get<Vector2>();
@@ -98,28 +94,41 @@ public class PlayerController : MonoBehaviour
     {
         if (canMove)
         {
-            // 1. PUBG-like: 沿输入方向累加速度 + 上限，松手沿原方向摩擦减速（惯性），不是每帧直接设为目标速度。
-            // Additive accel along input, clamp speed; release decelerates along current velocity (momentum slide).
+            // 使用加速度移动，而不是直接设置速度。
+            // Move using acceleration instead of setting velocity directly.
             float baseSpeed = playerStats != null ? playerStats.speed : 5f;
             float maxSpeed = baseSpeed * sprintMultiplier;
-            
-            // 【新增】计算惯性倍率：速度越快，惯性越大（正相关）
-            // 假设标准速度是 5f，超过 5f 的部分会按比例增加惯性
-            float speedExcess = Mathf.Max(0f, maxSpeed - 5f);
-            float inertiaMultiplier = 1f + (speedExcess * inertiaSpeedFactor);
 
             bool canInputMove = playerStats == null || (!playerStats.isStunned && !playerStats.isRooted);
             Vector2 input = canInputMove ? Vector2.ClampMagnitude(moveInput, 1f) : Vector2.zero;
-            
+
             Vector2 v = rb.linearVelocity;
             float dt = Time.fixedDeltaTime;
 
-            // 动态读取 PlayerStats 中的减速度
+            // 读取当前减速度。
+            // Read current deceleration.
             if (playerStats != null) currentDeceleration = playerStats.deceleration;
+            else currentDeceleration = moveDeceleration;
 
-            // 惯性越大，实际的加减速度越小（起步更肉，滑得更远）
-            float actualAccel = moveAcceleration / inertiaMultiplier;
-            float actualDecel = currentDeceleration / inertiaMultiplier;
+            // 如果减速度大于或等于速度，松开移动键后立即停止。
+            // If deceleration is equal to or higher than speed, stop instantly.
+            bool frictionCanInstantStop = currentDeceleration >= maxSpeed;
+
+            // 比较减速度和速度。
+            // Compare deceleration against speed.
+            float frictionToSpeedRatio = maxSpeed > 0f
+                ? Mathf.Clamp01(currentDeceleration / maxSpeed)
+                : 1f;
+
+            // 保持起步灵敏。
+            // Keep movement start responsive.
+            float actualAccel = moveAcceleration;
+
+            // 速度越高、减速度越低，玩家越滑。
+            // Higher speed and lower deceleration means more sliding.
+            float actualDecel = frictionCanInstantStop
+                ? currentDeceleration
+                : currentDeceleration * frictionToSpeedRatio;
 
             float accel = onIce ? actualAccel * iceAccelerationMultiplier : actualAccel;
             float decel = onIce ? actualDecel * iceDecelerationMultiplier : actualDecel;
@@ -128,28 +137,44 @@ public class PlayerController : MonoBehaviour
             {
                 Vector2 accelDir = input.normalized;
                 float stick = input.magnitude;
-                v += accelDir * (accel *stick * dt);
+
+                v += accelDir * (accel * stick * dt);
+
                 if (v.magnitude > maxSpeed)
                     v = v.normalized * maxSpeed;
             }
             else
             {
-                float spd = v.magnitude;
-                if (spd > 1e-4f)
+                // 没有输入时减速。
+                // Slow down when there is no input.
+                if (frictionCanInstantStop && !onIce)
                 {
-                    float drop = decel * dt;
-                    if (spd <= drop)
-                        v = Vector2.zero;
-                    else
-                        v -= v.normalized * drop;
+                    v = Vector2.zero;
                 }
                 else
-                    v = Vector2.zero;
+                {
+                    float spd = v.magnitude;
+
+                    if (spd > 1e-4f)
+                    {
+                        float drop = decel * dt;
+
+                        if (spd <= drop)
+                            v = Vector2.zero;
+                        else
+                            v -= v.normalized * drop;
+                    }
+                    else
+                    {
+                        v = Vector2.zero;
+                    }
+                }
             }
 
             rb.linearVelocity = v;
 
-            // 2. 瞄准/转向逻辑（分设备独立处理） — Aim/rotation per device (mouse vs gamepad).
+            // 处理瞄准和转向。
+            // Handle aiming and rotation.
             bool canRotate = playerStats == null || !playerStats.isStunned;
             if (canRotate)
             {
@@ -162,7 +187,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 核心函数：根据不同设备单独处理转向 — Resolve facing from mouse (KeyMouse) or right stick (Gamepad).
+    // 根据输入设备处理转向。
+    // Handle rotation based on input device.
     void HandleRotation()
     {
         if (playerInput == null) return;
@@ -188,18 +214,20 @@ public class PlayerController : MonoBehaviour
 
         if (lookDir.sqrMagnitude < 0.01f) return;
 
-        // Rotate only the aim pivot (arrow etc)
+        // 旋转瞄准点。
+        // Rotate the aim pivot.
         if (rotationPivot != null)
         {
             float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
             rotationPivot.rotation = Quaternion.Euler(0, 0, angle);
         }
 
-        // Flip the sprite based on look direction only
+        // 根据瞄准方向翻转角色。
+        // Flip the player based on aim direction.
         if (playerSprite != null)
         {
             playerSprite.localScale = new Vector3(
-                lookDir.x < 0 ? 1 : -1,  // flip X based on left/right
+                lookDir.x < 0 ? 1 : -1,
                 1,
                 1
             );
@@ -220,5 +248,4 @@ public class PlayerController : MonoBehaviour
     {
         onIce = false;
     }
-
 }

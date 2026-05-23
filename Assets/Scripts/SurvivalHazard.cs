@@ -127,20 +127,13 @@ public class SurvivalHazard : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerStats ps = other.GetComponent<PlayerStats>();
 
-            if (ps != null)
+            SurvivalScript ss = FindFirstObjectByType<SurvivalScript>();
+            if (ss != null)
             {
-                ps.IsAliveArena = false;
-
-                SurvivalScript ss = FindFirstObjectByType<SurvivalScript>();
-                if (ss != null)
-                {
-                    ss.PlayerEliminated(other.gameObject);
-                }
-
-                other.gameObject.SetActive(false);
+                ss.TakeSurvivalHit(other.gameObject);
             }
+            
         }
     }
 }
