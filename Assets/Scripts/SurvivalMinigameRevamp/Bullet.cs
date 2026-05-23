@@ -86,21 +86,12 @@ public class Bullet : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        PlayerStats ps =
-            other.GetComponent<PlayerStats>();
 
-        if (ps != null)
+        if (survivalManager != null)
         {
-            ps.IsAliveArena = false;
-
-            if (survivalManager != null)
-            {
-                survivalManager.PlayerEliminated(other.gameObject);
-            }
-
-            other.gameObject.SetActive(false);
+            survivalManager.TakeSurvivalHit(other.gameObject);
         }
-
+        
         ReturnToPool();
     }
 }

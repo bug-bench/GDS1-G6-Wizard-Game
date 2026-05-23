@@ -20,6 +20,12 @@ public class SurvivalScript : MonoBehaviour
     private int totalHazards;
 
     private int loopCount = 0;
+
+    [Header("Survival Settings")]
+    [SerializeField] private int maxHits = 3;
+
+    private Dictionary<GameObject, int> playerHits = new Dictionary<GameObject, int>();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -45,6 +51,7 @@ public class SurvivalScript : MonoBehaviour
         foreach (GameObject p in players)
         {
             playersAlive.Add(p);
+            playerHits[p] = 0;
         }
 
         hazards.Clear();
@@ -75,6 +82,23 @@ public class SurvivalScript : MonoBehaviour
     // PLAYER ELIMINATION
     // ====================
 
+    public void TakeSurvivalHit(GameObject player)
+    {
+        if (player == null) return;
+
+        if (!playerHits.ContainsKey(player)) return;
+
+        playerHits[player]++;
+
+        Debug.Log($"{player.name} took hit " + $"{playerHits[player]}/{maxHits}");
+
+        if (playerHits[player] >= maxHits)
+        {
+            PlayerEliminated(player);
+            player.SetActive(false);
+        }
+    }
+
     public void PlayerEliminated(GameObject player)
     {
         if (player == null) return;
@@ -83,6 +107,8 @@ public class SurvivalScript : MonoBehaviour
         {
             playersEliminated.Add(player);
         }
+
+
 
         var alivePlayers = new List<GameObject>();
 
