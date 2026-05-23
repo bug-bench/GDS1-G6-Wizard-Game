@@ -249,7 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
   isKnockedDown: 0
   firePoint: {fileID: 2102165188656464589}
-  currentAttackSpell: {fileID: 0}
+  currentAttackSpell: {fileID: 11400000, guid: 2157846b1b7c1ca49896abe72fa3b877, type: 2}
   currentMovementSpell: {fileID: 0}
   dropForce: 8
   spellSpawnForwardInset: 0.28

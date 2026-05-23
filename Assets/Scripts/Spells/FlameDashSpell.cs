@@ -19,6 +19,8 @@ public class FlameDashSpell : SpellBehavior
 
     private PlayerController controller;
     private Coroutine trailRoutine;
+    public float fireTrailRotationOffset = 90f;
+    public float leftFacingExtraRotation = 180f;
 
     public override void Execute(GameObject caster, Transform firePoint)
     {
@@ -30,22 +32,35 @@ public class FlameDashSpell : SpellBehavior
 
             if (fireTrailPrefab != null)
             {
-                trailRoutine = StartCoroutine(SpawnTrailRoutine(caster.transform));
+                trailRoutine = StartCoroutine(SpawnTrailRoutine(caster.transform, firePoint));
             }
         }
     }
 
-    IEnumerator SpawnTrailRoutine(Transform casterTransform)
+    IEnumerator SpawnTrailRoutine(Transform casterTransform, Transform firePoint)
     {
         while (true)
         {
-            // 在脚下生成火焰
-            GameObject trail = Instantiate(fireTrailPrefab, casterTransform.position, Quaternion.identity);
+            Vector3 fireDirection = firePoint.up;
+
+            float extraRotation = fireDirection.x < -0.01f ? leftFacingExtraRotation : 0f;
+
+            Quaternion spawnRotation =
+                Quaternion.LookRotation(Vector3.forward, fireDirection) *
+                Quaternion.Euler(0f, 0f, fireTrailRotationOffset + extraRotation);
+
+            GameObject trail = Instantiate(
+                fireTrailPrefab,
+                casterTransform.position,
+                spawnRotation
+            );
+
             HazardArea hazard = trail.GetComponent<HazardArea>();
             if (hazard != null)
             {
                 hazard.caster = casterTransform.gameObject;
             }
+
             yield return new WaitForSeconds(spawnInterval);
         }
     }

@@ -136,6 +136,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 926ef706055d98e4fad18626844e0f07, type: 2}
     - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
+      propertyPath: currentMovementSpell
+      value: 
+      objectReference: {fileID: 11400000, guid: 2157846b1b7c1ca49896abe72fa3b877, type: 2}
+    - target: {fileID: 1397807279015869338, guid: f122470c1f186ae478b6ded8c6c130b7, type: 3}
       propertyPath: equippedMainWeaponRenderer
       value: 
       objectReference: {fileID: 0}
