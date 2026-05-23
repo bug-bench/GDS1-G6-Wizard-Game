@@ -156,10 +156,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RaycastSniperSpell
   damage: 25
-  range: 100
+  range: 10
   knockbackForce: 25
   layerToHit:
     serializedVersion: 2
     m_Bits: 0
   castStartInset: 0.12
   lineVisualDuration: 0.1
+  showLineRenderer: 0
+  VFXPrefab: {fileID: 6189294275176017214, guid: a0a547e4ca35a224cbd2ea1c0b5239f6, type: 3}
+  VFXLifetime: 0.7
+  VFXThickness: 1
+  VFXRotationOffset: 270
+  VFXLength: 1
+  startOffset: 0.5

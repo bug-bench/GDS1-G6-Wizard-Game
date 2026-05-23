@@ -55,6 +55,11 @@ MonoBehaviour:
   hitOffset: 1
   startAngle: -60
   endAngle: 70
+  slashVisualPrefab: {fileID: 8663684875729065739, guid: 2714f7267122431459997736fc0e70d4, type: 3}
+  slashLocalOffset: {x: 0, y: 1}
+  slashLocalScale: {x: 1, y: 1}
+  slashRotationOffset: 90
+  flipSlashWhenFacingLeft: 0
 --- !u!1 &2007752607616842079
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,7 +87,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.27, y: 1.65, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6461589937716848074}
@@ -136,7 +141,7 @@ SpriteRenderer:
   m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 7c800b77e7f079749881b55acc51ae03, type: 3}
+  m_Sprite: {fileID: 1273137194770323464, guid: aa5863f32343f1c42848be195e8868d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
