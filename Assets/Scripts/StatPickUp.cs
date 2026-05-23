@@ -1,8 +1,12 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
 public class StatPickUp : MonoBehaviour
 {
+    private GameObject lastDroppedPlayer = null;
+    private bool canAllPickup = true;
+    private bool canLastPickup = true;
     public string statName;
     public float amount;
 
@@ -18,6 +22,30 @@ public class StatPickUp : MonoBehaviour
         pickupSound = GetComponent<AudioSource>();
     }
 
+    public void RegisterLastPlayer(GameObject player)
+    {
+        lastDroppedPlayer = player;
+    }
+
+    public void StartDrop()
+    {
+        StartCoroutine(BeginInvincibility());
+    }
+
+    IEnumerator BeginInvincibility()
+    {
+        canAllPickup = false;
+        canLastPickup = false;
+
+        yield return new WaitForSeconds(2f);
+
+        canAllPickup = true;
+
+        yield return new WaitForSeconds(1f);
+
+        canLastPickup = true;
+    }
+
     public void SetSpawner(StatSpawner statSpawner)
     {
         spawner = statSpawner;
@@ -25,6 +53,9 @@ public class StatPickUp : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (canAllPickup == false) return;
+        if (other.gameObject == lastDroppedPlayer && canLastPickup == false) return;
+
         PlayerStats playerstats = other.GetComponent<PlayerStats> ();
 
         if (playerstats != null)

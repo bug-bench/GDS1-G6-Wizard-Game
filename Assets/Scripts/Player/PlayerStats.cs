@@ -2,13 +2,16 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 
 public class PlayerStats : MonoBehaviour
 {
-    private List<string> collectedPickups = new List<string>();
+    [SerializeField] private PickupPrefabHolder pickupHolder;
+    [SerializeField] private float dropForce = 5f;
+    private List<string> lastCollectedPickups = new List<string>();
     private Phase1Script p1s;
-    private Phase2Script p2s;
+    private float nextDropThreshold;
 
     [Header("Base Stats / 核心基础属性")]
     [Tooltip("当前生命值。受到伤害会减少，吃道具会增加（无上限），归零时玩家死亡。\nCurrent health. Reduces on taking damage, increases on healing (no cap), player dies when it reaches 0.")]
@@ -50,14 +53,22 @@ public class PlayerStats : MonoBehaviour
     void Start()
     {
         p1s = FindFirstObjectByType<Phase1Script>();
-        p2s = FindFirstObjectByType<Phase2Script>();
 
         if (p1s == null)
         {
             Debug.LogError("EventManager (Phase1Script) not found in scene!");
         }
+        nextDropThreshold = MaxHealth - 20f;
     }
-    
+
+    void Update()
+    {
+        if (pickupHolder == null)
+        {
+            pickupHolder = FindFirstObjectByType<PickupPrefabHolder>();
+        }
+    }
+
 
     // =====================
     // PICKUP HANDLING
@@ -65,7 +76,8 @@ public class PlayerStats : MonoBehaviour
 
     public void RegisterPickup(string pickupID)
     {
-        collectedPickups.Add(pickupID);
+        lastCollectedPickups.Add(pickupID);
+
         Debug.Log(gameObject.name + " picked up: " + pickupID);
     }
 
@@ -101,6 +113,14 @@ public class PlayerStats : MonoBehaviour
 
         Debug.Log($"{gameObject.name} took {actualDamage:F1} damage (Original: {amount}, Armor: {defense}). Health: {health:F1}");
 
+        while (health <= nextDropThreshold && nextDropThreshold > 0)
+            {
+                int dropAmount = Random.Range(1, 3);
+                DropRandomPickups(dropAmount);
+
+                nextDropThreshold -= 20f;
+            }
+
         if (health <= 0)
         {
             Die();
@@ -109,8 +129,17 @@ public class PlayerStats : MonoBehaviour
 
     public void Heal(float amount)
     {
+        float oldMaxHealth = MaxHealth;
+
         health += amount;
+
         if (health > MaxHealth) MaxHealth = health;
+
+        if (MaxHealth > oldMaxHealth)
+        {
+            float maxHealthIncrease = MaxHealth - oldMaxHealth;
+            nextDropThreshold += maxHealthIncrease;
+        }
 
         Debug.Log(gameObject.name + " healed. Health: " + health);
     }
@@ -239,8 +268,54 @@ public class PlayerStats : MonoBehaviour
                 // 负面效果：获得减 CD 的同时，小幅降低法强 (Trade-off: gain CDR but lose a bit of spell power)
                 DecreaseStrength(amount * 10f); 
                 break;
+            case "Friction":
+                deceleration += amount;
+                break;
             default:
                 Debug.LogWarning("Invalid stat name: " + statName);
+                break;
+        }
+    }
+
+    void RemoveStat(string statName)
+    {
+        switch (statName)
+        {
+            case "Health":
+                MaxHealth -= 10f;
+                health = Mathf.Min(health, MaxHealth);
+                break;
+            case "Speed":
+                speed -= 1f;
+                speed = Mathf.Max(1f, speed);
+                break;
+            case "Attack":
+                strength -= 5f;
+                strength = Mathf.Max(1f, strength);
+                break;
+            case "Defense":
+                defense -= 1f;
+                defense = Mathf.Max(0f, defense);
+                break;
+            case "Size":
+                sizeMultiplier -= 1f;
+                sizeMultiplier = Mathf.Max(1f, sizeMultiplier);
+                break;
+            case "Focus":
+                cooldownReduction -= 1f;
+                cooldownReduction = Mathf.Max(1f, cooldownReduction);
+
+                strength += 10f;
+                break;
+            case "Friction":
+                deceleration -= 1f;
+                deceleration = Mathf.Max(1f, deceleration);
+                break;
+            case "Range":
+                //modify this if we switch back to range stat
+                break;
+            default:
+                Debug.LogWarning("Invalid stat removal: " + statName);
                 break;
         }
     }
@@ -255,7 +330,8 @@ public class PlayerStats : MonoBehaviour
 
         if (p1s != null && p1s.GetCurrentPhase() == 1)
         {
-            DropRandomPickups();
+            int dropCount = Random.Range(2, 5);
+            DropRandomPickups(dropCount);
         }
 
         Phase2Script p2 = p1s != null ? p1s.GetComponent<Phase2Script>() : null;
@@ -273,24 +349,71 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    void DropRandomPickups()
+    void DropRandomPickups(int dropCount)
     {
-        if (collectedPickups.Count == 0)
+        if (lastCollectedPickups.Count == 0)
         {
             Debug.Log("No pickups to drop.");
             return;
         }
 
-        int dropCount = Random.Range(2, 4);
+        if (pickupHolder == null)
+        {
+            Debug.LogWarning("PickupPrefabHolder is missing!");
+            return;
+        }
 
         for (int i = 0; i < dropCount; i++)
         {
-            if (collectedPickups.Count == 0) break;
+            if (lastCollectedPickups.Count == 0) break;
 
-            int index = Random.Range(0, collectedPickups.Count);
-            string droppedPickup = collectedPickups[index];
+            int index = Random.Range(0, lastCollectedPickups.Count);
+            string droppedPickup = lastCollectedPickups[index];
 
-            collectedPickups.RemoveAt(index);
+            lastCollectedPickups.RemoveAt(index);
+            RemoveStat(droppedPickup);
+
+            GameObject pickupPrefab = pickupHolder.GetPickupReference(droppedPickup);
+
+            if (pickupPrefab == null)
+            {
+                Debug.LogWarning("No prefab found for pickup: " + droppedPickup);
+                continue;
+            }
+
+            Vector2 offset = Random.insideUnitCircle * 1f;
+
+            GameObject spawnedPickup = Instantiate(
+                pickupPrefab,
+                (Vector2)transform.position + offset,
+                Quaternion.identity
+            );
+
+            Rigidbody2D rb = spawnedPickup.GetComponent<Rigidbody2D>();
+
+            if (rb != null)
+            {
+                Vector2 force = Random.insideUnitCircle * dropForce;
+                rb.AddForce(force, ForceMode2D.Impulse);
+            }
+
+            StatPickUp statPickUp = spawnedPickup.GetComponent<StatPickUp>();
+
+            if (statPickUp != null)
+            {
+                statPickUp.RegisterLastPlayer(gameObject);
+                statPickUp.StartDrop();
+            }
+
+            if (statPickupCounts.ContainsKey(droppedPickup))
+            {
+                statPickupCounts[droppedPickup]--;
+
+                if (statPickupCounts[droppedPickup] <= 0)
+                {
+                    statPickupCounts.Remove(droppedPickup);
+                }
+            }
 
             Debug.Log(gameObject.name + " dropped: " + droppedPickup);
         }

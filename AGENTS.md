@@ -5,9 +5,9 @@
   - Tags:
     - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, SpawnPoint, wall
   - Layers:
-    - Default, TransparentFX, Ignore Raycast, Pickup, Water, UI, hazards, wall
+    - Default, TransparentFX, Ignore Raycast, Pickup, Water, UI, hazards, wall, player, Spells, Crate
 - Active game object:
-  - Name: Pickup_tp fire
+  - Name: Round Bullet
   - Tag: Untagged
-  - Layer: Pickup
+  - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

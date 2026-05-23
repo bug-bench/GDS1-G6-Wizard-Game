@@ -12,6 +12,8 @@ public class StatSpawner : MonoBehaviour
     [SerializeField] private GameObject FocusSprite;
     [SerializeField] private GameObject SizeSprite;
     [SerializeField] private GameObject DefenseSprite;
+    [SerializeField] private GameObject FricitonSprite;
+
 
     [Header("Tilemaps")]
     [SerializeField] private Tilemap groundTilemap;
@@ -62,7 +64,8 @@ public class StatSpawner : MonoBehaviour
             MovementSprite,
             SizeSprite,
             FocusSprite,
-            DefenseSprite
+            DefenseSprite,
+            FricitonSprite,
         };
     }
 
