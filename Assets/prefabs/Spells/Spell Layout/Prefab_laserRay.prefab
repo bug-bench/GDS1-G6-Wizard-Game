@@ -79,7 +79,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Positions:
@@ -155,6 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3417f418aa9fee4792a81b361e8edc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RaycastSniperSpell
+  maxHoldDuration: 0
   damage: 25
   range: 10
   knockbackForce: 25
@@ -166,7 +167,7 @@ MonoBehaviour:
   showLineRenderer: 0
   VFXPrefab: {fileID: 6189294275176017214, guid: a0a547e4ca35a224cbd2ea1c0b5239f6, type: 3}
   VFXLifetime: 0.7
-  VFXThickness: 1
+  VFXThickness: 0.4
   VFXRotationOffset: 270
   VFXLength: 1
   startOffset: 0.5
