@@ -83,6 +83,7 @@ GameObject:
   - component: {fileID: 4497026461800808960}
   - component: {fileID: -6253903715297072521}
   - component: {fileID: 7835499728707293713}
+  - component: {fileID: 8303370649846345210}
   m_Layer: 3
   m_Name: Pickup_fireball
   m_TagString: Untagged
@@ -158,7 +159,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6512412375670681614, guid: 061e3882b25844577b3078134e6e0746, type: 3}
-  m_Color: {r: 0.9764706, g: 0.89882773, b: 0.15686274, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -356,6 +357,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractableUI
   interactPrompt: {fileID: 4302945745217433699}
   interactRadius: 2
+--- !u!95 &8303370649846345210
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2848393363742389300}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ff373c0b44e114e1c98f7ce9dc88a1a6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4735336362912590567
 GameObject:
   m_ObjectHideFlags: 0

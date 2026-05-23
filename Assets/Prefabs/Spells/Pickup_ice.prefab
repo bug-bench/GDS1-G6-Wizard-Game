@@ -84,6 +84,7 @@ GameObject:
   - component: {fileID: -8164115254314051634}
   - component: {fileID: -1261723942810757769}
   - component: {fileID: 6548715909179606740}
+  - component: {fileID: 8954327726389602299}
   m_Layer: 3
   m_Name: Pickup_ice
   m_TagString: Untagged
@@ -158,8 +159,8 @@ SpriteRenderer:
   m_SortingLayer: 5
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -6512412375670681614, guid: 061e3882b25844577b3078134e6e0746, type: 3}
-  m_Color: {r: 0.4433961, g: 0.8706181, b: 1, a: 1}
+  m_Sprite: {fileID: -113750415972631376, guid: 061e3882b25844577b3078134e6e0746, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -373,6 +374,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractableUI
   interactPrompt: {fileID: 2590348951784882417}
   interactRadius: 2
+--- !u!95 &8954327726389602299
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2848393363742389300}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b0292ac9106384b0da7aa48ab79b4557, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4735336362912590567
 GameObject:
   m_ObjectHideFlags: 0
