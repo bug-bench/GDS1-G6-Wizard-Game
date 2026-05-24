@@ -161,7 +161,30 @@ public class PlayerController : MonoBehaviour
                 Vector2 accelDir = input.normalized;
                 float stick = input.magnitude;
 
-                v += accelDir * (accel * stick * dt);
+                // 检查玩家是否正在反方向移动。
+                // Check if the player is moving against their current velocity.
+                bool turningAround = v.sqrMagnitude > 0.1f &&
+                                     Vector2.Dot(v.normalized, accelDir) < -0.25f;
+
+                if (turningAround)
+                {
+                    // 转身辅助：先减少当前滑行速度。
+                    // Turn assist: reduce current sliding velocity first.
+                    float turnBrake = decel * 3f * dt;
+
+                    if (v.magnitude <= turnBrake)
+                        v = Vector2.zero;
+                    else
+                        v -= v.normalized * turnBrake;
+
+                    // 转身时给一点额外加速度。
+                    // Add extra acceleration when turning around.
+                    v += accelDir * (accel * 1.5f * stick * dt);
+                }
+                else
+                {
+                    v += accelDir * (accel * stick * dt);
+                }
 
                 if (v.magnitude > maxSpeed)
                     v = v.normalized * maxSpeed;

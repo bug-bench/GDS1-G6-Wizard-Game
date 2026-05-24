@@ -44,17 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bf0899691d5ceb41a2f5c2cec556746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlinkSpell
+  maxHoldDuration: 0
   blinkDistance: 4
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1152
-  blockingSortingLayers:
-  - WalkingInFront
-  - WalkingInFront
-  blinkCastRadius: 0.25
-  wallBuffer: 0
+  blinkCastRadius: 0.35
+  wallBuffer: 0.25
   castInset: 0.05
   selfStunDuration: 0.5
+  safetyPullbackSteps: 12
+  safetyPullbackAmount: 0.2
   afterImagePrefab: {fileID: 3504796317370007493, guid: 09c239ef0960db04d90356750096afea, type: 3}
   afterImageCount: 5
   afterImageFadeTime: 0.25
