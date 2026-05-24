@@ -58,6 +58,7 @@ public class Phase1Script : MonoBehaviour
         {
             timer -= Time.deltaTime;
             UpdateTimerUI(Mathf.CeilToInt(timer).ToString());
+            BGMManager.Instance?.SetTimeRemaining(timer);
 
             if (timer <= 0)
             {
