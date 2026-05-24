@@ -450234,7 +450234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FireHazard
   fireDamage: 5
-  tick: 2
+  tick: 1
 --- !u!50 &1199158938
 Rigidbody2D:
   serializedVersion: 5
