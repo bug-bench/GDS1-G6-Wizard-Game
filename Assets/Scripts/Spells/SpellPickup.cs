@@ -4,8 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public class SpellPickup : MonoBehaviour
 {
-    [Tooltip("生成后多少秒内不能被捡起（防丢立刻捡）；用时间判断，不再关碰撞体。 — Seconds after spawn before pickup is allowed (prevents instant re-pick after drop); uses time, not disabling colliders.")]
-    public float pickupCooldown = 1f;
+    [Header("Pickup Settings")]
+    [Range(0f, 2f)]
+    public float pickupCooldown = 0.05f;
 
     [Tooltip("若 LineRenderer 点数不足或从法术预制体复制过来，在地面补一段本地短线（激光条）。 — If LineRenderer has too few points or was copied from a spell prefab, lay out a short local line on the ground (laser strip).")]
     public bool fixLineRendererIfNeeded = true;
@@ -17,8 +18,6 @@ public class SpellPickup : MonoBehaviour
     private float pickupReadyTime;
 
     private AudioSource spellPickupSound;
-
-
 
     void Start()
     {
@@ -120,8 +119,5 @@ public class SpellPickup : MonoBehaviour
     public void SetSpawner(SpellSpawner spellSpawner)
     {
         spawner = spellSpawner;
-
-
-
     }
 }
