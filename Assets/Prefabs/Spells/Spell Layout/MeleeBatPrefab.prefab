@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 107c0a51fba0dfc4d9d66ba3cecfaf86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeSwingSpell
+  maxHoldDuration: 0
   damage: 20
   swingDuration: 0.25
   knockbackForce: 20
@@ -53,11 +54,11 @@ MonoBehaviour:
     m_Bits: 4294967295
   hitRadius: 0.8
   hitOffset: 1
-  startAngle: -60
-  endAngle: 70
-  slashVisualPrefab: {fileID: 8663684875729065739, guid: 2714f7267122431459997736fc0e70d4, type: 3}
-  slashLocalOffset: {x: 0, y: 1}
-  slashLocalScale: {x: 1, y: 1}
+  startAngle: 100
+  endAngle: -90
+  slashVisualPrefab: {fileID: 3549229607730413970, guid: b03fdbf9e054e464ba8cf1d5f4502324, type: 3}
+  slashLocalOffset: {x: 0, y: 0.7}
+  slashLocalScale: {x: 0.7, y: 0.7}
   slashRotationOffset: 90
   flipSlashWhenFacingLeft: 0
 --- !u!1 &2007752607616842079
@@ -138,7 +139,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1273137194770323464, guid: aa5863f32343f1c42848be195e8868d0, type: 3}
