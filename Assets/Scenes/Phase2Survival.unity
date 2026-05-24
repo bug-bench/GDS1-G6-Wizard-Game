@@ -4063,6 +4063,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: spawn area
       objectReference: {fileID: 0}
+    - target: {fileID: 2044771269976841627, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 1485216680615802304, guid: d968089a870a89d498c522a28935580e, type: 3}
+    - target: {fileID: 7122099501705735029, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 1485216680615802304, guid: d968089a870a89d498c522a28935580e, type: 3}
     - target: {fileID: 8128837736014539446, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
