@@ -266,7 +266,7 @@ public class PlayerController : MonoBehaviour
         if (playerSprite != null)
         {
             playerSprite.localScale = new Vector3(
-                lookDir.x < 0 ? 1 : -1,
+                lookDir.x < 0 ? -1 : 1,
                 1,
                 1
             );

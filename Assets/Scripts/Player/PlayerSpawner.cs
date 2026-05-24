@@ -53,19 +53,23 @@ public class PlayerSpawner : MonoBehaviour
 
             playerInput.transform.position = spawnPos;
 
-            var sr = playerInput.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null) {
-                sr.color = colors[data.colorIndex];
-                data.playerSprite = sr.sprite; // save sprite 
+            // Color all SpriteRenderers in children
+            var renderers = playerInput.GetComponentsInChildren<SpriteRenderer>();
+            Color playerColor = colors[data.colorIndex];
+            SpriteRenderer firstRenderer = null;
+
+            foreach (var sr in renderers)
+            {
+                sr.color = playerColor;
+                if (firstRenderer == null) firstRenderer = sr;
             }
 
-            // 更新战斗脚本里的原始颜色，防止闪烁后变回白色
-            // Update the original colors in the battle script to prevent them from reverting to white after flickering.
+            if (firstRenderer != null)
+                data.playerSprite = firstRenderer.sprite;
+
             var combat = playerInput.GetComponent<PlayerCombat>();
             if (combat != null)
-            {
                 combat.UpdateOriginalBlinkColors();
-            }
 
             var go = playerInput.gameObject;
             if (go != null)
