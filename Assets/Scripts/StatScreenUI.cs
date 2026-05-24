@@ -11,11 +11,12 @@ public class StatScreenUI : MonoBehaviour
 
     [Header("Stat Rows")]
     public StatRow healthRow;
-    public StatRow speedRow;
-    public StatRow strengthRow;
+    public StatRow attackRow;
     public StatRow defenseRow;
-    public StatRow sizeRow;
+    public StatRow speedRow;
+    public StatRow frictionRow;
     public StatRow focusRow;
+    public StatRow manaRow;
 
     [Header("Timing")]
     public float animDuration = 1.2f;
@@ -25,12 +26,13 @@ public class StatScreenUI : MonoBehaviour
 
     void Start()
     {
-        healthRow?.Setup("Health",      new Color(0.87f, 0.19f, 0.19f));
-        speedRow?.Setup("Speed",        new Color(0.22f, 0.53f, 0.93f));
-        strengthRow?.Setup("Attack",  new Color(0.93f, 0.35f, 0.22f));
-        defenseRow?.Setup("Defense",    new Color(0.22f, 0.85f, 0.45f));
-        sizeRow?.Setup("Size",          new Color(0.75f, 0.22f, 0.93f));
-        focusRow?.Setup("Focus",        new Color(0.93f, 0.78f, 0.22f));
+        healthRow?.Setup("Health",   new Color(0.90f, 0.20f, 0.20f)); // Red
+        attackRow?.Setup("Attack",   new Color(1.00f, 0.55f, 0.15f)); // Orange
+        defenseRow?.Setup("Defense", new Color(1.00f, 0.85f, 0.15f)); // Yellow
+        speedRow?.Setup("Speed",     new Color(0.10f, 0.20f, 0.60f)); // Navy Blue
+        frictionRow?.Setup("Friction", new Color(0.15f, 0.85f, 1.00f)); // Cyan Blue
+        focusRow?.Setup("Focus",     new Color(0.20f, 0.85f, 0.30f)); // Green
+        manaRow?.Setup("Mana",       new Color(0.70f, 0.30f, 1.00f)); // Purple
     }
 
     public void Show(PlayerStats stats, System.Action onComplete)
@@ -49,10 +51,11 @@ public class StatScreenUI : MonoBehaviour
         var rows = new List<(StatRow row, float value)>
         {
             (healthRow,   stats.GetStatPickupCount("Health")),
-            (speedRow,    stats.GetStatPickupCount("Speed")),
-            (strengthRow, stats.GetStatPickupCount("Attack")),
+            (attackRow,   stats.GetStatPickupCount("Attack")),
             (defenseRow,  stats.GetStatPickupCount("Defense")),
-            (sizeRow,     stats.GetStatPickupCount("Size")),
+            (speedRow,    stats.GetStatPickupCount("Speed")),
+            (frictionRow, stats.GetStatPickupCount("Friction")),
+            (manaRow,     stats.GetStatPickupCount("Mana")),
             (focusRow,    stats.GetStatPickupCount("Focus")),
         };
 

@@ -12,15 +12,58 @@ public class Phase1Script : MonoBehaviour
     private int currentPhase = 1;
 
     [Header("UI")]
+    public TimerUI centralTimer;
     [SerializeField] private TMPro.TextMeshProUGUI[] timerTexts;    
 
     // [SerializeField] bool useSplitScreen = false; // Set Inspector to control split-screen for Phase 2
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        timer = phaseDuration;
+        timer        = phaseDuration;
         CurrentPhase = currentPhase;
-        StartCoroutine(FindTimerTextsNextFrame());
+        timerRunning = false;
+        StartCoroutine(StartWithCountdown());
+    }
+
+    IEnumerator StartWithCountdown()
+    {
+        // Wait for PlayerSpawner to finish
+        yield return null;
+        yield return null; // two frames to be safe
+
+        // Find timer texts
+        var allTexts = FindObjectsByType<TMPro.TextMeshProUGUI>(FindObjectsSortMode.None);
+        var found    = new System.Collections.Generic.List<TMPro.TextMeshProUGUI>();
+        foreach (var t in allTexts)
+            if (t.gameObject.name == "TimerText")
+                found.Add(t);
+        timerTexts = found.ToArray();
+        Debug.Log($"Phase1Script found {timerTexts.Length} timer texts");
+
+        // Find countdowns (now players are spawned)
+        var countdowns = FindObjectsByType<CountdownUI>(FindObjectsSortMode.None);
+        Debug.Log($"Found {countdowns.Length} CountdownUI instances");
+
+        centralTimer?.Init(phaseDuration);
+
+        int total = countdowns.Length;
+        int done  = 0;
+
+        if (total == 0)
+        {
+            timerRunning = true;
+            yield break;
+        }
+
+        foreach (var cd in countdowns)
+        {
+            cd.Play(() =>
+            {
+                done++;
+                if (done >= total)
+                    timerRunning = true;
+            });
+        }
     }
 
     IEnumerator FindTimerTextsNextFrame()
@@ -58,6 +101,7 @@ public class Phase1Script : MonoBehaviour
         {
             timer -= Time.deltaTime;
             UpdateTimerUI(Mathf.CeilToInt(timer).ToString());
+            centralTimer?.UpdateTimer(timer);          
             BGMManager.Instance?.SetTimeRemaining(timer);
 
             if (timer <= 0)
