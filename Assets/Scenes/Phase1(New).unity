@@ -450233,8 +450233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aa220a066b0fe441942bd485b6dba42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FireHazard
-  fireDamage: 50
-  tick: 1
+  fireDamage: 5
+  tick: 2
 --- !u!50 &1199158938
 Rigidbody2D:
   serializedVersion: 5
