@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a037d9ef77ae64c87abd2b460fb8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReflectShieldSpell
+  maxHoldDuration: 0
   radius: 1
   segments: 36
   localCenterOffsetY: 0.5
@@ -52,7 +53,9 @@ MonoBehaviour:
   arcColor: {r: 0.4264151, g: 0.15367034, b: 0.36974564, a: 0.95}
   sortingOrder: 12
   shieldVisualPrefab: {fileID: 5128976107769333880, guid: 82838b58d6e2b4e4d9075ae5a911d527, type: 3}
-  visualScale: 1.5
+  visualScale: 1.1
+  visualLocalOffset: {x: 0, y: 0.25}
+  showLineRenderer: 0
 --- !u!50 &3526696377543989448
 Rigidbody2D:
   serializedVersion: 5
