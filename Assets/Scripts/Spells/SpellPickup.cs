@@ -76,10 +76,10 @@ public class SpellPickup : MonoBehaviour
             proj.enabled = false;
     }
 
-    public bool IsPickupReady()
-    {
-        return Time.time >= pickupReadyTime;
-    }
+    // public bool IsPickupReady()
+    // {
+    //     return Time.time >= pickupReadyTime;
+    // }
 
     public void OnPickedUp()
     {
@@ -98,7 +98,7 @@ public class SpellPickup : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        if (!IsPickupReady()) return;
+        // if (!IsPickupReady()) return;
         if (spellData == null) return;
 
         // 碰撞体常在子物体上，必须用父级查找 PlayerCombat — Collider is often on a child; use GetComponentInParent for PlayerCombat.

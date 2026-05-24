@@ -443,7 +443,7 @@ public class PlayerCombat : MonoBehaviour
             
             if (pickup != null && pickup.spellData != null)
             {
-                if (!pickup.IsPickupReady()) continue;
+                // if (!pickup.IsPickupReady()) continue;
 
                 float dist = Vector2.Distance(transform.position, pickup.transform.position);
                 if (dist < minDistance)
