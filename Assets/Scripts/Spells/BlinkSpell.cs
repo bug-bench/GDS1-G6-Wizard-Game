@@ -10,24 +10,30 @@ public class BlinkSpell : SpellBehavior
 {
     [Header("闪现数值接口 — Blink Tuning")]
     public float blinkDistance = 4f;
+
+    [Tooltip("会阻挡闪现的物理 Layer — Physics layers that block blink.")]
     public LayerMask obstacleLayer;
 
-    [Tooltip("会阻挡闪现的 Sorting Layer 名称 — Sorting Layer names that block blink.")]
-    public string[] blockingSortingLayers;
-
-    [Tooltip("闪现路径检测半径，应该接近玩家碰撞体大小 — Blink path check radius, should roughly match player collider size.")]
-    public float blinkCastRadius = 0.25f;
+    [Tooltip("闪现路径检测半径，防止从墙角/Tilemap 边缘穿过去 — Blink path check radius to prevent slipping through wall/tilemap corners.")]
+    public float blinkCastRadius = 0.4f;
 
     [Tooltip("撞墙时终点离墙皮留的空隙 — Gap from wall surface when stopping on hit.")]
-    public float wallBuffer = 0.2f;
+    public float wallBuffer = 0.35f;
 
     [Tooltip("射线起点沿移动方向微移，避免从碰撞体内部出发 — Nudge ray origin along move dir to avoid casting from inside colliders.")]
-    public float castInset = 0.08f;
+    public float castInset = 0.02f;
 
     [Tooltip("闪现落地后的硬直时间（眩晕，无法移动施法） — Stun duration applied to self after blinking.")]
-    public float selfStunDuration = 0f;
+    public float selfStunDuration = 0.06f;
 
-   
+    [Header("Landing Safety")]
+    [Tooltip("落点不安全时往回拉的次数 — How many times to pull back if landing is unsafe.")]
+    public int safetyPullbackSteps = 12;
+
+    [Tooltip("每次往回拉的距离 — Distance pulled back each safety step.")]
+    public float safetyPullbackAmount = 0.1f;
+
+    [Header("After Image")]
     public GameObject afterImagePrefab;
     public int afterImageCount = 5;
     public float afterImageFadeTime = 0.25f;
@@ -50,6 +56,7 @@ public class BlinkSpell : SpellBehavior
             Vector2 mouseWorld = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector2 toTarget = mouseWorld - casterPos;
             float dist = toTarget.magnitude;
+
             if (dist < 0.08f)
             {
                 // 鼠标几乎在角色身上：按面朝方向闪一段，避免原地抽搐 — Mouse on character: blink along facing to avoid jitter.
@@ -69,16 +76,25 @@ public class BlinkSpell : SpellBehavior
             travelDist = blinkRange;
         }
 
-        Vector2 desiredEnd = casterPos + dir * travelDist;
-        Vector2 finalPos = ResolvePathEnd(caster, casterPos, dir, desiredEnd);
-
+        Vector2 finalPos = GetBlinkPosition(caster, casterPos, dir, travelDist);
 
         SpawnAfterImages(caster, casterPos, finalPos);
 
-
         Rigidbody2D rb = caster.GetComponent<Rigidbody2D>();
         if (rb != null)
+        {
+            // 停止闪现前的高速移动，防止闪现后继续冲进墙里
+            // Stop fast movement before blink so the player does not keep sliding into walls after blinking.
+            rb.linearVelocity = Vector2.zero;
+
+            // 移动到最终安全位置
+            // Move to the final safe position.
             rb.position = finalPos;
+
+            // 再清一次，避免同一帧保留旧速度
+            // Clear again to avoid keeping old velocity during the same frame.
+            rb.linearVelocity = Vector2.zero;
+        }
         else
         {
             Vector3 p = caster.transform.position;
@@ -87,115 +103,109 @@ public class BlinkSpell : SpellBehavior
             caster.transform.position = p;
         }
 
+        // 轻微硬直用于防止移动脚本在闪现后立刻重新推动玩家穿墙
+        // Tiny stun prevents the movement script from instantly pushing the player through a wall after blink.
+        if (selfStunDuration > 0f)
+        {
+            PlayerStats stats = caster.GetComponent<PlayerStats>();
+            if (stats != null)
+                stats.ApplyStun(selfStunDuration);
+        }
+
         Destroy(gameObject);
     }
 
-    static bool IsColliderOnCaster(GameObject casterRoot, Collider2D col)
+    Vector2 GetBlinkPosition(GameObject caster, Vector2 start, Vector2 dir, float blinkRange)
     {
-        if (casterRoot == null || col == null) return false;
-        Transform t = col.transform;
-        return t == casterRoot.transform || t.IsChildOf(casterRoot.transform);
-    }
-
-    bool IsSortingLayerBlocked(Collider2D col)
-    {
-        if (blockingSortingLayers == null || blockingSortingLayers.Length == 0)
-            return false;
-
-        Renderer renderer = col.GetComponentInParent<Renderer>();
-
-        if (renderer == null)
-            return false;
-
-        for (int i = 0; i < blockingSortingLayers.Length; i++)
-        {
-            if (renderer.sortingLayerName == blockingSortingLayers[i])
-                return true;
-        }
-
-        return false;
-    }
-
-    bool IsPhysicsLayerBlocked(Collider2D col, int mask)
-    {
-        int objectLayerMask = 1 << col.gameObject.layer;
-        return (mask & objectLayerMask) != 0;
-    }
-
-    bool IsBlockingCollider(Collider2D col, int mask)
-    {
-        if (col == null) return false;
-        if (col.isTrigger) return false; // 忽略触发器 — Ignore triggers
-
-        bool blockedByPhysicsLayer = IsPhysicsLayerBlocked(col, mask);
-        bool blockedBySortingLayer = IsSortingLayerBlocked(col);
-
-        return blockedByPhysicsLayer || blockedBySortingLayer;
-    }
-
-    Vector2 ResolvePathEnd(GameObject caster, Vector2 start, Vector2 dir, Vector2 desiredEnd)
-    {
-        float pathLen = Vector2.Distance(start, desiredEnd);
-        if (pathLen < 0.001f)
+        if (blinkRange <= 0.001f)
             return start;
 
         // 默认检测 wall 层，如果没有设置则使用 DefaultRaycastLayers
         int mask = obstacleLayer.value == 0 ? LayerMask.GetMask("wall") : obstacleLayer.value;
         if (mask == 0) mask = Physics2D.DefaultRaycastLayers;
 
-        // 此时退回到射线击中墙壁的前面，防止卡在墙里
         Vector2 rayOrigin = start + dir * castInset;
-        float rayLen = Mathf.Max(0.01f, pathLen - castInset);
+        float rayDistance = Mathf.Max(0.01f, blinkRange - castInset);
 
-        // 使用 CircleCast 而不是 Raycast，因为玩家有体积，单条射线可能会从墙边缝隙穿过去
-        // Use CircleCast instead of Raycast because the player has size, and a thin ray can miss wall edges/gaps.
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(
+        // 使用 CircleCast 而不是 Raycast，因为 Raycast 是一条很细的线，可能从 Tilemap 墙角穿过去
+        // Use CircleCast instead of Raycast because a thin ray can slip past tilemap corners.
+        RaycastHit2D hit = Physics2D.CircleCast(
             rayOrigin,
             blinkCastRadius,
             dir,
-            rayLen,
-            Physics2D.DefaultRaycastLayers
+            rayDistance,
+            mask
         );
 
-        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+        bool wallInBlinkPath = hit.collider != null
+            && !hit.collider.isTrigger
+            && !IsColliderOnCaster(caster, hit.collider);
 
-        foreach (RaycastHit2D hit in hits)
+        Vector2 targetPos;
+
+        if (wallInBlinkPath)
         {
-            if (hit.collider == null) continue;
-            if (hit.collider.isTrigger) continue; // 忽略触发器
-            if (IsColliderOnCaster(caster, hit.collider)) continue;
-
-            // 如果物体在阻挡 Physics Layer 或 Sorting Layer 上，就停在它前面
-            // If object is on a blocking Physics Layer or Sorting Layer, stop before it.
-            if (IsBlockingCollider(hit.collider, mask))
-            {
-                // CircleCast 使用 centroid 会比 hit.point 更适合作为玩家的新位置
-                // CircleCast centroid is better than hit.point for placing the player body safely.
-                return hit.centroid - dir * wallBuffer;
-            }
+            // 如果墙在闪现距离内，就停在墙前面
+            // If the wall is inside the blink distance, stop before the wall.
+            float safeDistance = Mathf.Max(0f, hit.distance + castInset - wallBuffer);
+            targetPos = start + dir * safeDistance;
+        }
+        else
+        {
+            // 如果没有墙，就正常闪现完整距离
+            // If there is no wall, blink the full distance.
+            targetPos = start + dir * blinkRange;
         }
 
-        // 最后检查落点是否直接卡进墙里，防止目标点在障碍物内部
-        // Final check: make sure the destination itself is not inside a wall/object.
-        Collider2D[] destinationHits = Physics2D.OverlapCircleAll(
-            desiredEnd,
-            blinkCastRadius,
-            Physics2D.DefaultRaycastLayers
-        );
+        // 最后再检查一次落点是否卡进墙角/Tilemap 角落
+        // Final safety check to stop landing inside corners / tilemap edges.
+        return PullBackUntilSafe(caster, start, targetPos, mask);
+    }
 
-        foreach (Collider2D col in destinationHits)
+    Vector2 PullBackUntilSafe(GameObject caster, Vector2 start, Vector2 target, int mask)
+    {
+        Vector2 directionFromStart = target - start;
+        float distance = directionFromStart.magnitude;
+
+        if (distance <= 0.001f)
+            return start;
+
+        Vector2 dir = directionFromStart.normalized;
+
+        // Step backwards in small chunks until the landing position is no longer inside a wall.
+        // This helps stop corner slipping on TilemapCollider2D corners.
+        for (int i = 0; i < safetyPullbackSteps; i++)
         {
-            if (col == null) continue;
-            if (col.isTrigger) continue;
-            if (IsColliderOnCaster(caster, col)) continue;
+            Collider2D hit = Physics2D.OverlapCircle(
+                target,
+                blinkCastRadius,
+                mask
+            );
 
-            if (IsBlockingCollider(col, mask))
-            {
+            bool landingInsideWall = hit != null
+                && !hit.isTrigger
+                && !IsColliderOnCaster(caster, hit);
+
+            if (!landingInsideWall)
+                return target;
+
+            distance -= safetyPullbackAmount;
+
+            if (distance <= 0f)
                 return start;
-            }
+
+            target = start + dir * distance;
         }
 
-        return desiredEnd;
+        return start;
+    }
+
+    static bool IsColliderOnCaster(GameObject casterRoot, Collider2D col)
+    {
+        if (casterRoot == null || col == null) return false;
+
+        Transform t = col.transform;
+        return t == casterRoot.transform || t.IsChildOf(casterRoot.transform);
     }
 
     void SpawnAfterImages(GameObject caster, Vector2 start, Vector2 end)
