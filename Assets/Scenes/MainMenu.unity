@@ -1225,7 +1225,7 @@ MonoBehaviour:
     outroStart: 0
     hasOutro: 0
   - sceneName: Phase1(New)
-    clip: {fileID: 8300000, guid: d36b849fd5dc44849b674a5d04a6873e, type: 3}
+    clip: {fileID: 8300000, guid: 9110f1961c9144a43bd2c53e6cd4d8ef, type: 3}
     volume: 0.7
     loopStart: 11
     loopEnd: 30
@@ -1233,9 +1233,23 @@ MonoBehaviour:
     hasOutro: 1
   - sceneName: Phase2Collection
     clip: {fileID: 8300000, guid: d36b849fd5dc44849b674a5d04a6873e, type: 3}
-    volume: 0
-    loopStart: 0
-    loopEnd: 0
+    volume: 0.7
+    loopStart: 11
+    loopEnd: 30
+    outroStart: 0
+    hasOutro: 0
+  - sceneName: Phase2Arena
+    clip: {fileID: 8300000, guid: d36b849fd5dc44849b674a5d04a6873e, type: 3}
+    volume: 0.7
+    loopStart: 11
+    loopEnd: 30
+    outroStart: 0
+    hasOutro: 0
+  - sceneName: Phase2Survival
+    clip: {fileID: 8300000, guid: d36b849fd5dc44849b674a5d04a6873e, type: 3}
+    volume: 0.7
+    loopStart: 11
+    loopEnd: 30
     outroStart: 0
     hasOutro: 0
   crossfadeDuration: 1.5
