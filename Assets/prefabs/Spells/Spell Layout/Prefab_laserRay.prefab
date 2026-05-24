@@ -170,4 +170,4 @@ MonoBehaviour:
   VFXThickness: 0.5
   VFXRotationOffset: 270
   VFXLength: 0.5
-  startOffset: 0.5
+  startOffset: 0.8

@@ -1,0 +1,1027 @@
+fileFormatVersion: 2
+guid: baeca1d196dfb144a80c1fd083d30f6f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 53691009566800608
+    second: Kobold Priest Sprite Sheet_0
+  - first:
+      213: -5981736311402309191
+    second: Kobold Priest Sprite Sheet_1
+  - first:
+      213: 2270375247927776353
+    second: Kobold Priest Sprite Sheet_2
+  - first:
+      213: 4221455341670748484
+    second: Kobold Priest Sprite Sheet_3
+  - first:
+      213: 4014563674306911921
+    second: Kobold Priest Sprite Sheet_4
+  - first:
+      213: -6816390164660686605
+    second: Kobold Priest Sprite Sheet_5
+  - first:
+      213: -1531005681074923521
+    second: Kobold Priest Sprite Sheet_6
+  - first:
+      213: -5815876977205221123
+    second: Kobold Priest Sprite Sheet_7
+  - first:
+      213: 4945875859498302700
+    second: Kobold Priest Sprite Sheet_8
+  - first:
+      213: -6968332589451098684
+    second: Kobold Priest Sprite Sheet_9
+  - first:
+      213: 4902719228714807466
+    second: Kobold Priest Sprite Sheet_10
+  - first:
+      213: 7469886502279644208
+    second: Kobold Priest Sprite Sheet_11
+  - first:
+      213: -3085946855874266152
+    second: Kobold Priest Sprite Sheet_12
+  - first:
+      213: -8292899281126577741
+    second: Kobold Priest Sprite Sheet_13
+  - first:
+      213: 7078897413583924188
+    second: Kobold Priest Sprite Sheet_14
+  - first:
+      213: -753548948744205063
+    second: Kobold Priest Sprite Sheet_15
+  - first:
+      213: 3559821478773675698
+    second: Kobold Priest Sprite Sheet_16
+  - first:
+      213: 215433355199538192
+    second: Kobold Priest Sprite Sheet_17
+  - first:
+      213: 3421460100822455199
+    second: Kobold Priest Sprite Sheet_18
+  - first:
+      213: 1235550713145629370
+    second: Kobold Priest Sprite Sheet_19
+  - first:
+      213: 4375751206696138420
+    second: Kobold Priest Sprite Sheet_20
+  - first:
+      213: -8692687009617651821
+    second: Kobold Priest Sprite Sheet_21
+  - first:
+      213: -3291475756847934050
+    second: Kobold Priest Sprite Sheet_22
+  - first:
+      213: 2034864017884232265
+    second: Kobold Priest Sprite Sheet_23
+  - first:
+      213: 7200727577768159527
+    second: Kobold Priest Sprite Sheet_24
+  - first:
+      213: -612823930418585924
+    second: Kobold Priest Sprite Sheet_25
+  - first:
+      213: -8555653937943513841
+    second: Kobold Priest Sprite Sheet_26
+  - first:
+      213: -4129254931390003680
+    second: Kobold Priest Sprite Sheet_27
+  - first:
+      213: -4975336270438476679
+    second: Kobold Priest Sprite Sheet_28
+  - first:
+      213: -3453442734012128715
+    second: Kobold Priest Sprite Sheet_29
+  - first:
+      213: -7185207774692765429
+    second: Kobold Priest Sprite Sheet_30
+  - first:
+      213: 7928146670440019111
+    second: Kobold Priest Sprite Sheet_31
+  - first:
+      213: 7488199624456587158
+    second: Kobold Priest Sprite Sheet_32
+  - first:
+      213: 2972016365870732346
+    second: Kobold Priest Sprite Sheet_33
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 159
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ea7cd050bfbeb000800000000000000
+      internalID: 53691009566800608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 159
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b95fc2748a9cfca0800000000000000
+      internalID: -5981736311402309191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 159
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 164139f424ef18f10800000000000000
+      internalID: 2270375247927776353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 159
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 441d57b544f959a30800000000000000
+      internalID: 4221455341670748484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 127
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1be1047446896b730800000000000000
+      internalID: 4014563674306911921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 129
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f0fee092415761a0800000000000000
+      internalID: -6816390164660686605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 131
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff79c66d176c0cae0800000000000000
+      internalID: -1531005681074923521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 129
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df86f4cf3bad94fa0800000000000000
+      internalID: -5815876977205221123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 127
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cec739cc3e743a440800000000000000
+      internalID: 4945875859498302700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 129
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c54df00e628b4f90800000000000000
+      internalID: -6968332589451098684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 130
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa0f50da925f90440800000000000000
+      internalID: 4902719228714807466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 129
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0340dd8523e5aa760800000000000000
+      internalID: 7469886502279644208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 95
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8db71e34fa38c25d0800000000000000
+      internalID: -3085946855874266152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 95
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b9ab5e9a04b9ec80800000000000000
+      internalID: -8292899281126577741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 95
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cdbe91a21bb4d3260800000000000000
+      internalID: 7078897413583924188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_15
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 95
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fc8b3d393bda85f0800000000000000
+      internalID: -753548948744205063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_16
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 95
+        width: 25
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b65c1236c6076130800000000000000
+      internalID: 3559821478773675698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_17
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 95
+        width: 26
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0146071ce7f5df200800000000000000
+      internalID: 215433355199538192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_18
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 95
+        width: 21
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f93d1b285d77b7f20800000000000000
+      internalID: 3421460100822455199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_19
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 95
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aba960fc3de852110800000000000000
+      internalID: 1235550713145629370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_20
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 63
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b63c9ce98ac9bc30800000000000000
+      internalID: 4375751206696138420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_21
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 63
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3975618783f5d5780800000000000000
+      internalID: -8692687009617651821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_22
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 63
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e95d446fc345252d0800000000000000
+      internalID: -3291475756847934050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_23
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 63
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94ab6380b0a4d3c10800000000000000
+      internalID: 2034864017884232265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4
+        width: 25
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 729ea35b49f1ee360800000000000000
+      internalID: 7200727577768159527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_25
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbe9a85d1efce77f0800000000000000
+      internalID: -612823930418585924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_26
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 31
+        width: 21
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0574bfb216344980800000000000000
+      internalID: -8555653937943513841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_27
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 0
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02608738480f1b6c0800000000000000
+      internalID: -4129254931390003680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_28
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 31
+        width: 23
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 974d562c50e04fab0800000000000000
+      internalID: -4975336270438476679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_29
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 31
+        width: 28
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 532ad0b6128e210d0800000000000000
+      internalID: -3453442734012128715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_30
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 0
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0110180993094c90800000000000000
+      internalID: -7185207774692765429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_31
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 0
+        width: 45
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a4f5c2446f660e60800000000000000
+      internalID: 7928146670440019111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_32
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 31
+        width: 28
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 697c2fe52ed6be760800000000000000
+      internalID: 7488199624456587158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kobold Priest Sprite Sheet_33
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 5
+        width: 28
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a345f5a6329be3920800000000000000
+      internalID: 2972016365870732346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Kobold Priest Sprite Sheet_0: 53691009566800608
+      Kobold Priest Sprite Sheet_1: -5981736311402309191
+      Kobold Priest Sprite Sheet_10: 4902719228714807466
+      Kobold Priest Sprite Sheet_11: 7469886502279644208
+      Kobold Priest Sprite Sheet_12: -3085946855874266152
+      Kobold Priest Sprite Sheet_13: -8292899281126577741
+      Kobold Priest Sprite Sheet_14: 7078897413583924188
+      Kobold Priest Sprite Sheet_15: -753548948744205063
+      Kobold Priest Sprite Sheet_16: 3559821478773675698
+      Kobold Priest Sprite Sheet_17: 215433355199538192
+      Kobold Priest Sprite Sheet_18: 3421460100822455199
+      Kobold Priest Sprite Sheet_19: 1235550713145629370
+      Kobold Priest Sprite Sheet_2: 2270375247927776353
+      Kobold Priest Sprite Sheet_20: 4375751206696138420
+      Kobold Priest Sprite Sheet_21: -8692687009617651821
+      Kobold Priest Sprite Sheet_22: -3291475756847934050
+      Kobold Priest Sprite Sheet_23: 2034864017884232265
+      Kobold Priest Sprite Sheet_24: 7200727577768159527
+      Kobold Priest Sprite Sheet_25: -612823930418585924
+      Kobold Priest Sprite Sheet_26: -8555653937943513841
+      Kobold Priest Sprite Sheet_27: -4129254931390003680
+      Kobold Priest Sprite Sheet_28: -4975336270438476679
+      Kobold Priest Sprite Sheet_29: -3453442734012128715
+      Kobold Priest Sprite Sheet_3: 4221455341670748484
+      Kobold Priest Sprite Sheet_30: -7185207774692765429
+      Kobold Priest Sprite Sheet_31: 7928146670440019111
+      Kobold Priest Sprite Sheet_32: 7488199624456587158
+      Kobold Priest Sprite Sheet_33: 2972016365870732346
+      Kobold Priest Sprite Sheet_4: 4014563674306911921
+      Kobold Priest Sprite Sheet_5: -6816390164660686605
+      Kobold Priest Sprite Sheet_6: -1531005681074923521
+      Kobold Priest Sprite Sheet_7: -5815876977205221123
+      Kobold Priest Sprite Sheet_8: 4945875859498302700
+      Kobold Priest Sprite Sheet_9: -6968332589451098684
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
