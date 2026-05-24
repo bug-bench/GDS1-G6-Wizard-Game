@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class MeleeSwingSpell : SpellBehavior
@@ -127,6 +128,33 @@ public class MeleeSwingSpell : SpellBehavior
         {
             GameObject targetObj = col.gameObject;
             if (targetObj == casterRef) continue; // 不打自己
+
+
+            destroyableObject destroyobject = col.GetComponent<destroyableObject>()
+          ?? col.GetComponentInParent<destroyableObject>();
+
+            if(destroyobject !=null)
+            {
+                GameObject destroyCrate = destroyobject.gameObject;
+
+                if (!hitTargets.Contains(destroyCrate))
+                {
+                    hitTargets.Add(destroyCrate); // 记录已命中，防止单次挥击重复扣血
+
+                    float totalDamage = damage;
+
+                    PlayerStats casterStats = casterRef.GetComponent<PlayerStats>();
+                    if (casterStats != null)
+                    {
+                        totalDamage += casterStats.strength;
+                    }
+
+                    destroyobject.takeDamage(totalDamage);
+                }
+                continue;
+            }
+
+            
 
             // 找对方最根部的对象，确保只记录一次
             PlayerCombat targetCombat = col.GetComponentInParent<PlayerCombat>();

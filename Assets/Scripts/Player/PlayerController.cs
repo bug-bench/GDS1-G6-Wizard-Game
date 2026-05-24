@@ -100,6 +100,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (playerStats == null || !playerStats.isStunned)
                     HandleRotation();
+
                 return;
             }
 
@@ -119,25 +120,38 @@ public class PlayerController : MonoBehaviour
             if (playerStats != null) currentDeceleration = playerStats.deceleration;
             else currentDeceleration = moveDeceleration;
 
-            // 如果减速度大于或等于速度，松开移动键后立即停止。
-            // If deceleration is equal to or higher than speed, stop instantly.
-            bool frictionCanInstantStop = currentDeceleration >= maxSpeed;
-
             // 比较减速度和速度。
             // Compare deceleration against speed.
             float frictionToSpeedRatio = maxSpeed > 0f
-                ? Mathf.Clamp01(currentDeceleration / maxSpeed)
+                ? currentDeceleration / maxSpeed
                 : 1f;
 
-            // 保持起步灵敏。
-            // Keep movement start responsive.
-            float actualAccel = moveAcceleration;
+            // 平滑摩擦强度，避免速度只高 1 点就突然变得很滑。
+            // Smooth friction strength so +1 speed does not suddenly feel too slippery.
+            float smoothFrictionStrength = Mathf.SmoothStep(
+                0.25f,
+                1f,
+                Mathf.Clamp01(frictionToSpeedRatio)
+            );
 
-            // 速度越高、减速度越低，玩家越滑。
-            // Higher speed and lower deceleration means more sliding.
-            float actualDecel = frictionCanInstantStop
-                ? currentDeceleration
-                : currentDeceleration * frictionToSpeedRatio;
+            // 起步加快一点，让加速度不要比停止慢太多。
+            // Slightly boost acceleration so starting movement feels snappier.
+            float actualAccel = moveAcceleration * 1.25f;
+
+            // 速度越高、减速度越低，玩家越滑，但变化会更平滑。
+            // Higher speed and lower deceleration means more sliding, but the change is smoother.
+            float actualDecel = currentDeceleration * Mathf.Lerp(
+                0.45f,
+                1.35f,
+                smoothFrictionStrength
+            );
+
+            // 如果减速度明显高于速度，就停得更快，但不会突然瞬停。
+            // If deceleration is clearly higher than speed, stop faster without a harsh instant stop.
+            if (frictionToSpeedRatio > 1f)
+            {
+                actualDecel *= Mathf.Clamp(frictionToSpeedRatio, 1f, 1.5f);
+            }
 
             float accel = onIce ? actualAccel * iceAccelerationMultiplier : actualAccel;
             float decel = onIce ? actualDecel * iceDecelerationMultiplier : actualDecel;
@@ -147,7 +161,30 @@ public class PlayerController : MonoBehaviour
                 Vector2 accelDir = input.normalized;
                 float stick = input.magnitude;
 
-                v += accelDir * (accel * stick * dt);
+                // 检查玩家是否正在反方向移动。
+                // Check if the player is moving against their current velocity.
+                bool turningAround = v.sqrMagnitude > 0.1f &&
+                                     Vector2.Dot(v.normalized, accelDir) < -0.25f;
+
+                if (turningAround)
+                {
+                    // 转身辅助：先减少当前滑行速度。
+                    // Turn assist: reduce current sliding velocity first.
+                    float turnBrake = decel * 3f * dt;
+
+                    if (v.magnitude <= turnBrake)
+                        v = Vector2.zero;
+                    else
+                        v -= v.normalized * turnBrake;
+
+                    // 转身时给一点额外加速度。
+                    // Add extra acceleration when turning around.
+                    v += accelDir * (accel * 1.5f * stick * dt);
+                }
+                else
+                {
+                    v += accelDir * (accel * stick * dt);
+                }
 
                 if (v.magnitude > maxSpeed)
                     v = v.normalized * maxSpeed;
@@ -156,27 +193,20 @@ public class PlayerController : MonoBehaviour
             {
                 // 没有输入时减速。
                 // Slow down when there is no input.
-                if (frictionCanInstantStop && !onIce)
+                float spd = v.magnitude;
+
+                if (spd > 1e-4f)
                 {
-                    v = Vector2.zero;
+                    float drop = decel * dt;
+
+                    if (spd <= drop)
+                        v = Vector2.zero;
+                    else
+                        v -= v.normalized * drop;
                 }
                 else
                 {
-                    float spd = v.magnitude;
-
-                    if (spd > 1e-4f)
-                    {
-                        float drop = decel * dt;
-
-                        if (spd <= drop)
-                            v = Vector2.zero;
-                        else
-                            v -= v.normalized * drop;
-                    }
-                    else
-                    {
-                        v = Vector2.zero;
-                    }
+                    v = Vector2.zero;
                 }
             }
 
