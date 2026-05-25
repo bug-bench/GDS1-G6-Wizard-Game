@@ -1129,7 +1129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac82c94ce0aeaf40a74429654804f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  phaseDuration: 3
+  phaseDuration: 160
   transitionDelay: 1.3
   centralTimer: {fileID: 1209897779}
   timerTexts: []
@@ -67287,7 +67287,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1119689960
 Transform:
   m_ObjectHideFlags: 0

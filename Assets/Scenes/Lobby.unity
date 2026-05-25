@@ -318,12 +318,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   maxPlayers: 4
-  minPlayers: 1
+  minPlayers: 2
   cardPrefab: {fileID: 6367834551410800005, guid: 2a06c7d997dcd4161a2183dbaa623c0d, type: 3}
   emptyCardPrefab: {fileID: 6367834551410800005, guid: 01dd5fea89f274408b7633f6abf0fd7b, type: 3}
   cardContainer: {fileID: 200389504}
   useSplitScreen: 1
   scene: Phase1(new)
+  playerCards: []
 --- !u!1 &342475046
 GameObject:
   m_ObjectHideFlags: 0
