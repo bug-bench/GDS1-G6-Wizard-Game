@@ -1,14 +1,14 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class FloatingStatSpawner : MonoBehaviour
 {
     [Header("Prefab")]
     public GameObject floatingTextPrefab;
-
-    [Header("Spawn position within player HUD (local to FloatingTextCanvas)")]
-    public Vector2 spawnLocalPos = new Vector2(0f, 0f);
+    public Vector2 spawnOffset = new Vector2(0f, 5f);
 
     private Canvas floatingCanvas;
+    private List<FloatingStatText> activeTexts = new List<FloatingStatText>();
 
     void Awake()
     {
@@ -26,18 +26,27 @@ public class FloatingStatSpawner : MonoBehaviour
     {
         if (floatingTextPrefab == null || floatingCanvas == null) return;
 
-        GameObject obj = Instantiate(floatingTextPrefab, floatingCanvas.transform);
-        RectTransform rt = obj.GetComponent<RectTransform>();
+        // Clean up destroyed texts from list
+        activeTexts.RemoveAll(t => t == null);
 
+        GameObject obj = Instantiate(floatingTextPrefab, floatingCanvas.transform);
+
+        // Stack vertically based on how many are active
+        float stackOffset = activeTexts.Count * 80f; // 80 units per text above
+        RectTransform rt  = obj.GetComponent<RectTransform>();
         if (rt != null)
         {
             rt.anchorMin        = new Vector2(0.5f, 0.5f);
             rt.anchorMax        = new Vector2(0.5f, 0.5f);
             rt.pivot            = new Vector2(0.5f, 0.5f);
-            rt.anchoredPosition = Vector2.zero;
+            rt.anchoredPosition = new Vector2(spawnOffset.x, spawnOffset.y + stackOffset);
         }
 
         FloatingStatText ft = obj.GetComponent<FloatingStatText>();
-        if (ft != null) ft.Play(statName, amount);
+        if (ft != null)
+        {
+            activeTexts.Add(ft);
+            ft.Play(statName, amount, () => activeTexts.Remove(ft));
+        }
     }
 }

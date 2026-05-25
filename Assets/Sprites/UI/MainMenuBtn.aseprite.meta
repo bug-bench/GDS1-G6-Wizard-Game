@@ -174,7 +174,7 @@ ScriptedImporter:
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
-    border: {x: 2, y: 0, z: 2, w: 0}
+    border: {x: 2, y: 2, z: 2, w: 2}
     customData: 
     rect:
       serializedVersion: 2
@@ -195,7 +195,7 @@ ScriptedImporter:
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
-    border: {x: 2, y: 0, z: 2, w: 0}
+    border: {x: 2, y: 1, z: 2, w: 1}
     customData: 
     rect:
       serializedVersion: 2

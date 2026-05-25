@@ -5,6 +5,7 @@ public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
     public Transform[] spawnPoints;
+    public GameObject backgroundPrefab;
 
     [SerializeField] private Color[] colors = {
         UseHexColor.HexColor("C2453A"),
@@ -25,6 +26,7 @@ public class PlayerSpawner : MonoBehaviour
             
             SpawnExistingPlayers();
         }
+        
     }
 
     private void SpawnAllPlayers()
@@ -100,6 +102,74 @@ public class PlayerSpawner : MonoBehaviour
             }
         }
         Debug.Log($"PlayerSpawner — useSplitScreen: {GameData.useSplitScreen}");
+        if (GameData.useSplitScreen)
+        {
+            ApplyCameraLayout();
+            SpawnBackgroundForGap();
+        }
+    }
+
+    void ApplyCameraLayout()
+    {
+        int count = GameData.players.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var go  = GameData.players[i].playerGameObject;
+            if (go == null) continue;
+            var cam = go.GetComponentInChildren<Camera>();
+            if (cam == null) continue;
+            cam.rect = GetCameraRect(i, count);
+        }
+    }
+
+    void SpawnBackgroundForGap()
+    {
+        // Only needed for 3 players — 4 players fills the screen, 1/2 have no gap
+        if (GameData.players.Count != 3) return;
+        if (backgroundPrefab == null) return;
+
+        // Background camera — renders full screen behind all player cameras
+        GameObject bgCamObj   = new GameObject("BackgroundCamera");
+        Camera bgCam          = bgCamObj.AddComponent<Camera>();
+        bgCam.clearFlags      = CameraClearFlags.SolidColor;
+        bgCam.backgroundColor = Color.black;
+        bgCam.cullingMask     = 0;      // renders nothing from game world
+        bgCam.depth           = -10;    // behind all player cameras
+        bgCam.rect            = new Rect(0, 0, 1, 1);
+
+        // Spawn background prefab and assign it to the background camera
+        GameObject bg    = Instantiate(backgroundPrefab);
+        Canvas bgCanvas  = bg.GetComponent<Canvas>();
+        if (bgCanvas != null)
+        {
+            bgCanvas.renderMode   = RenderMode.ScreenSpaceCamera;
+            bgCanvas.worldCamera  = bgCam;
+            bgCanvas.sortingOrder = -100;
+        }
+    }
+
+    Rect GetCameraRect(int index, int total)
+    {
+        switch (total)
+        {
+            case 1: return new Rect(0, 0, 1, 1);
+            case 2: return new Rect(index * 0.5f, 0, 0.5f, 1);
+            case 3:
+                switch (index)
+                {
+                    case 0: return new Rect(0,     0.5f, 0.5f, 0.5f);
+                    case 1: return new Rect(0.5f,  0.5f, 0.5f, 0.5f);
+                    case 2: return new Rect(0.25f, 0f,   0.5f, 0.5f);
+                    default: return new Rect(0, 0, 1, 1);
+                }
+            case 4:
+                return new Rect(
+                    (index % 2) * 0.5f,
+                    index < 2 ? 0.5f : 0f,
+                    0.5f, 0.5f
+                );
+            default: return new Rect(0, 0, 1, 1);
+        }
     }
 
     void SpawnExistingPlayers()

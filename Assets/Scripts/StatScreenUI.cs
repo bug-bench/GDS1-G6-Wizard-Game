@@ -26,13 +26,13 @@ public class StatScreenUI : MonoBehaviour
 
     void Start()
     {
-        healthRow?.Setup("Health",   new Color(0.90f, 0.20f, 0.20f)); // Red
-        attackRow?.Setup("Attack",   new Color(1.00f, 0.55f, 0.15f)); // Orange
-        defenseRow?.Setup("Defense", new Color(1.00f, 0.85f, 0.15f)); // Yellow
-        speedRow?.Setup("Speed",     new Color(0.10f, 0.20f, 0.60f)); // Navy Blue
-        frictionRow?.Setup("Friction", new Color(0.15f, 0.85f, 1.00f)); // Cyan Blue
-        focusRow?.Setup("Focus",     new Color(0.20f, 0.85f, 0.30f)); // Green
-        manaRow?.Setup("Mana",       new Color(0.70f, 0.30f, 1.00f)); // Purple
+        healthRow?.Setup("Health",   new Color(0.851f, 0.341f, 0.388f)); // #D95763
+        attackRow?.Setup("Attack",   new Color(1.000f, 0.404f, 0.000f)); // #FF6700
+        defenseRow?.Setup("Defense", new Color(0.890f, 0.847f, 0.000f)); // #E3D800
+        speedRow?.Setup("Speed",     new Color(0.200f, 0.373f, 0.533f)); // #335F88
+        frictionRow?.Setup("Friction", new Color(0.000f, 0.596f, 0.569f)); // #009891
+        focusRow?.Setup("Focus",     new Color(0.204f, 0.831f, 0.369f)); // #34D45E
+        manaRow?.Setup("Mana",       new Color(0.463f, 0.259f, 0.541f)); // #76428A
     }
 
     public void Show(PlayerStats stats, System.Action onComplete)

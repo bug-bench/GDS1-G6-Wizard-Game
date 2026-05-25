@@ -152,4 +152,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   label: {fileID: 7771430872482136702}
   floatSpeed: 250
-  fadeDuration: 15
+  fadeDuration: 5

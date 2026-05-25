@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class PlayerCard : MonoBehaviour
 {
@@ -115,16 +116,41 @@ public class PlayerCard : MonoBehaviour
 
         if (move.x > 0.5f)
         {
-            colorIndex = (colorIndex + 1) % colors.Length;
+            colorIndex = GetNextAvailableColor(colorIndex, 1);
             UpdateColor();
             lastInputTime = Time.time;
         }
         else if (move.x < -0.5f)
         {
-            colorIndex = (colorIndex - 1 + colors.Length) % colors.Length;
+            colorIndex = GetNextAvailableColor(colorIndex, -1);
             UpdateColor();
             lastInputTime = Time.time;
         }
+    }
+
+    private int GetNextAvailableColor(int current, int direction)
+    {
+        // Get all taken colors from other cards
+        HashSet<int> takenColors = new HashSet<int>();
+        var manager = FindFirstObjectByType<PlayerJoinManager>();
+        if (manager != null)
+        {
+            foreach (var card in manager.playerCards)
+            {
+                if (card != this)
+                    takenColors.Add(card.GetColorIndex());
+            }
+        }
+
+        int next = current;
+        for (int i = 0; i < colors.Length; i++)
+        {
+            next = (next + direction + colors.Length) % colors.Length;
+            if (!takenColors.Contains(next))
+                return next;
+        }
+
+        return current; // no available color found, stay on current
     }
 
     private void HandleReady()

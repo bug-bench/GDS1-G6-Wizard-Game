@@ -21,7 +21,6 @@ public class CharacterLayerSync : MonoBehaviour
         };
     }
 
-    // Call this instead of setting parameters directly
     public void SetBool(string param, bool value)
     {
         foreach (var a in all)
@@ -46,7 +45,6 @@ public class CharacterLayerSync : MonoBehaviour
             if (a != null) a.SetInteger(param, value);
     }
 
-    // Swap all animators at once for a new skin
     public void ApplySkin(CharacterSkin skin)
     {
         if (skin == null) return;
