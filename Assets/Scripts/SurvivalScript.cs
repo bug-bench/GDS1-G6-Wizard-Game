@@ -130,6 +130,7 @@ public class SurvivalScript : MonoBehaviour
     {
         // Enable hazards
         survivalStartTime = Time.time;
+        Debug.Log($"BeginGame — survivalStartTime: {survivalStartTime}");
         foreach (var hazard in hazards)
             hazard.enabled = true;
     }
@@ -258,7 +259,7 @@ public class SurvivalScript : MonoBehaviour
             float survivalTime = Time.time - survivalStartTime;
             playerSurvivalTimes[player] = Time.time - survivalStartTime;
             playersEliminated.Add(player);
-            Debug.Log($"{player.name} eliminated at {survivalTime}s");
+            Debug.Log($"{player.name} eliminated at {survivalTime}s (survivalStartTime: {survivalStartTime}, Time.time: {Time.time})");
         }
 
 
@@ -366,9 +367,12 @@ public class SurvivalScript : MonoBehaviour
     void EndGame(GameObject winner)
     {
         // Record winner's survival time
-        if (winner != null && playerSurvivalTimes.ContainsKey(winner) && playerSurvivalTimes[winner] == 0f)
-        playerSurvivalTimes[winner] = Time.time - survivalStartTime;
-
+        if (winner != null && playerSurvivalTimes.ContainsKey(winner))
+        {
+            playerSurvivalTimes[winner] = Time.time - survivalStartTime;
+            float elapsed = Time.time - survivalStartTime;
+            Debug.Log($"Winner {winner.name} survived {elapsed}s + 1 bonus");
+        }
         Time.timeScale = 0f;
 
         foreach (var p in GameData.players)
@@ -384,7 +388,10 @@ public class SurvivalScript : MonoBehaviour
         {
             var winnerData = GameData.players.Find(p => p.playerGameObject == winner);
             if (winnerData != null)
+            {
                 GameData.winnerIndex = winnerData.playerIndex;
+                playerSurvivalTimes[winner] = (Time.time - survivalStartTime) + 1f;
+            }
         }
         if (winnerText != null)
         winnerText.text = winner != null

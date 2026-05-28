@@ -64,6 +64,10 @@ public class PlayerVoteController : MonoBehaviour
 
         if (readyIndicator != null) readyIndicator.SetActive(false);
 
+        var label = GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        if (label != null)
+            label.text = $"P{index + 1}";
+
         MoveTo(0);
     }
 

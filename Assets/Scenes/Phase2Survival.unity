@@ -255,6 +255,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1233369085}
   - {fileID: 151660814}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -398,11 +399,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 32
+  m_ReferencePixelsPerUnit: 16
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 1280, y: 720}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.35
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -444,7 +445,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 845151522}
-  - {fileID: 1233369085}
   m_Father: {fileID: 18896239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3452,8 +3452,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 151660814}
+    m_TransformParent: {fileID: 18896239}
     m_Modifications:
+    - target: {fileID: 638371531075072225, guid: dd8a7c77ce6e5406899193305bca186b, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5504890647398300278, guid: dd8a7c77ce6e5406899193305bca186b, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -3516,11 +3520,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5504890647398300278, guid: dd8a7c77ce6e5406899193305bca186b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 825.14844
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5504890647398300278, guid: dd8a7c77ce6e5406899193305bca186b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1069.641
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5504890647398300278, guid: dd8a7c77ce6e5406899193305bca186b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

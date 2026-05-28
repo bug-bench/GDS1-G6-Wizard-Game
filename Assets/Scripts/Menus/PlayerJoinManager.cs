@@ -27,7 +27,6 @@ public class PlayerJoinManager : MonoBehaviour
         PlayerInputManager.instance.onPlayerJoined += OnPlayerJoined;
         for (int i = 0; i < minPlayers; i++)
             SpawnEmptyCard();
-        SpawnEmptyCard();
     }
 
     private void SpawnEmptyCard()
@@ -93,9 +92,12 @@ public class PlayerJoinManager : MonoBehaviour
 
         // Only spawn new empty card if we have room AND
         // current total (real + empty) is less than maxPlayers
-        int totalSlots = playerCards.Count + emptyCards.Count;
-        if (totalSlots < maxPlayers)
-            SpawnEmptyCard();
+        if (playerCards.Count >= minPlayers)
+        {
+            int totalSlots = playerCards.Count + emptyCards.Count;
+            if (totalSlots < maxPlayers)
+                SpawnEmptyCard();
+        }
     }
 
     private void StartGame()
