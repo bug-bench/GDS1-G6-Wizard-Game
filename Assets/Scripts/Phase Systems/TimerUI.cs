@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class TimerUI : MonoBehaviour
 {
@@ -8,24 +9,32 @@ public class TimerUI : MonoBehaviour
     public TMP_Text timerText;
 
     [Header("Progress Border")]
-    public Image progressBorder;   // Image type Filled, Fill Method Radial360
+    public Image progressBorder;
 
     [Header("Colors")]
-    public Color normalColor  = Color.white;
-    public Color warningColor = new Color(1f, 0.25f, 0.25f); // red
-    public float warningTime  = 30f;
+    public Color normalColor        = Color.white;
+    public Color warningColor       = new Color(1f, 0.25f, 0.25f);
+    public Color normalBorderColor  = Color.white;
+    public Color warningBorderColor = new Color(1f, 0.25f, 0.25f);
+    public float warningTime        = 30f;
+    public float fadeDuration       = 0.5f;
 
     private float totalTime;
-    private bool  initialized = false;
+    private bool  initialized  = false;
+    private bool  warningFired = false;
 
     public void Init(float duration)
     {
-        totalTime   = duration;
-        initialized = true;
+        totalTime    = duration;
+        initialized  = true;
+        warningFired = false;
         gameObject.SetActive(true);
 
         if (progressBorder != null)
+        {
             progressBorder.fillAmount = 1f;
+            progressBorder.color      = normalBorderColor;
+        }
 
         if (timerText != null)
         {
@@ -38,17 +47,39 @@ public class TimerUI : MonoBehaviour
     {
         if (!initialized) return;
 
-        // Text
-        int seconds = Mathf.CeilToInt(remaining);
         if (timerText != null)
-        {
-            timerText.text  = seconds.ToString();
-            timerText.color = remaining <= warningTime ? warningColor : normalColor;
-        }
+            timerText.text = Mathf.CeilToInt(remaining).ToString();
 
-        // Progress border wraps around — fillAmount 1 = full, 0 = empty
         if (progressBorder != null)
             progressBorder.fillAmount = Mathf.Clamp01(remaining / totalTime);
+
+        // Trigger crossfade once when hitting warning time
+        if (!warningFired && remaining <= warningTime)
+        {
+            warningFired = true;
+            StartCoroutine(FadeToWarning());
+        }
+    }
+
+    IEnumerator FadeToWarning()
+    {
+        float elapsed      = 0f;
+        Color startText    = timerText   != null ? timerText.color        : normalColor;
+        Color startBorder  = progressBorder != null ? progressBorder.color : normalBorderColor;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t  = elapsed / fadeDuration;
+
+            if (timerText    != null) timerText.color        = Color.Lerp(startText,   warningColor,       t);
+            if (progressBorder != null) progressBorder.color = Color.Lerp(startBorder, warningBorderColor, t);
+
+            yield return null;
+        }
+
+        if (timerText      != null) timerText.color        = warningColor;
+        if (progressBorder != null) progressBorder.color   = warningBorderColor;
     }
 
     public void Hide()

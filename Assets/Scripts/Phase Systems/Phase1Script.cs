@@ -130,6 +130,15 @@ public class Phase1Script : MonoBehaviour
 
     IEnumerator ShowStatScreenThenTransition()
     {
+        foreach (var p in GameData.players)
+        {
+            if (p.playerGameObject == null) continue;
+            var controller = p.playerGameObject.GetComponent<PlayerController>();
+            if (controller != null) controller.canMove = false;
+            var combat = p.playerGameObject.GetComponent<PlayerCombat>();
+            if (combat != null) combat.enabled = false;
+        }
+        
         var statScreens = FindObjectsByType<StatScreenUI>(FindObjectsSortMode.None);
         int completed = 0;
         int total     = statScreens.Length;

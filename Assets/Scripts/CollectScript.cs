@@ -13,7 +13,9 @@ public class CollectScript : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] GameObject collectScorePrefab;
-    [SerializeField] private TMPro.TextMeshProUGUI[] timerTexts;
+    [SerializeField] private TimerUI centralTimer;
+    [SerializeField] private TMPro.TextMeshProUGUI winnerText;
+
 
     private List<GameObject> players = new List<GameObject>();
 
@@ -22,7 +24,6 @@ public class CollectScript : MonoBehaviour
     private GameObject winner = null;
 
     [SerializeField] private float minigameLength = 60f;
-
     private float timer = 0;
 
     void Start()
@@ -30,39 +31,12 @@ public class CollectScript : MonoBehaviour
         Time.timeScale = 1f;
 
         StartCoroutine(SetupNextFrame());
-        StartCoroutine(GameTimer());
-
-        StartCoroutine(FindTimerTextsNextFrame());
     }
 
-    IEnumerator FindTimerTextsNextFrame()
+    void UpdateTimerUI(float value)
     {
-        yield return null;
-
-        var allTexts = FindObjectsByType<TMPro.TextMeshProUGUI>(FindObjectsSortMode.None);
-
-        var found = new List<TMPro.TextMeshProUGUI>();
-
-        foreach (var t in allTexts)
-        {
-            if (t.gameObject.name == "TimerText")
-                found.Add(t);
-        }
-
-        timerTexts = found.ToArray();
-
-        Debug.Log($"CollectScript found {timerTexts.Length} timer texts");
-    }
-
-    void UpdateTimerUI(string value)
-    {
-        if (timerTexts == null) return;
-
-        foreach (var t in timerTexts)
-        {
-            if (t != null)
-                t.text = $"Time Left: {value}";
-        }
+        if (centralTimer == null) return;
+        centralTimer.UpdateTimer(value);
     }
 
     IEnumerator SetupNextFrame()
@@ -97,6 +71,26 @@ public class CollectScript : MonoBehaviour
             players[i].transform.position = spawnPoints[i].transform.position;
             players[i].transform.rotation = spawnPoints[i].transform.rotation;
         }
+
+        var countdowns = FindObjectsByType<CountdownUI>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        int total = countdowns.Length;
+        int done  = 0;
+
+        if (total == 0)
+        {
+            BeginGame();
+            yield break;
+        }
+
+        foreach (var cd in countdowns)
+        {
+            cd.Play(() =>
+            {
+                done++;
+                if (done >= total)
+                    BeginGame();
+            });
+        }
     }
 
     void Update()
@@ -108,6 +102,15 @@ public class CollectScript : MonoBehaviour
                 players.Add(player.playerGameObject);
             }
         }
+
+        #if UNITY_EDITOR
+        if (UnityEngine.InputSystem.Keyboard.current.tKey.wasPressedThisFrame)
+        {
+            StopAllCoroutines();
+            winner = players.Count > 0 ? players[0] : null;
+            EndGame(winner);
+        }
+        #endif
     }
 
     public int GetTimer()
@@ -115,24 +118,28 @@ public class CollectScript : MonoBehaviour
         return Mathf.CeilToInt(timer);
     }
 
+    public void BeginGame()
+    {
+        StartCoroutine(GameTimer());
+    }
+
     IEnumerator GameTimer()
     {
         timer = minigameLength;
-
-        UpdateTimerUI(Mathf.CeilToInt(timer).ToString());
+        centralTimer?.Init(minigameLength);
 
         while (timer > 0)
         {
             timer -= Time.deltaTime;
 
-            UpdateTimerUI(Mathf.CeilToInt(timer).ToString());
-
+            centralTimer?.UpdateTimer(timer);
+            BGMManager.Instance?.SetTimeRemaining(timer);
             yield return null;
         }
 
         timer = 0;
 
-        UpdateTimerUI("0");
+        centralTimer?.Init(minigameLength);
 
         winner = cm.RegisterGameEnd();
 
@@ -146,37 +153,39 @@ public class CollectScript : MonoBehaviour
         Debug.Log("END GAME CALLED");
         Time.timeScale = 0f;
 
+        // Set winner
+        var winnerData = GameData.players.Find(p => p.playerGameObject == winner);
+        if (winnerData != null)
+        {
+            GameData.winnerIndex = winnerData.playerIndex;
+            if (winnerText != null)
+                winnerText.text = $"P{winnerData.playerIndex + 1} Wins!";
+        }
+        else if (winnerText != null)
+            winnerText.text = "Draw!";
+
         winPanel.SetActive(true);
-        Debug.Log("WIN PANEL ENABLED");
 
         List<KeyValuePair<GameObject, int>> rankings = cm.GetRankings();
+        float containerHeight = podiumContainer.GetComponent<RectTransform>().rect.height;
+        int topScore = rankings.Count > 0 ? rankings[0].Value : 1;
 
         for (int i = 0; i < rankings.Count; i++)
         {
-            Debug.Log("SPAWNING RESULT");
             GameObject player = rankings[i].Key;
+            int score         = rankings[i].Value;
 
-            int score = rankings[i].Value;
+            var data = GameData.players.Find(p => p.playerGameObject == player);
+            if (data == null) continue;
 
             GameObject result = Instantiate(resultPrefab, podiumContainer);
-
             PlayerResultUI ui = result.GetComponent<PlayerResultUI>();
+            if (ui == null) continue;
 
-            var playerInput = player.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+            float ratio  = topScore > 0 ? (float)score / topScore : 0f;
+            float height = containerHeight * ratio;
 
-            int playerIndex = playerInput.playerIndex;
-
-            int colorIndex = GameData.players[playerIndex].colorIndex;
-
-            float height = 300f - (i * 60f);
-
-            ui.Setup(
-                i + 1,
-                playerIndex,
-                colorIndex,
-                score,
-                height
-            );
+            ui.Setup(i + 1, data.playerIndex, data.colorIndex, score.ToString(), height);
         }
     }
 }

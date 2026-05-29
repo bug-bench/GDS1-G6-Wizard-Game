@@ -11,16 +11,18 @@ public class PlayerResultUI : MonoBehaviour
     public Image playerImage;
     public RectTransform bar;
 
-    public void Setup(int placement, int playerIndex, int colorIndex, int score, float height)
+    public void Setup(int placement, int playerIndex, int colorIndex, string displayValue, float height)
     {
         placementText.text = placement + GetSuffix(placement);
 
-        scoreText.text = score.ToString();
+        scoreText.text = displayValue;
 
         playerText.text = "P" + (playerIndex + 1);
 
         playerImage.color = PlayerData.PlayerColors.GetColor(colorIndex);
         bar.GetComponent<Image>().color = PlayerData.PlayerColors.GetColor(colorIndex);
+
+        bar.pivot = new Vector2(0.5f, 0f);
 
         Vector2 size = bar.sizeDelta;
         size.y = height;

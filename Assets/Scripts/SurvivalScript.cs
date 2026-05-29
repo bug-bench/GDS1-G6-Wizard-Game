@@ -7,17 +7,25 @@ using UnityEngine.InputSystem;
 public class SurvivalScript : MonoBehaviour
 {
     [SerializeField] private GameObject resultsPanel;
-    [SerializeField] private UnityEngine.UI.Image winnerImage;
+    // [SerializeField] private UnityEngine.UI.Image winnerImage;
     [SerializeField] private TMPro.TextMeshProUGUI winnerText;
+    [SerializeField] private Transform podiumContainer;
+    [SerializeField] private GameObject resultPrefab;
+    private GameObject winner = null;
+
 
     private List<GameObject> players = new List<GameObject>();
     private List<GameObject> playersAlive = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
+    // Add with other private fields
+    private float survivalStartTime;
+    private Dictionary<GameObject, float> playerSurvivalTimes = new Dictionary<GameObject, float>();
 
     private List<SurvivalHazard> hazards = new List<SurvivalHazard>();
 
     private int hazardsFinishedThisLoop = 0;
     private int totalHazards;
+    
 
     private int loopCount = 0;
 
@@ -47,13 +55,24 @@ public class SurvivalScript : MonoBehaviour
     {
         StartCoroutine(SetupNextFrame());
     }
+    private bool gameEnded = false;
 
     void Update()
     {
+        if (gameEnded) return;
         if (players.Count > 0)
         {
             TryEndGameAfterElimination();
         }
+
+        #if UNITY_EDITOR
+        if (UnityEngine.InputSystem.Keyboard.current.tKey.wasPressedThisFrame)
+        {
+            StopAllCoroutines();
+            winner = players.Count > 0 ? players[0] : null;
+            EndGame(winner);
+        }
+        #endif
     }
 
     IEnumerator SetupNextFrame()
@@ -66,6 +85,7 @@ public class SurvivalScript : MonoBehaviour
         }
         foreach (GameObject p in players)
         {
+            playerSurvivalTimes[p] = 0f;
             playersAlive.Add(p);
             playerHits[p] = 0;
             playerInvulnerabilityTimers[p] = 0f;
@@ -84,6 +104,35 @@ public class SurvivalScript : MonoBehaviour
         totalHazards = hazards.Count;
 
         Debug.Log($"Survival started with {playersAlive.Count} players and {totalHazards} hazards");
+
+        var countdowns = FindObjectsByType<CountdownUI>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        int total = countdowns.Length;
+        int done  = 0;
+
+        if (total == 0)
+        {
+            BeginGame(); // your existing start logic
+            yield break;
+        }
+
+        foreach (var cd in countdowns)
+        {
+            cd.Play(() =>
+            {
+                done++;
+                if (done >= total)
+                    BeginGame();
+            });
+        }
+    }
+
+    void BeginGame()
+    {
+        // Enable hazards
+        survivalStartTime = Time.time;
+        Debug.Log($"BeginGame — survivalStartTime: {survivalStartTime}");
+        foreach (var hazard in hazards)
+            hazard.enabled = true;
     }
 
     public void RegisterHazard(SurvivalHazard hazard)
@@ -207,7 +256,10 @@ public class SurvivalScript : MonoBehaviour
 
         if (!playersEliminated.Contains(player))
         {
+            float survivalTime = Time.time - survivalStartTime;
+            playerSurvivalTimes[player] = Time.time - survivalStartTime;
             playersEliminated.Add(player);
+            Debug.Log($"{player.name} eliminated at {survivalTime}s (survivalStartTime: {survivalStartTime}, Time.time: {Time.time})");
         }
 
 
@@ -260,12 +312,17 @@ public class SurvivalScript : MonoBehaviour
 
         if (alivePlayers.Count == 1)
         {
+            gameEnded = true;
             GameObject winner = alivePlayers[0];
-            Debug.Log("Winner: " + winner.name);
+            
+            // Record winner's time NOW — when last opponent dies
+            playerSurvivalTimes[winner] = Time.time - survivalStartTime;
+            Debug.Log($"Winner: {winner.name} at {playerSurvivalTimes[winner]}s");
             EndGame(winner);
         }
         else if (alivePlayers.Count == 0)
         {
+            gameEnded = true;
             Debug.Log("Draw!");
             EndGame(null);
         }
@@ -309,46 +366,79 @@ public class SurvivalScript : MonoBehaviour
 
     void EndGame(GameObject winner)
     {
-        if (winner == null)
+        // Record winner's survival time
+        if (winner != null && playerSurvivalTimes.ContainsKey(winner))
         {
-            Debug.Log("No winner (draw)");
-            resultsPanel.SetActive(true);
-            winnerText.text = "DRAW";
-            winnerImage.enabled = false;
-            return;
+            playerSurvivalTimes[winner] = Time.time - survivalStartTime;
+            float elapsed = Time.time - survivalStartTime;
+            Debug.Log($"Winner {winner.name} survived {elapsed}s + 1 bonus");
         }
-
-        var data = GameData.players.Find(p => p.playerGameObject == winner);
-
-        if (data == null)
-        {
-            Debug.LogError("Winner data not found in GameData");
-            return;
-        }
-
-        GameData.winnerIndex = data.playerIndex;
-
-        Debug.Log($"Winner: P{data.playerIndex + 1}");
-
-        // freeze game
         Time.timeScale = 0f;
 
         foreach (var p in GameData.players)
         {
+            if (p.playerGameObject == null) continue;
             var input = p.playerGameObject.GetComponent<PlayerInput>();
             if (input != null) input.DeactivateInput();
-
             var rb = p.playerGameObject.GetComponent<Rigidbody2D>();
             if (rb != null) rb.linearVelocity = Vector2.zero;
         }
 
-        // show UI
+        if (winner != null)
+        {
+            var winnerData = GameData.players.Find(p => p.playerGameObject == winner);
+            if (winnerData != null)
+            {
+                GameData.winnerIndex = winnerData.playerIndex;
+                playerSurvivalTimes[winner] = (Time.time - survivalStartTime) + 1f;
+            }
+        }
+        if (winnerText != null)
+        winnerText.text = winner != null
+            ? $"P{GameData.winnerIndex + 1} Wins!"
+            : "Draw!";
+
         resultsPanel.SetActive(true);
 
-        winnerText.text = $"P{data.playerIndex + 1} WINS!";
+        // Build rankings — sort by survival time descending
+        List<KeyValuePair<GameObject, float>> rankings = new List<KeyValuePair<GameObject, float>>();
+        foreach (var p in players)
+        {
+            float t = playerSurvivalTimes.ContainsKey(p) ? playerSurvivalTimes[p] : 0f;
+            rankings.Add(new KeyValuePair<GameObject, float>(p, t));
+        }
+        rankings.Sort((a, b) => b.Value.CompareTo(a.Value));
 
-        // image + color
-        winnerImage.sprite = data.playerSprite;
-        winnerImage.color = PlayerData.PlayerColors.GetColor(data.colorIndex);
+        // Clear old UI
+        foreach (Transform child in podiumContainer)
+            Destroy(child.gameObject);
+
+        float containerHeight = podiumContainer.GetComponent<RectTransform>().rect.height;
+        float topTime = rankings.Count > 0 ? rankings[0].Value : 1f;
+
+        for (int i = 0; i < rankings.Count; i++)
+        {
+            GameObject player = rankings[i].Key;
+            float survivalTime = rankings[i].Value;
+
+            var data = GameData.players.Find(p => p.playerGameObject == player);
+            if (data == null) continue;
+
+            GameObject result = Instantiate(resultPrefab, podiumContainer);
+            PlayerResultUI ui = result.GetComponent<PlayerResultUI>();
+            if (ui == null) continue;
+
+            int mins = Mathf.FloorToInt(survivalTime / 60f);
+            int secs = Mathf.FloorToInt(survivalTime % 60f);
+            string timeStr = $"{mins:00}:{secs:00}";
+
+            // 1st place always full height, others scale down but minimum 20%
+            float ratio = topTime > 0 ? survivalTime / topTime : 0f;
+            float minHeight = containerHeight * 0.2f;
+            float maxHeight = containerHeight;
+            float height = i == 0 ? maxHeight : Mathf.Max(minHeight, maxHeight * ratio);
+
+            ui.Setup(i + 1, data.playerIndex, data.colorIndex, timeStr, height);
+        }
     }
 }
