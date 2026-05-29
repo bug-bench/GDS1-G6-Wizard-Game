@@ -13,16 +13,29 @@ public class PlayerJoinManager : MonoBehaviour
     [SerializeField] int minPlayers = 2;
 
     public GameObject cardPrefab;
+    public GameObject emptyCardPrefab;
     public Transform cardContainer;
     public bool useSplitScreen = true;
     [SerializeField] string scene = "Phase1";
-    private List<PlayerCard> playerCards = new List<PlayerCard>();
+    public List<PlayerCard> playerCards = new List<PlayerCard>();
+    private List<EmptyCardUI> emptyCards = new List<EmptyCardUI>();
     private HashSet<int> joinedDeviceIds = new HashSet<int>();
     private bool gameStarting = false;
 
     private void Start()
     {
         PlayerInputManager.instance.onPlayerJoined += OnPlayerJoined;
+        for (int i = 0; i < minPlayers; i++)
+            SpawnEmptyCard();
+    }
+
+    private void SpawnEmptyCard()
+    {
+        if (emptyCards.Count + playerCards.Count >= maxPlayers) return;
+
+        GameObject empty = Instantiate(emptyCardPrefab, cardContainer);
+        EmptyCardUI ui   = empty.GetComponent<EmptyCardUI>();
+        if (ui != null) emptyCards.Add(ui);
     }
 
     private void OnDestroy()
@@ -48,8 +61,6 @@ public class PlayerJoinManager : MonoBehaviour
     {
         int deviceId = player.devices[0].deviceId;
 
-        Debug.Log($"OnPlayerJoined — deviceId: {deviceId}, already joined: {joinedDeviceIds.Contains(deviceId)}, total cards: {playerCards.Count}");
-
         if (joinedDeviceIds.Contains(deviceId))
         {
             Destroy(player.gameObject);
@@ -58,22 +69,40 @@ public class PlayerJoinManager : MonoBehaviour
 
         if (playerCards.Count >= maxPlayers)
         {
-            Debug.LogWarning($"已达到最大人数 {maxPlayers}，忽略新加入。 | Max players {maxPlayers} reached; ignoring join.");
             Destroy(player.gameObject);
             return;
         }
 
         joinedDeviceIds.Add(deviceId);
 
+        // Hide first empty card
+        if (emptyCards.Count > 0)
+        {
+            EmptyCardUI firstEmpty = emptyCards[0];
+            emptyCards.RemoveAt(0);
+            firstEmpty.Hide();
+        }
+
+        // Spawn real card
         GameObject cardGO = Instantiate(cardPrefab, cardContainer);
+        cardGO.transform.SetSiblingIndex(playerCards.Count);
         PlayerCard card = cardGO.GetComponent<PlayerCard>();
         card.SetPlayer(player);
         playerCards.Add(card);
+
+        // Only spawn new empty card if we have room AND
+        // current total (real + empty) is less than maxPlayers
+        if (playerCards.Count >= minPlayers)
+        {
+            int totalSlots = playerCards.Count + emptyCards.Count;
+            if (totalSlots < maxPlayers)
+                SpawnEmptyCard();
+        }
     }
 
     private void StartGame()
     {
-        // GameData.players.Clear();
+        GameData.players.Clear();
         GameData.useSplitScreen = useSplitScreen;
 
         foreach (var card in playerCards)

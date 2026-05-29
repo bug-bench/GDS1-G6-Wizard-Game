@@ -22,6 +22,22 @@ public class ArenaScript : MonoBehaviour
 
     void Update()
     {
+        if (isEnding) return;
+
+         var alivePlayers = GetAlivePlayers();
+         if (alivePlayers.Count == 1)
+         {
+             isEnding = true;
+             GameObject winner = alivePlayers[0];
+             Debug.Log("Winner: " + winner.name);
+             EndGame(winner);
+         }
+         else if (alivePlayers.Count == 0)
+         {
+             isEnding = true;
+             Debug.Log("Draw!");
+             EndGame(playersEliminated);
+         }
         if (gameWon && !isEnding)
         {
             isEnding = true;
@@ -62,6 +78,20 @@ public class ArenaScript : MonoBehaviour
         {
             players[i].transform.position = spawnPoints[i].transform.position;
             players[i].transform.rotation = spawnPoints[i].transform.rotation;
+        }
+
+        var countdowns = FindObjectsByType<CountdownUI>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        int total = countdowns.Length;
+        int done  = 0;
+
+        if (total == 0) yield break;
+
+        foreach (var cd in countdowns)
+        {
+            cd.Play(() =>
+            {
+                done++;
+            });
         }
     }
 

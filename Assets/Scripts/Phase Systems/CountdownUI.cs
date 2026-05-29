@@ -30,7 +30,30 @@ public class CountdownUI : MonoBehaviour
     public void Play(Action onComplete)
     {
         gameObject.SetActive(true);
-        StartCoroutine(RunCountdown(onComplete));
+
+        // Freeze all players
+        foreach (var p in GameData.players)
+        {
+            if (p.playerGameObject == null) continue;
+            var controller = p.playerGameObject.GetComponent<PlayerController>();
+            if (controller != null) controller.canMove = false;
+            var combat = p.playerGameObject.GetComponent<PlayerCombat>();
+            if (combat != null) combat.enabled = false;
+        }
+
+        StartCoroutine(RunCountdown(() =>
+        {
+            // Unfreeze all players
+            foreach (var p in GameData.players)
+            {
+                if (p.playerGameObject == null) continue;
+                var controller = p.playerGameObject.GetComponent<PlayerController>();
+                if (controller != null) controller.canMove = true;
+                var combat = p.playerGameObject.GetComponent<PlayerCombat>();
+                if (combat != null) combat.enabled = true;
+            }
+            onComplete?.Invoke();
+        }));
     }
 
     IEnumerator RunCountdown(Action onComplete)
