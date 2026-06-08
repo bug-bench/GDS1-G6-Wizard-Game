@@ -6,7 +6,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class PatternSettings
 {
-    public Spawner.PatternType patternType;
+    public SurvivalBulletSpawner.PatternType patternType;
 
     [Header("Bullet")]
     public float bulletSpeed = 5f;
@@ -21,7 +21,7 @@ public class PatternSettings
     public float spreadAngle = 60f;
 }
 
-public class Spawner : MonoBehaviour
+public class SurvivalBulletSpawner : MonoBehaviour
 {
     public enum PatternType
     {
@@ -312,8 +312,8 @@ public class Spawner : MonoBehaviour
         bulletObj.transform.rotation =
             Quaternion.identity;
 
-        Bullet bullet =
-            bulletObj.GetComponent<Bullet>();
+        SurvivalBullet bullet =
+            bulletObj.GetComponent<SurvivalBullet>();
 
         bullet.Initialize(
             direction,

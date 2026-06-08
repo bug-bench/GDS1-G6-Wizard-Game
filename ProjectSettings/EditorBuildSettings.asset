@@ -6,31 +6,31 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/Scenes/Main Scenes/MainMenu.unity
     guid: 15ba93ca90011484bb250dd54309b01e
   - enabled: 1
-    path: Assets/Scenes/Lobby.unity
+    path: Assets/Scenes/Main Scenes/Lobby.unity
     guid: b73483bd59e4549a5be1c5aeae84976d
   - enabled: 0
-    path: Assets/Scenes/Phase1.unity
+    path: Assets/Scenes/Archived Scenes/Phase1.unity
     guid: afa704d8cfc448342a354cdf6b2708e6
   - enabled: 1
-    path: Assets/Scenes/Phase1(New).unity
+    path: Assets/Scenes/Main Scenes/Phase1(New).unity
     guid: 8d49daceea1486947869219692834b6b
   - enabled: 1
-    path: Assets/Scenes/VotingScene.unity
+    path: Assets/Scenes/Main Scenes/VotingScene.unity
     guid: 4ab4dd99fdde44efe8ed00afdc8750ff
   - enabled: 1
-    path: Assets/Scenes/Phase2Arena.unity
+    path: Assets/Scenes/Main Scenes/Phase2Arena.unity
     guid: fc3ec3e1911879541899d5741c632740
   - enabled: 1
-    path: Assets/Scenes/Phase2Survival.unity
+    path: Assets/Scenes/Main Scenes/Phase2Survival.unity
     guid: 1b98f7a55e9fd88438903fe74d138594
   - enabled: 1
-    path: Assets/Scenes/Phase2Collect.unity
+    path: Assets/Scenes/Main Scenes/Phase2Collect.unity
     guid: 566ee8c3f82a9714aa2f27aef27d2b78
   - enabled: 1
-    path: Assets/Scenes/WinScene.unity
+    path: Assets/Scenes/Main Scenes/WinScene.unity
     guid: 23a9ff162d8984049bc2cb7acc69350f
   - enabled: 0
     path: Assets/Scenes/player scene.unity
