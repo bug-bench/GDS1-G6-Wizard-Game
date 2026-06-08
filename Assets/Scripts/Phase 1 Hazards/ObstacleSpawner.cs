@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ostacleSpawner : MonoBehaviour
+public class ObstacleSpawner : MonoBehaviour
 {
 
     public GameObject[] sprites;
