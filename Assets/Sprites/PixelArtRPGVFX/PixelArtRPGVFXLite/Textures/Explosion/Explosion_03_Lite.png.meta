@@ -1,12 +1,19 @@
 fileFormatVersion: 2
-guid: f4d2477fd62a199459780452843ca04d
+guid: 07a7d4c8ffe41f1439f289296d45b977
+AssetOrigin:
+  serializedVersion: 1
+  productId: 311145
+  packageName: Pixel Art RPG VFX Lite
+  packageVersion: 1.0
+  assetPath: Assets/Pixel Art/PixelArtRPGVFXLite/Textures/Explosion/Explosion_03_Lite.png
+  uploadId: 735461
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -20,11 +27,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -36,8 +44,8 @@ TextureImporter:
     filterMode: 0
     aniso: 1
     mipBias: 0
-    wrapU: 1
-    wrapV: 1
+    wrapU: 0
+    wrapV: 0
     wrapW: 0
   nPOTScale: 0
   lightmap: 0
@@ -47,7 +55,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -63,11 +71,12 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  cookieLightType: 1
+  swizzle: 50462976
+  cookieLightType: 0
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 512
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -75,9 +84,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -87,21 +97,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Windows Store Apps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -111,10 +110,11 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
+  - serializedVersion: 4
+    buildTarget: iOS
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -123,9 +123,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -135,13 +136,27 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HolyCross_0
+      name: Explosion_03_0
       rect:
         serializedVersion: 2
         x: 0
@@ -151,18 +166,19 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d86f03434e46d4e4d9bc5347c809b0c2
-      internalID: 1288024808
+      spriteID: 58ceef70e3126624c82d77ef5ae92d3a
+      internalID: 1343172438
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HolyCross_1
+      name: Explosion_03_1
       rect:
         serializedVersion: 2
         x: 0
@@ -172,18 +188,19 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: debc489b547e23c4a931c3629bec4b43
-      internalID: -1706749001
+      spriteID: 636e3d9d4ac680949a2b4711d9bde1b4
+      internalID: 1389328290
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HolyCross_2
+      name: Explosion_03_2
       rect:
         serializedVersion: 2
         x: 0
@@ -193,18 +210,19 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4e71eb7f5c0410844b2afc04367b71c0
-      internalID: -871904778
+      spriteID: 2d0b4ad320f920d4fb0bd704629c54f3
+      internalID: -523584915
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HolyCross_3
+      name: Explosion_03_3
       rect:
         serializedVersion: 2
         x: 0
@@ -214,18 +232,19 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: effa53458f6133e4fbfaefe47a44f00a
-      internalID: 454991810
+      spriteID: 653aaf2eb42833d49b8ffef38087a4cf
+      internalID: 500476928
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HolyCross_4
+      name: Explosion_03_4
       rect:
         serializedVersion: 2
         x: 0
@@ -235,18 +254,19 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43c87557598ce534bb4322aea6f65107
-      internalID: -599329564
+      spriteID: b2bb27609d93e8541ab09d58602cf65c
+      internalID: -1470835115
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HolyCross_5
+      name: Explosion_03_5
       rect:
         serializedVersion: 2
         x: 0
@@ -256,43 +276,39 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 671337377d48374448aa32b44f077335
-      internalID: -1073165655
+      spriteID: 7c515c301131de74eae725602881f3bc
+      internalID: -1752411074
       vertices: []
       indices: 
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 09d54356d17b4494dbc9ea8cf47709d2
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
     nameFileIdTable:
-      HolyCross_5: -1073165655
-      HolyCross_1: -1706749001
-      HolyCross_2: -871904778
-      HolyCross_3: 454991810
-      HolyCross_0: 1288024808
-      HolyCross_4: -599329564
-  spritePackingTag: 
+      Explosion_03_0: 1343172438
+      Explosion_03_1: 1389328290
+      Explosion_03_2: -523584915
+      Explosion_03_3: 500476928
+      Explosion_03_4: -1470835115
+      Explosion_03_5: -1752411074
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 311145
-  packageName: Pixel Art RPG VFX Lite
-  packageVersion: 1.0
-  assetPath: Assets/Pixel Art/PixelArtRPGVFXLite/Textures/Holy/HolyCross_Lite.png
-  uploadId: 735461
