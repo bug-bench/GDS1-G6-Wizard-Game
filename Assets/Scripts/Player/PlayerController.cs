@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerInput playerInput;
     private Camera myCam;
+    private CharacterLayerSync layerSync;
 
     private PlayerData playerData;
     private PlayerStats playerStats;
@@ -60,6 +61,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
         myCam = GetComponentInChildren<Camera>(); // 玩家自己的摄像机 — This player's camera.
+        layerSync = GetComponentInChildren<CharacterLayerSync>();
 
         // 锁定旋转，防止物理翻转。
         // Lock rotation to prevent physics flipping.
@@ -219,6 +221,9 @@ public class PlayerController : MonoBehaviour
             {
                 HandleRotation();
             }
+
+            if (layerSync != null)
+                layerSync.SetBool("IsWalking", rb.linearVelocity.sqrMagnitude > 0.1f);
         }
         else
         {
@@ -266,7 +271,7 @@ public class PlayerController : MonoBehaviour
         if (playerSprite != null)
         {
             playerSprite.localScale = new Vector3(
-                lookDir.x < 0 ? 1 : -1,
+                lookDir.x < 0 ? -1 : 1,
                 1,
                 1
             );

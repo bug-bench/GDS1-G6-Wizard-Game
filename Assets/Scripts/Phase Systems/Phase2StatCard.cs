@@ -20,6 +20,9 @@ public class Phase2StatCard : MonoBehaviour
     [Header("Overflow FX")]
     public float overflowThreshold     = 150f;
     public float superSaiyanThreshold  = 200f;
+    public float shakeSpeedX, shakeSpeedY;
+    public float shakeDistX, shakeDistY;
+
     public Color normalBarColor        = new Color(0.91f, 0.19f, 0.19f);
     public Color normalOuterColor      = new Color(0.4f, 0.05f, 0.05f);
     public Color superSaiyanColor      = new Color(1f, 0.95f, 0.2f);
@@ -125,8 +128,8 @@ public class Phase2StatCard : MonoBehaviour
                     outerImg.color = Color.Lerp(normalOuterColor, superSaiyanOuterColor, pulse);
 
                 shakeTimer += Time.deltaTime;
-                float shakeX = Mathf.Sin(shakeTimer * 40f) * 3f;
-                float shakeY = Mathf.Sin(shakeTimer * 37f) * 2f;
+                float shakeX = Mathf.Sin(shakeTimer * shakeSpeedX) * shakeDistX;
+                float shakeY = Mathf.Sin(shakeTimer * shakeSpeedY) * shakeDistY;
                 healthBarOuter.anchoredPosition = barOriginalPos + new Vector2(shakeX, shakeY);
             }
             else

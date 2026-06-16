@@ -80,6 +80,8 @@ public class PlayerCombat : MonoBehaviour
     private InputAction castSubAction;
     private PlayerStats playerStats;
     private SpellAudioSystem spellAudio;
+    private CharacterLayerSync layerSync;
+
 
     float GetEffectiveCooldownFor(SpellData data)
     {
@@ -95,6 +97,7 @@ public class PlayerCombat : MonoBehaviour
         playerStats = GetComponent<PlayerStats>();
         playerRb = GetComponent<Rigidbody2D>();
         spellAudio = GetComponent<SpellAudioSystem>();
+        layerSync = GetComponentInChildren<CharacterLayerSync>();
         if (spellAudio == null)
             spellAudio = gameObject.AddComponent<SpellAudioSystem>();
         BuildInvincibilityBlinkTargets();
@@ -674,6 +677,8 @@ public class PlayerCombat : MonoBehaviour
     IEnumerator Knockdown()
     {
         isKnockedDown = true;
+        layerSync?.SetTrigger("Knocked");
+        layerSync?.SetBool("IsKnockedDown", true);
 
         CleanupHeldAttackEffects(applyReleaseCooldown: false);
         CleanupHeldMovementEffects(applyReleaseCooldown: false);
@@ -698,6 +703,7 @@ public class PlayerCombat : MonoBehaviour
         }
 
         isKnockedDown = false;
+        layerSync?.SetBool("IsKnockedDown", false);
 
         invincibleUntil = Time.time + 1f;
     }

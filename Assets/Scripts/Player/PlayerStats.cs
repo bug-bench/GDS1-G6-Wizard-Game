@@ -258,7 +258,7 @@ public class PlayerStats : MonoBehaviour
                 // 增加护甲 / Increase armor（预制体拼写 Defence 也兼容）
                 defense += amount;
                 break;
-            case "Size":
+            case "Mana":
                 // 增加法术体积倍率 (例如传入 0.5 表示变大 50%) / Increase spell size multiplier (e.g., 0.5 means +50% size)
                 sizeMultiplier += amount;
                 break;
@@ -297,7 +297,7 @@ public class PlayerStats : MonoBehaviour
                 defense -= 1f;
                 defense = Mathf.Max(0f, defense);
                 break;
-            case "Size":
+            case "Mana":
                 sizeMultiplier -= 1f;
                 sizeMultiplier = Mathf.Max(1f, sizeMultiplier);
                 break;
