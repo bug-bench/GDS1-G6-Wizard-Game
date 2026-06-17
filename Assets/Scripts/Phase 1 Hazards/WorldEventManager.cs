@@ -89,4 +89,39 @@ public class WorldEventManager : MonoBehaviour
         }
         Debug.Log("player swap");
     }
+
+    void SpellSwap()
+    {
+        List<PlayerCombat> players = new List<PlayerCombat>();
+
+        foreach ( var playerdata in GameData.players )
+        {
+            if (playerdata.playerGameObject == null) continue;
+
+            PlayerCombat combat = playerdata.playerGameObject.GetComponent<PlayerCombat>();
+
+            if (combat != null)
+
+            {
+                players.Add(combat);
+            }
+
+        }
+
+        if(players.Count <2)
+        {
+            return;
+        }
+
+        //Save spells 
+
+        List<SpellData> leftSpell = new List<SpellData>();
+        List<SpellData> RightSpell = new List<SpellData>();
+
+        foreach(PlayerCombat player in players)
+        {
+            leftSpell.Add(player.currentAttackSpell);
+            RightSpell.Add(player.currentMovementSpell);
+        }
+    }
 }
