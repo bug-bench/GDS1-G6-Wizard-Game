@@ -67,7 +67,7 @@ public static class SpellStatScaling
         ApplyProjectileSize(spellRoot, caster);
     }
 
-    public static void ApplyMeleeHitboxScale(MeleeSwingSpell melee, float scale)
+    public static void ApplyMeleeHitboxScale(StaffSpell melee, float scale)
     {
         if (melee == null || scale <= 1.001f) return;
         melee.hitRadius *= scale;
