@@ -15,6 +15,7 @@ public class CollectScript : MonoBehaviour
     [SerializeField] GameObject collectScorePrefab;
     [SerializeField] private TimerUI centralTimer;
     [SerializeField] private TMPro.TextMeshProUGUI winnerText;
+    [SerializeField] private float minigameLength = 60f;
 
     [Header("Debug")]
     [SerializeField]
@@ -29,7 +30,6 @@ public class CollectScript : MonoBehaviour
 
     private GameObject winner = null;
 
-    [SerializeField] private float minigameLength = 60f;
     private float timer = 0;
 
     void Start()
