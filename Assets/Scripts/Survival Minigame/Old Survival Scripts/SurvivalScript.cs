@@ -74,8 +74,6 @@ public class SurvivalScript : MonoBehaviour
         {
             TryEndGameAfterElimination();
         }
-
-        
     }
 
     IEnumerator SetupNextFrame()
@@ -156,6 +154,11 @@ public class SurvivalScript : MonoBehaviour
             hazards.Add(hazard);
             totalHazards = hazards.Count;
         }
+    }
+
+    public bool IsUsingMouseDebugTarget()
+    {
+        return manualWinDebugMode && GameData.players.Count <= 0;
     }
 
     // ====================
