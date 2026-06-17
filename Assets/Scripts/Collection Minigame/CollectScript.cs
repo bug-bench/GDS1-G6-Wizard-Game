@@ -6,6 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class CollectScript : MonoBehaviour
 {
+    [Header("Debug")]
+    [SerializeField]
+    private bool manualWinDebugMode = false;
+    [SerializeField]
+    private bool forceDebugWin = false;
+    
     [Header("Win Screen")]
     [SerializeField] GameObject winPanel;
     [SerializeField] Transform podiumContainer;
@@ -16,12 +22,6 @@ public class CollectScript : MonoBehaviour
     [SerializeField] private TimerUI centralTimer;
     [SerializeField] private TMPro.TextMeshProUGUI winnerText;
     [SerializeField] private float minigameLength = 60f;
-
-    [Header("Debug")]
-    [SerializeField]
-    private bool manualWinDebugMode = false;
-    [SerializeField]
-    private bool forceDebugWin = false;
 
 
     private List<GameObject> players = new List<GameObject>();

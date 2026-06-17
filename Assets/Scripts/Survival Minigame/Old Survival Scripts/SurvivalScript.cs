@@ -6,17 +6,18 @@ using UnityEngine.InputSystem;
 
 public class SurvivalScript : MonoBehaviour
 {
-    [SerializeField] private GameObject resultsPanel;
-    // [SerializeField] private UnityEngine.UI.Image winnerImage;
-    [SerializeField] private TMPro.TextMeshProUGUI winnerText;
-    [SerializeField] private Transform podiumContainer;
-    [SerializeField] private GameObject resultPrefab;
-
     [Header("Debug")]
     [SerializeField]
     private bool manualWinDebugMode = false;
     [SerializeField]
     private bool forceDebugWin = false;
+
+    [Header("Win Screen")]
+    [SerializeField] private GameObject resultsPanel;
+    // [SerializeField] private UnityEngine.UI.Image winnerImage;
+    [SerializeField] private TMPro.TextMeshProUGUI winnerText;
+    [SerializeField] private Transform podiumContainer;
+    [SerializeField] private GameObject resultPrefab;
 
     private GameObject winner = null;
 

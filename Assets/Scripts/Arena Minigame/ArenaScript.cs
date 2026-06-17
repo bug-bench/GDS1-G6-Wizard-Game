@@ -6,8 +6,6 @@ using UnityEngine.InputSystem;
 
 public class ArenaScript : MonoBehaviour
 {
-    [SerializeField] private string winScene = "WinScene";
-
     [Header("Debug")]
     // Can be enabled manually in the Inspector,
     // or automatically when testing Arena with <= 1 player.
@@ -15,6 +13,9 @@ public class ArenaScript : MonoBehaviour
     private bool manualWinDebugMode = false;
     [SerializeField] 
     private bool forceDebugWin = false;
+
+    [Header("Win Screen")]
+    [SerializeField] private string winScene = "WinScene";
 
     private List<GameObject> players = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
