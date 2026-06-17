@@ -99,13 +99,61 @@ PrefabInstance:
     - target: {fileID: 1785841473864684055, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 40633647039503821, guid: 91c1dd75d1c4e43feb2eb054ca401b84, type: 3}
+      objectReference: {fileID: 6519666426634485592, guid: b69efc3b7762e442c89fb7ba02aafa09, type: 3}
     - target: {fileID: 2103083875384750114, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
       propertyPath: m_Name
       value: SpellSwapPrompt
       objectReference: {fileID: 0}
+    - target: {fileID: 6780938445123336170, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1388449611
+      objectReference: {fileID: 0}
+    - target: {fileID: 8049320437992200019, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8049320437992200019, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.7499
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8683476574509427933, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2103083875384750114, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1677079181029033642}
   m_SourcePrefab: {fileID: 100100000, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+--- !u!1 &7642098414478624157 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2103083875384750114, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+  m_PrefabInstance: {fileID: 8584309082100069823}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1677079181029033642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7642098414478624157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ef6b7b3f8fc4d37a11db5f78158571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  targetImage: {fileID: 8063979885823436712}
+  iconA: {fileID: 6519666426634485592, guid: b69efc3b7762e442c89fb7ba02aafa09, type: 3}
+  iconB: {fileID: -743780595518795906, guid: 90c40086ee8ff42fc897b6d8df53cb36, type: 3}
+  swapInterval: 1
+--- !u!114 &8063979885823436712 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1785841473864684055, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+  m_PrefabInstance: {fileID: 8584309082100069823}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image

@@ -90,7 +90,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2103083875384750114, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
       propertyPath: m_Name
-      value: InteractPrompt
+      value: ChestPrompt
+      objectReference: {fileID: 0}
+    - target: {fileID: 4364393372516347582, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 3.2499
+      objectReference: {fileID: 0}
+    - target: {fileID: 4364393372516347582, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.0000031069
+      objectReference: {fileID: 0}
+    - target: {fileID: 6399123897823254270, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_text
+      value: Chest
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
