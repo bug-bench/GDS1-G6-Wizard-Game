@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeSwingSpell : SpellBehavior
+public class StaffSpell : SpellBehavior
 {
     [Header("Combat Settings")]
     public int damage = 20;
