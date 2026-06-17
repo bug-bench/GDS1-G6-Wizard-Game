@@ -9,8 +9,10 @@ public class ArenaScript : MonoBehaviour
     [SerializeField] private string winScene = "WinScene";
 
     [Header("Debug")]
+    // Can be enabled manually in the Inspector,
+    // or automatically when testing Arena with <= 1 player.
     [SerializeField] 
-    private bool singlePlayerDebugMode = false;
+    private bool manualWinDebugMode = false;
     [SerializeField] 
     private bool forceDebugWin = false;
 
@@ -28,7 +30,7 @@ public class ArenaScript : MonoBehaviour
     void Update()
     {
         HandleDebugWin();
-        
+
         if (isEnding || !playersReady) return;
 
         TryEndGameAfterElimination();
@@ -52,6 +54,16 @@ public class ArenaScript : MonoBehaviour
         }
 
         Debug.Log($"ArenaScript tracking {players.Count} players");
+
+        if (GameData.players.Count <= 1)
+        {
+            manualWinDebugMode = true;
+
+            Debug.Log(
+                $"ArenaScript: Auto-enabled Manual Win Debug Mode " +
+                $"because only {GameData.players.Count} player(s) were detected."
+            );
+        }
 
         GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
 
@@ -106,17 +118,23 @@ public class ArenaScript : MonoBehaviour
     // for use when debugging
     public void HandleDebugWin()
     {
-        if (!singlePlayerDebugMode) return;
+        if (!manualWinDebugMode) return;
         if (!forceDebugWin) return;
         if (isEnding) return;
-        if (players.Count == 0) return;
 
         forceDebugWin = false;
         isEnding = true;
 
         Debug.Log("Debug win triggered by Main User.");
 
-        EndGame(players[0]);
+        if (players.Count > 0)
+        {
+            EndGame(players[0]);
+        }
+        else
+        {
+            EndGame(playersEliminated);
+        }
     }
 
     public void PlayerEliminated(GameObject player)
@@ -175,6 +193,9 @@ public class ArenaScript : MonoBehaviour
 
         if (alivePlayers.Count == 1)
         {
+            bool suppressAutomaticWin = manualWinDebugMode && GameData.players.Count <= 1;
+            if (suppressAutomaticWin) return;
+
             isEnding = true;
 
             GameObject winner = alivePlayers[0];
