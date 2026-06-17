@@ -62,6 +62,8 @@ public class SurvivalBulletSpawner : MonoBehaviour
 
     private Transform targetPlayer;
 
+    private SurvivalScript survival;
+
     private void Start()
     {
         fallbackDirection = Random.insideUnitCircle.normalized;
@@ -70,6 +72,8 @@ public class SurvivalBulletSpawner : MonoBehaviour
         {
             fallbackDirection = Vector2.right;
         }
+
+        survival = FindFirstObjectByType<SurvivalScript>();
 
         ChooseRandomPattern();
 
@@ -362,8 +366,6 @@ public class SurvivalBulletSpawner : MonoBehaviour
         {
             return (targetPlayer.position - transform.position).normalized;
         }
-
-        SurvivalScript survival = FindFirstObjectByType<SurvivalScript>();
 
         if (survival != null && survival.IsUsingMouseDebugTarget())
         {
