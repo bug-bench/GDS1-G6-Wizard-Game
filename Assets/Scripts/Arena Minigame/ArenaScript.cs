@@ -8,6 +8,12 @@ public class ArenaScript : MonoBehaviour
 {
     [SerializeField] private string winScene = "WinScene";
 
+    [Header("Debug")]
+    [SerializeField] 
+    private bool singlePlayerDebugMode = false;
+    [SerializeField] 
+    private bool forceDebugWin = false;
+
     private List<GameObject> players = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
 
@@ -21,6 +27,8 @@ public class ArenaScript : MonoBehaviour
 
     void Update()
     {
+        HandleDebugWin();
+        
         if (isEnding || !playersReady) return;
 
         TryEndGameAfterElimination();
@@ -93,6 +101,22 @@ public class ArenaScript : MonoBehaviour
         }
 
         playersReady = true;
+    }
+
+    // for use when debugging
+    public void HandleDebugWin()
+    {
+        if (!singlePlayerDebugMode) return;
+        if (!forceDebugWin) return;
+        if (isEnding) return;
+        if (players.Count == 0) return;
+
+        forceDebugWin = false;
+        isEnding = true;
+
+        Debug.Log("Debug win triggered by Main User.");
+
+        EndGame(players[0]);
     }
 
     public void PlayerEliminated(GameObject player)
