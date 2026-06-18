@@ -143,8 +143,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   targetImage: {fileID: 8063979885823436712}
-  iconA: {fileID: 6519666426634485592, guid: b69efc3b7762e442c89fb7ba02aafa09, type: 3}
-  iconB: {fileID: -743780595518795906, guid: 90c40086ee8ff42fc897b6d8df53cb36, type: 3}
+  promptA: {fileID: 6519666426634485592, guid: b69efc3b7762e442c89fb7ba02aafa09, type: 3}
+  promptB: {fileID: -743780595518795906, guid: 90c40086ee8ff42fc897b6d8df53cb36, type: 3}
   swapInterval: 1
 --- !u!114 &8063979885823436712 stripped
 MonoBehaviour:
