@@ -10,7 +10,7 @@ public class WorldEventManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(EventLoop());
-        Debug.Log("GameData player count: " + GameData.players.Count);
+       
     }
 
     // Update is called once per frame
@@ -21,14 +21,28 @@ public class WorldEventManager : MonoBehaviour
 
     IEnumerator EventLoop()
     {
-        Debug.Log("Event Loop Started");
+      
         yield return new WaitForSeconds(FirstEventDelay);
-        Debug.Log("First Event Triggered");
+       
 
         while (true)
 
         {
-            PlayerLocationSwap();
+            int randomEvent = Random.Range(0, 2);
+
+            switch (randomEvent)
+            {
+                case 0:
+                  PlayerLocationSwap();
+                    break;
+
+
+                case 1:
+                    SpellSwap();
+                    break;
+            
+            }
+
 
             yield return new WaitForSeconds(timebetweenEvents);
 
@@ -37,7 +51,7 @@ public class WorldEventManager : MonoBehaviour
 
     void PlayerLocationSwap()
     {
-        Debug.Log("Trying to swap players...");
+       
         List<GameObject> players = new List<GameObject>();
 
         foreach(var playerData in GameData.players)
@@ -48,7 +62,6 @@ public class WorldEventManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Players found: " + players.Count);
 
         if (players.Count < 2)
             {
@@ -87,7 +100,7 @@ public class WorldEventManager : MonoBehaviour
                 players[i].transform.position = Positions[i];
             }
         }
-        Debug.Log("player swap");
+       
     }
 
     void SpellSwap()
@@ -115,13 +128,39 @@ public class WorldEventManager : MonoBehaviour
 
         //Save spells 
 
-        List<SpellData> leftSpell = new List<SpellData>();
+        List<SpellData> LeftSpell = new List<SpellData>();
         List<SpellData> RightSpell = new List<SpellData>();
 
         foreach(PlayerCombat player in players)
         {
-            leftSpell.Add(player.currentAttackSpell);
+            LeftSpell.Add(player.currentAttackSpell);
             RightSpell.Add(player.currentMovementSpell);
+        }
+
+
+        //Shuffles the Left spells 
+        for(int i = 0; i <LeftSpell.Count;++)
+        {
+            int randomIndex = Random.Range(i, LeftSpell.Count);
+            SpellData temp = LeftSpell[i];
+            LeftSpell[i] = LeftSpell[randomIndex];
+            LeftSpell[randomIndex] = temp;
+        }
+
+        //Shuffles the right spells
+        for (int i = 0; i < RightSpell.Count; ++)
+        {
+            int randomIndex = Random.Range(i, RightSpell.Count);
+            SpellData temp = RightSpell[i];
+            RightSpell[i] = RightSpell[randomIndex];
+            RightSpell[randomIndex] = temp;
+        }
+
+        //Give back spells to players 
+        for(int i = 0; i < players.Count;i++)
+        {
+            players[i].currentAttackSpell = LeftSpell[i];
+            players[i].currentMovementSpell = RightSpell[i];
         }
     }
 }
