@@ -3,9 +3,9 @@ using System.Collections;
 
 /// <summary>
 /// 火焰冲刺：按住副键期间加速，并在身后不断留下火焰轨迹。
-/// Flame Dash: Sprint while leaving a trail of fire hazards behind.
+/// Fire Dash: Sprint while leaving a trail of fire hazards behind.
 /// </summary>
-public class FlameDashSpell : SpellBehavior
+public class FireDashSpell : SpellBehavior
 {
     public const float DefaultMaxHoldDuration = 3f;
 
