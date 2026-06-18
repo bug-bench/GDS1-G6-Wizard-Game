@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da68d7c89dbcb8146ab9e5cc48586ac4, type: 3}
-  m_Name: Data_fire dash
+  m_Name: Data_FireDash
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
   spellName: firedash
   spellType: 1
