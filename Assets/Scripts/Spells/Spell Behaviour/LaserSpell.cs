@@ -7,7 +7,7 @@ using UnityEngine;
 /// 预制体需挂 LineRenderer（至少 2 个 position），材质可用 Default-Line 或自定义激光材质。
 /// Sniper laser: instant Raycast2D damage plus LineRenderer beam. Prefab needs LineRenderer (at least 2 positions); use Default-Line or custom material.
 /// </summary>
-public class RaycastSniperSpell : SpellBehavior
+public class LaserSpell : SpellBehavior
 {
     [Header("激光 / 狙击数值 — Laser / Sniper")]
     public int damage = 50;
