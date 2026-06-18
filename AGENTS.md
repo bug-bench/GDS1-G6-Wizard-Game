@@ -3,11 +3,11 @@
 - Unity version: Unity 6000.3.8f1
 - Active scene:
   - Tags:
-    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, SpawnPoint, wall
+    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Water, UI
 - Active game object:
-  - Name: Prefab_Staff
+  - Name: Prefab_laserRay
   - Tag: Untagged
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
