@@ -139,7 +139,7 @@ public class WorldEventManager : MonoBehaviour
 
 
         //Shuffles the Left spells 
-        for(int i = 0; i <LeftSpell.Count;++)
+        for(int i = 0; i <LeftSpell.Count;i++)
         {
             int randomIndex = Random.Range(i, LeftSpell.Count);
             SpellData temp = LeftSpell[i];
@@ -148,7 +148,7 @@ public class WorldEventManager : MonoBehaviour
         }
 
         //Shuffles the right spells
-        for (int i = 0; i < RightSpell.Count; ++)
+        for (int i = 0; i < RightSpell.Count;i ++)
         {
             int randomIndex = Random.Range(i, RightSpell.Count);
             SpellData temp = RightSpell[i];
