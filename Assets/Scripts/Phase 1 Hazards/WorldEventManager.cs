@@ -1,12 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum WorldEventType
+{
+    PlayerLocationSwap,
+    SpellSwap
+}
+
 
 public class WorldEventManager : MonoBehaviour
 {
 
     public float FirstEventDelay = 30f;
     public float timebetweenEvents = 60f;
+    public System.Action<WorldEventType> WorldEventTriggered;
     void Start()
     {
         StartCoroutine(EventLoop());
@@ -21,6 +28,7 @@ public class WorldEventManager : MonoBehaviour
 
     IEnumerator EventLoop()
     {
+
       
         yield return new WaitForSeconds(FirstEventDelay);
        
@@ -28,16 +36,20 @@ public class WorldEventManager : MonoBehaviour
         while (true)
 
         {
-            int randomEvent = Random.Range(0, 2);
+            WorldEventType randomEvent = (WorldEventType)Random.Range(0, 2);
+            WorldEventTriggered?.Invoke(randomEvent);
+
+            //delay for text to show up before event
+            yield return new WaitForSeconds(3f);
 
             switch (randomEvent)
             {
-                case 0:
-                  PlayerLocationSwap();
+                case WorldEventType.PlayerLocationSwap:
+                    PlayerLocationSwap();
                     break;
 
 
-                case 1:
+                case WorldEventType.SpellSwap:
                     SpellSwap();
                     break;
             
@@ -76,35 +88,26 @@ public class WorldEventManager : MonoBehaviour
             Positions.Add(player.transform.position);
         }
 
-        for( int i = 0; i <Positions.Count; i++)
-        {
-            int randomIndex = Random.Range(i, Positions.Count);
-
-            Vector3 temp = Positions[i];
-            Positions[i] = Positions[randomIndex];
-            Positions[randomIndex] = temp;
-
-        }
+        
         for (int i = 0; i < Positions.Count; i ++)
         {
+            int next = (i + 1) % players.Count;
             Rigidbody2D rb = players[i].GetComponent<Rigidbody2D>();
 
             if(rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
-                rb.position = Positions[i];
+                rb.position = Positions[next];
 
             }
-            else
-            {
-                players[i].transform.position = Positions[i];
-            }
+           
         }
        
     }
 
     void SpellSwap()
     {
+        Debug.Log("spell swap happening");
         List<PlayerCombat> players = new List<PlayerCombat>();
 
         foreach ( var playerdata in GameData.players )
@@ -137,30 +140,15 @@ public class WorldEventManager : MonoBehaviour
             RightSpell.Add(player.currentMovementSpell);
         }
 
+      
+       
 
-        //Shuffles the Left spells 
-        for(int i = 0; i <LeftSpell.Count;i++)
+       
+        for (int i = 0; i < players.Count;i++)
         {
-            int randomIndex = Random.Range(i, LeftSpell.Count);
-            SpellData temp = LeftSpell[i];
-            LeftSpell[i] = LeftSpell[randomIndex];
-            LeftSpell[randomIndex] = temp;
-        }
-
-        //Shuffles the right spells
-        for (int i = 0; i < RightSpell.Count;i ++)
-        {
-            int randomIndex = Random.Range(i, RightSpell.Count);
-            SpellData temp = RightSpell[i];
-            RightSpell[i] = RightSpell[randomIndex];
-            RightSpell[randomIndex] = temp;
-        }
-
-        //Give back spells to players 
-        for(int i = 0; i < players.Count;i++)
-        {
-            players[i].currentAttackSpell = LeftSpell[i];
-            players[i].currentMovementSpell = RightSpell[i];
+            int next = (i + 1) % players.Count;
+            players[i].currentAttackSpell = LeftSpell[next];
+            players[i].currentMovementSpell = RightSpell[next];
         }
     }
 }
