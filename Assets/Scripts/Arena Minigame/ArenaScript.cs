@@ -3,26 +3,35 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using TMPro;
 
 public class ArenaScript : MonoBehaviour
 {
     [SerializeField] private string winScene = "WinScene";
 
+    [Header("Win Panel")]
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private Image playerWonImg;
+    [SerializeField] private TextMeshProUGUI playerWonTxt;
+    [SerializeField] private TextMeshProUGUI damageDealtTxt;
+    [SerializeField] private TextMeshProUGUI eliminationsTxt;
+
     private List<GameObject> players = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
 
-    private bool isEnding = false;
+    private bool isEnding    = false;
     private bool playersReady = false;
 
     void Start()
     {
+        if (winPanel != null) winPanel.SetActive(false);
         StartCoroutine(FindPlayersNextFrame());
     }
 
     void Update()
     {
         if (isEnding || !playersReady) return;
-
         TryEndGameAfterElimination();
     }
 
@@ -36,20 +45,16 @@ public class ArenaScript : MonoBehaviour
         foreach (var playerData in GameData.players)
         {
             if (playerData.playerGameObject == null) continue;
-
             if (!players.Contains(playerData.playerGameObject))
-            {
                 players.Add(playerData.playerGameObject);
-            }
         }
 
         Debug.Log($"ArenaScript tracking {players.Count} players");
 
         GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
-
         if (spawnPoints.Length < players.Count)
         {
-            Debug.LogError("Not enough spawn points for all players!");
+            Debug.LogError("Not enough spawn points!");
             yield break;
         }
 
@@ -61,35 +66,21 @@ public class ArenaScript : MonoBehaviour
             players[i].transform.position = spawnPoints[i].transform.position;
             players[i].transform.rotation = spawnPoints[i].transform.rotation;
 
-            PlayerInput pi = players[i].GetComponent<PlayerInput>();
-            if (pi != null)
-            {
-                pi.ActivateInput();
-            }
+            var pi = players[i].GetComponent<PlayerInput>();
+            if (pi != null) pi.ActivateInput();
 
-            SpriteRenderer sr = players[i].GetComponentInChildren<SpriteRenderer>();
-            if (sr != null)
-            {
-                sr.enabled = true;
-            }
+            var sr = players[i].GetComponentInChildren<SpriteRenderer>();
+            if (sr != null) sr.enabled = true;
         }
 
         var countdowns = FindObjectsByType<CountdownUI>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None
-        );
+            FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         if (countdowns.Length > 0)
         {
             int done = 0;
-
             foreach (var cd in countdowns)
-            {
-                cd.Play(() =>
-                {
-                    done++;
-                });
-            }
+                cd.Play(() => done++);
         }
 
         playersReady = true;
@@ -101,7 +92,7 @@ public class ArenaScript : MonoBehaviour
 
         if (!players.Contains(player))
         {
-            Debug.LogWarning($"{player.name} was eliminated but is not tracked by ArenaScript.");
+            Debug.LogWarning($"{player.name} not tracked by ArenaScript.");
             return;
         }
 
@@ -111,59 +102,43 @@ public class ArenaScript : MonoBehaviour
             Debug.Log($"{player.name} eliminated.");
         }
 
-        PlayerInput pi = player.GetComponent<PlayerInput>();
-        if (pi != null)
-        {
-            pi.DeactivateInput();
-        }
+        var pi = player.GetComponent<PlayerInput>();
+        if (pi != null) pi.DeactivateInput();
 
-        SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
-        if (sr != null)
-        {
-            sr.enabled = false;
-        }
+        var sr = player.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null) sr.enabled = false;
 
         TryEndGameAfterElimination();
     }
 
     private List<GameObject> GetAlivePlayers()
     {
-        List<GameObject> alivePlayers = new List<GameObject>();
-
-        foreach (GameObject player in players)
+        var alive = new List<GameObject>();
+        foreach (var player in players)
         {
             if (player == null) continue;
             if (!player.activeInHierarchy) continue;
             if (playersEliminated.Contains(player)) continue;
-
-            alivePlayers.Add(player);
+            alive.Add(player);
         }
-
-        return alivePlayers;
+        return alive;
     }
 
     private void TryEndGameAfterElimination()
     {
-        if (isEnding) return;
-        if (players.Count == 0) return;
+        if (isEnding || players.Count == 0) return;
 
-        List<GameObject> alivePlayers = GetAlivePlayers();
+        var alive = GetAlivePlayers();
 
-        if (alivePlayers.Count == 1)
+        if (alive.Count == 1)
         {
             isEnding = true;
-
-            GameObject winner = alivePlayers[0];
-            Debug.Log("Winner: " + winner.name);
-
-            EndGame(winner);
+            EndGame(alive[0]);
         }
-        else if (alivePlayers.Count == 0)
+        else if (alive.Count == 0)
         {
             isEnding = true;
-
-            Debug.Log("Draw!");
-            EndGame(playersEliminated);
+            EndGame((GameObject)null);
         }
     }
 
@@ -171,50 +146,74 @@ public class ArenaScript : MonoBehaviour
     {
         for (int i = 0; i < array.Length; i++)
         {
-            int rand = Random.Range(i, array.Length);
-
-            GameObject temp = array[i];
-            array[i] = array[rand];
+            int rand    = Random.Range(i, array.Length);
+            var temp    = array[i];
+            array[i]    = array[rand];
             array[rand] = temp;
         }
     }
 
     private void EndGame(GameObject winner)
     {
-        PlayerInput playerInput = winner.GetComponent<PlayerInput>();
-        GameData.winnerIndex = playerInput != null ? playerInput.playerIndex : 0;
+        Time.timeScale = 0f;
 
+        // Freeze all players
         foreach (var p in GameData.players)
         {
-            Debug.Log($"EndGame — Player {p.playerIndex} kills: {p.kills}, damage: {p.damageDealt}");
+            if (p.playerGameObject == null) continue;
+            var pi = p.playerGameObject.GetComponent<PlayerInput>();
+            if (pi != null) pi.DeactivateInput();
+            var rb = p.playerGameObject.GetComponent<Rigidbody2D>();
+            if (rb != null) rb.linearVelocity = Vector2.zero;
         }
 
-        SceneManager.LoadScene(winScene);
+        if (winner != null)
+        {
+            var pi = winner.GetComponent<PlayerInput>();
+            GameData.winnerIndex = pi != null ? pi.playerIndex : 0;
+        }
+        else
+        {
+            GameData.winnerIndex = -1;
+        }
+
+        ShowWinPanel(winner);
     }
 
-    private void EndGame(List<GameObject> eliminations)
+    private void ShowWinPanel(GameObject winner)
     {
-        GameData.winnerIndex = -1;
+        if (winPanel == null) return;
+        winPanel.SetActive(true);
 
-        foreach (GameObject player in players)
+        if (winner == null)
         {
-            if (player == null) continue;
-
-            SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null)
-            {
-                sr.enabled = false;
-            }
-
-            PersistentObject persistent = player.GetComponent<PersistentObject>();
-            if (persistent != null)
-            {
-                Destroy(persistent);
-            }
-
-            Destroy(player);
+            if (playerWonTxt    != null) playerWonTxt.text    = "DRAW!";
+            if (damageDealtTxt  != null) damageDealtTxt.text  = "";
+            if (eliminationsTxt != null) eliminationsTxt.text = "";
+            if (playerWonImg    != null) playerWonImg.enabled = false;
+            return;
         }
 
-        SceneManager.LoadScene(winScene);
+        var data = GameData.players.Find(p => p.playerIndex == GameData.winnerIndex);
+        if (data == null)
+        {
+            if (playerWonTxt != null) playerWonTxt.text = "NO DATA";
+            return;
+        }
+
+        if (playerWonImg != null)
+        {
+            playerWonImg.enabled = true;
+            playerWonImg.color   = PlayerData.PlayerColors.GetColor(data.colorIndex);
+            if (data.playerSprite != null)
+                playerWonImg.sprite = data.playerSprite;
+        }
+
+        if (playerWonTxt    != null) playerWonTxt.text    = $"P{data.playerIndex + 1} WINS!";
+        if (damageDealtTxt  != null) damageDealtTxt.text  = $"Damage: {Mathf.RoundToInt(data.damageDealt)}";
+        if (eliminationsTxt != null) eliminationsTxt.text = $"Eliminations: {data.kills}";
+
+        foreach (var p in GameData.players)
+            Debug.Log($"Player {p.playerIndex} — kills: {p.kills}, damage: {p.damageDealt}");
     }
 }
