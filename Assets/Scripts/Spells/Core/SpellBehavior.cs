@@ -37,11 +37,11 @@ public abstract class SpellBehavior : MonoBehaviour
                Time.time - holdStartTime >= maxHoldDuration;
     }
 
-    protected float SizeScale =>
-        SpellStatScaling.GetSizeScale(caster);
-
     protected float Strength =>
         casterStats != null
             ? casterStats.strength
             : 0f;
+
+    protected float SizeScale =>
+        SpellStatScaling.GetSizeScale(caster);
 }
