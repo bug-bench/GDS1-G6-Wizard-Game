@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 2021982601714489538}
   - component: {fileID: 8544290027473481327}
   - component: {fileID: 5306420138738417854}
-  - component: {fileID: 815487475822788058}
+  - component: {fileID: 2408631420343445206}
+  - component: {fileID: 5964737456705836626}
   m_Layer: 0
   m_Name: Fireball
   m_TagString: Untagged
@@ -158,7 +159,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &815487475822788058
+--- !u!114 &2408631420343445206
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,18 +172,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellProjectile
   speed: 10
-  damage: 0
+  damage: 1
   lifeTime: 3
   knockbackForce: 15
-  applyBurnDamage: 10
-  burnDuration: 4
+  applyBurnDamage: 0
+  burnDuration: 3
   applySlowPercentage: 0
-  slowDuration: 0
+  slowDuration: 2
   caster: {fileID: 0}
   ignoreCasterUntilTime: 0
-  hitVFXPrefab: {fileID: 8763047975685687804, guid: efe4abc7e09ed4d47ba801a1716b9be2, type: 3}
+  hitVFXPrefab: {fileID: 0}
   hitVFXLifetime: 0.5
   rotateHitVFXToProjectile: 1
+--- !u!114 &5964737456705836626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485216680615802304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68a2aeb5e1197b04c8e34a206571fc5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FireballSpell
+  maxHoldDuration: 0
+  projectilePrefab: {fileID: 1485216680615802304}
+  damage: 10
+  speed: 10
+  lifetime: 3
+  knockbackForce: 10
+  projectileCount: 1
+  spreadAngle: 0
 --- !u!1 &2597219893205522265
 GameObject:
   m_ObjectHideFlags: 0

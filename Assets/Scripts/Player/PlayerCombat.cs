@@ -299,12 +299,12 @@ public class PlayerCombat : MonoBehaviour
         if (controller != null)
             controller.ClearSprintMultiplier();
 
-        foreach (var s in GetComponentsInChildren<SprintSpell>(true))
-        {
-            if (s != null) Destroy(s.gameObject);
-        }
+        // foreach (var s in GetComponentsInChildren<SprintSpell>(true))
+        // {
+        //     if (s != null) Destroy(s.gameObject);
+        // }
 
-        DestroyAllReflectShieldsUnderRoot();
+        // DestroyAllReflectShieldsUnderRoot();
 
         if (hadTracked && currentMovementSpell != null)
             spellAudio?.PlayRelease(currentMovementSpell, firePoint);
@@ -328,7 +328,7 @@ public class PlayerCombat : MonoBehaviour
         if (isKnockedDown || attackCDTimer > 0f) return;
         if (playerStats != null && playerStats.isStunned) return;
 
-        DestroyAllReflectShieldsUnderRoot();
+        // DestroyAllReflectShieldsUnderRoot();
         activeMainSpell = ExecuteAndReturnSpell(currentAttackSpell, ref attackCDTimer);
         if (currentAttackSpell.cooldownStartsOnRelease)
             pendingMainReleaseCooldown = true;
@@ -357,19 +357,19 @@ public class PlayerCombat : MonoBehaviour
         CleanupHeldMovementEffects(applyReleaseCooldown: true);
     }
 
-    void DestroyAllReflectShieldsUnderRoot()
-    {
-        Transform root = transform.root;
-        foreach (ReflectShieldSpell sh in root.GetComponentsInChildren<ReflectShieldSpell>(true))
-        {
-            if (sh == null) continue;
-            if ((Object)activeSubSpell == (Object)sh)
-                activeSubSpell = null;
-            if ((Object)activeMainSpell == (Object)sh)
-                activeMainSpell = null;
-            Destroy(sh.gameObject);
-        }
-    }
+    // void DestroyAllReflectShieldsUnderRoot()
+    // {
+    //     Transform root = transform.root;
+    //     foreach (ReflectShieldSpell sh in root.GetComponentsInChildren<ReflectShieldSpell>(true))
+    //     {
+    //         if (sh == null) continue;
+    //         if ((Object)activeSubSpell == (Object)sh)
+    //             activeSubSpell = null;
+    //         if ((Object)activeMainSpell == (Object)sh)
+    //             activeMainSpell = null;
+    //         Destroy(sh.gameObject);
+    //     }
+    // }
 
     public bool EquipSpell(SpellData newSpell)
     {
@@ -530,7 +530,11 @@ public class PlayerCombat : MonoBehaviour
         SpellBehavior behavior = spellObj.GetComponentInChildren<SpellBehavior>(true);
         if (behavior != null)
         {
-            behavior.Execute(gameObject, firePoint);
+            behavior.Initialize(
+                gameObject,
+                firePoint);
+
+            behavior.Execute();
             if (behavior.maxHoldDuration > 0f)
                 behavior.BeginHoldDurationTracking();
         }
