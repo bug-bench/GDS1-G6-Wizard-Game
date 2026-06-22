@@ -4,7 +4,10 @@ using UnityEngine;
 public enum WorldEventType
 {
     PlayerLocationSwap,
-    SpellSwap
+    SpellSwap,
+    Firehazard,
+    Icehazard
+   
 }
 
 
@@ -14,6 +17,9 @@ public class WorldEventManager : MonoBehaviour
     public float FirstEventDelay = 30f;
     public float timebetweenEvents = 60f;
     public System.Action<WorldEventType> WorldEventTriggered;
+    public bool FireHazardActive { get; private set; }
+    public bool IceHazardActive { get; private set; }
+    public float hazardTime = 15f;
     void Start()
     {
         StartCoroutine(EventLoop());
@@ -36,7 +42,7 @@ public class WorldEventManager : MonoBehaviour
         while (true)
 
         {
-            WorldEventType randomEvent = (WorldEventType)Random.Range(0, 2);
+            WorldEventType randomEvent = (WorldEventType)Random.Range(0, 4);
             WorldEventTriggered?.Invoke(randomEvent);
 
             //delay for text to show up before event
@@ -52,6 +58,15 @@ public class WorldEventManager : MonoBehaviour
                 case WorldEventType.SpellSwap:
                     SpellSwap();
                     break;
+
+                case WorldEventType.Firehazard:
+                    FirehazardEvent();
+                    break;
+
+                case WorldEventType.Icehazard:
+                    IcehazardEvent();
+                    break;
+
             
             }
 
@@ -150,5 +165,80 @@ public class WorldEventManager : MonoBehaviour
             players[i].currentAttackSpell = LeftSpell[next];
             players[i].currentMovementSpell = RightSpell[next];
         }
+    }
+
+    IEnumerator FirehazardEvent()
+    {
+        FireHazardActive = true;
+
+        float timer = 3f;
+        float tick = 2f;
+
+        while (timer <hazardTime)
+        {
+            foreach(var playerData in GameData.players)
+            {
+                if (playerData.playerGameObject == null)
+                {
+                    continue;
+
+                }
+                PlayerStats stats = playerData.playerGameObject.GetComponentInParent<PlayerStats>();
+
+                if (stats != null)
+                {
+                    stats.TakeDamage(2f);
+                }
+            }
+
+            yield return new WaitForSeconds(tick);
+            timer += tick;
+        }
+
+
+
+        FireHazardActive = false;
+    }
+    IEnumerator IcehazardEvent()
+    {
+        IceHazardActive = true;
+
+        
+            foreach (var playerData in GameData.players)
+            {
+            if (playerData.playerGameObject == null)
+            {
+                continue;
+
+            }
+            PlayerController controller = playerData.playerGameObject.GetComponent<PlayerController>();
+
+            if(controller != null)
+            {
+                controller.applyIce();
+            }
+        }
+
+        yield return new WaitForSeconds(hazardTime);
+
+        foreach (var playerData in GameData.players)
+        {
+            if (playerData.playerGameObject == null)
+            {
+                continue;
+
+            }
+            PlayerController controller = playerData.playerGameObject.GetComponent<PlayerController>();
+
+            if (controller != null)
+            {
+                controller.removeIce();
+            }
+        }
+
+
+
+        IceHazardActive = false;
+
     }
 }
