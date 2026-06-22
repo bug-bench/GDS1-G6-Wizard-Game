@@ -171,8 +171,8 @@ public class WorldEventManager : MonoBehaviour
     {
         FireHazardActive = true;
 
-        float timer = 3f;
-        float tick = 2f;
+        float timer = 1f;
+        float tick = 4f;
 
         while (timer <hazardTime)
         {
