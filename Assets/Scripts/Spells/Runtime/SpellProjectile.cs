@@ -1,47 +1,57 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SpellProjectile : MonoBehaviour
 {
-    public float speed = 10f;
-    public float damage = 1f;
-    public float lifeTime = 3f;
+    [Header("Runtime Data")]
+    private float damage;
+    private float speed;
+    private float lifeTime;
+    private float knockbackForce;
 
-    [Header("Knockback Settings")]
-    [Tooltip("击退力。如果是火球/冰球，设置合适的击退（例如 10 到 20）")]
-    public float knockbackForce = 15f;
+    private int burnDamage;
+    private float burnDuration;
 
-    [Header("Status Effects on Hit")]
-    [Tooltip("命中附加的燃烧总伤害 — Total burn damage applied on hit.")]
-    public int applyBurnDamage = 0;
-    [Tooltip("燃烧持续时间 — Burn duration.")]
-    public float burnDuration = 3f;
+    private float slowPercentage;
+    private float slowDuration;
 
-    [Tooltip("命中附加的减速百分比（0~1，例如0.3表示减速30%） — Speed reduction percentage applied on hit.")]
-    [Range(0f, 1f)]
-    public float applySlowPercentage = 0f;
-    [Tooltip("减速持续时间 — Slow duration.")]
-    public float slowDuration = 2f;
+    [HideInInspector]
+    public GameObject caster;
 
-    // 用来记录发射这个火球的玩家是谁 — Root GameObject of the player who fired this projectile.
-    [HideInInspector] public GameObject caster;
-
-    /// <summary>
-    /// 生成后极短时间内忽略与施法者碰撞（Overlap 时 Trigger 可能同一帧多次触发）。
-    /// Briefly ignore collisions with the caster after spawn (triggers may fire multiple times in one frame on overlap).
-    /// </summary>
-    [HideInInspector] public float ignoreCasterUntilTime;
-
-    /// <summary>
-    /// 地上的 SpellPickup 预制体若误挂了本脚本，Start 里的 Destroy 会把整个拾取物删掉；这里直接当作装饰品关掉弹道逻辑。
-    /// If this script is mistakenly on a ground SpellPickup prefab, Start would Destroy the whole pickup; disable projectile logic instead.
-    /// </summary>
-    bool IsUnderSpellPickup => GetComponentInParent<SpellPickup>() != null;
-
+    [HideInInspector]
+    public float ignoreCasterUntilTime;
 
     [Header("Hit VFX")]
     public GameObject hitVFXPrefab;
     public float hitVFXLifetime = 0.5f;
-    public bool rotateHitVFXToProjectile = true;
+
+    bool IsUnderSpellPickup =>
+        GetComponentInParent<SpellPickup>() != null;
+
+    public void Initialize(
+        GameObject caster,
+        float damage,
+        float speed,
+        float lifeTime,
+        float knockbackForce,
+        int burnDamage,
+        float burnDuration,
+        float slowPercentage,
+        float slowDuration)
+    {
+        this.caster = caster;
+
+        this.damage = damage;
+        this.speed = speed;
+        this.lifeTime = lifeTime;
+        this.knockbackForce = knockbackForce;
+
+        this.burnDamage = burnDamage;
+        this.burnDuration = burnDuration;
+
+        this.slowPercentage = slowPercentage;
+        this.slowDuration = slowDuration;
+    }
 
     void Awake()
     {
@@ -51,159 +61,181 @@ public class SpellProjectile : MonoBehaviour
 
     void Start()
     {
-        if (IsUnderSpellPickup) return;
+        if (IsUnderSpellPickup)
+            return;
+
         Destroy(gameObject, lifeTime);
     }
 
     void Update()
     {
-        if (IsUnderSpellPickup) return;
-        transform.Translate(Vector3.up * speed * Time.deltaTime);
+        transform.Translate(
+            Vector3.up *
+            speed *
+            Time.deltaTime);
     }
 
-    static bool IsColliderOnCaster(GameObject casterRoot, Collider2D col)
+    void OnTriggerEnter2D(Collider2D hit)
     {
-        if (casterRoot == null || col == null) return false;
-        Transform t = col.transform;
-        return t == casterRoot.transform || t.IsChildOf(casterRoot.transform);
-    }
-
-    /// <summary>
-    /// 不用 CompareTag：项目里若未在 Tag 列表添加 "Wall"/"Player"，CompareTag 会报错刷屏甚至卡死。
-    /// Avoid CompareTag: missing "Wall"/"Player" in the Tag list can throw and spam errors or stall the editor.
-    /// </summary>
-    static bool HasTag(Collider2D col, string tagName)
-    {
-        return col != null && col.gameObject.tag == tagName;
-    }
-
-    void OnTriggerEnter2D(Collider2D hitInfo)
-    {
-        if (IsUnderSpellPickup) return;
-
-        // 【调试代码】打印子弹撞到了什么东西
-        Debug.Log($"[SpellProjectile] {gameObject.name} 撞到了: {hitInfo.gameObject.name}, Layer: {LayerMask.LayerToName(hitInfo.gameObject.layer)}, Tag: {hitInfo.gameObject.tag}");
-
-        // caster 未设置时，以前会误判成「可以打 Player」，导致立刻自伤 — If caster is unset, we used to hit "Player" and self-damage immediately.
         if (caster == null)
-        {
-            if (HasTag(hitInfo, "Player"))
-                Destroy(gameObject);
-            return;
-        }
-
-        if (Time.time < ignoreCasterUntilTime && IsColliderOnCaster(caster, hitInfo))
             return;
 
-        // 碰撞体在玩家子物体上时 gameObject != caster 根节点，必须用层级判断否则会打到自己 — Colliders may be on child objects; use hierarchy check, not reference equality to root.
-        if (IsColliderOnCaster(caster, hitInfo)) return;
+        if (Time.time < ignoreCasterUntilTime &&
+            IsColliderOnCaster(caster, hit))
+            return;
 
-        // ReflectShieldSpell shield = hitInfo.GetComponent<ReflectShieldSpell>()
-        //     ?? hitInfo.GetComponentInParent<ReflectShieldSpell>();
-        // if (shield != null)
-        // {
-        //     shield.ApplyReflectToProjectile(this);
-        //     return;
-        // }
+        if (IsColliderOnCaster(caster, hit))
+            return;
 
-        float totalDamage = damage;
+        destroyableObject destroyable =
+            hit.GetComponent<destroyableObject>()
+            ?? hit.GetComponentInParent<destroyableObject>();
 
-        PlayerStats casterStats = caster.GetComponent<PlayerStats>();
-        if (casterStats != null)
+        if (destroyable != null)
         {
-            totalDamage += casterStats.strength;
-        }
+            destroyable.takeDamage(
+                damage + StrengthBonus());
 
-        //destroyable object code 
-        destroyableObject destroyobject = hitInfo.GetComponent<destroyableObject>()
-            ?? hitInfo.GetComponentInParent<destroyableObject>();
-
-        if (destroyobject != null)
-        {
-            destroyobject.takeDamage(totalDamage);
-            SpawnHitVFX(transform.position);
+            SpawnHitVFX();
             Destroy(gameObject);
             return;
         }
 
-        if (HasTag(hitInfo, "Player"))
+        if (hit.CompareTag("Player"))
         {
-            PlayerCombat target = hitInfo.GetComponent<PlayerCombat>()
-                ?? hitInfo.GetComponentInParent<PlayerCombat>();
-            // 双保险：即使 IgnoreCollision 漏了某个碰撞体，也不打施法者本人 — Extra guard: never damage the caster even if IgnoreCollision missed a collider.
-            if (target != null && target.gameObject != caster)
+            HandlePlayerHit(hit);
+            return;
+        }
+
+        if (hit.gameObject.layer ==
+            LayerMask.NameToLayer("wall"))
+        {
+            SpawnHitVFX();
+            Destroy(gameObject);
+        }
+    }
+
+    void HandlePlayerHit(Collider2D hit)
+    {
+        PlayerCombat target =
+            hit.GetComponent<PlayerCombat>()
+            ?? hit.GetComponentInParent<PlayerCombat>();
+
+        if (target == null)
+            return;
+
+        if (target.gameObject == caster)
+            return;
+
+        if (target.IsInvincible)
+            return;
+
+        float finalDamage =
+            damage + StrengthBonus();
+
+        int attackerIndex = -1;
+
+        PlayerInput input =
+            caster.GetComponent<PlayerInput>();
+
+        if (input != null)
+            attackerIndex = input.playerIndex;
+
+        Vector2 knockback =
+            (Vector2)transform.up *
+            knockbackForce;
+
+        target.TakeDamage(
+            Mathf.RoundToInt(finalDamage),
+            attackerIndex,
+            knockback);
+
+        PlayerStats stats =
+            target.GetComponent<PlayerStats>();
+
+        if (stats != null)
+        {
+            if (burnDamage > 0)
             {
-                // if (ReflectShieldSpell.HasActiveShieldOn(target))
-                //     return;
-
-                if (target.IsInvincible)
-                    return;
-
-                var casterInput = caster.GetComponent<UnityEngine.InputSystem.PlayerInput>();
-                int attackerIndex = casterInput != null ? casterInput.playerIndex : -1;
-
-                // 子弹的击退方向最好是子弹的飞行方向，而不是从子弹中心向外排斥（否则打到碰撞体边缘会把人往侧面甚至反向推）
-                Vector2 knockDirection = (Vector2)transform.up;
-
-                // 传入方向乘以击退力
-                target.TakeDamage(Mathf.RoundToInt(totalDamage), attackerIndex, knockDirection.normalized * knockbackForce);
-
-                PlayerStats targetStats = target.GetComponent<PlayerStats>();
-                if (targetStats != null)
-                {
-                    if (applyBurnDamage > 0)
-                        targetStats.ApplyBurn(applyBurnDamage, burnDuration, 0.5f, attackerIndex);
-                    if (applySlowPercentage > 0f)
-                        targetStats.ApplySpeedMultiplier(1f - applySlowPercentage, slowDuration);
-                }
-                SpawnHitVFX(transform.position);
-                Destroy(gameObject);
-
-
+                stats.ApplyBurn(
+                    burnDamage,
+                    burnDuration,
+                    0.5f,
+                    attackerIndex);
             }
 
+            if (slowPercentage > 0f)
+            {
+                stats.ApplySpeedMultiplier(
+                    1f - slowPercentage,
+                    slowDuration);
+            }
         }
-        else if (hitInfo.gameObject.layer == LayerMask.NameToLayer("wall") || HasTag(hitInfo, "Wall"))
-        {
-            SpawnHitVFX(transform.position);
-            Destroy(gameObject);
-        }
 
-      
+        SpawnHitVFX();
 
-
-
+        Destroy(gameObject);
     }
 
-    void SpawnHitVFX(Vector2 hitPosition)
+    float StrengthBonus()
     {
-        if (hitVFXPrefab == null) return;
+        if (caster == null)
+            return 0f;
 
-        Quaternion rotation = Quaternion.identity;
+        PlayerStats stats =
+            caster.GetComponent<PlayerStats>();
 
-        if (rotateHitVFXToProjectile)
-        {
-            rotation = transform.rotation;
-        }
+        return stats != null
+            ? stats.strength
+            : 0f;
+    }
 
-        GameObject vfx = Instantiate(hitVFXPrefab, hitPosition, rotation);
+    void SpawnHitVFX()
+    {
+        if (hitVFXPrefab == null)
+            return;
+
+        GameObject vfx =
+            Instantiate(
+                hitVFXPrefab,
+                transform.position,
+                transform.rotation);
+
         Destroy(vfx, hitVFXLifetime);
     }
 
-    /// <summary>
-    /// 子物体上火球也要认主；并与施法者所有 Collider2D 做 IgnoreCollision，防止出生点重叠瞬伤。
-    /// Assign caster on child projectiles too; ignore collision with all caster Collider2D to prevent spawn overlap damage.
-    /// </summary>
-    public static void RegisterWithCaster(GameObject projectileRoot, GameObject casterRoot, float casterIgnoreSeconds = 0.15f)
+    static bool IsColliderOnCaster(
+        GameObject casterRoot,
+        Collider2D col)
     {
-        if (projectileRoot == null || casterRoot == null) return;
+        if (casterRoot == null || col == null)
+            return false;
 
-        float until = Time.time + casterIgnoreSeconds;
-        Collider2D[] casterCols = casterRoot.GetComponentsInChildren<Collider2D>(true);
-        // 必须从弹道根物体收集：Collider 常在父节点、SpellProjectile 在子节点，用 sp.GetComponentsInChildren 会漏掉根上的碰撞体 — Collect colliders from projectile root; collider may be on parent while SpellProjectile is on child.
-        Collider2D[] projCols = projectileRoot.GetComponentsInChildren<Collider2D>(true);
+        Transform t = col.transform;
 
-        foreach (SpellProjectile sp in projectileRoot.GetComponentsInChildren<SpellProjectile>(true))
+        return t == casterRoot.transform ||
+               t.IsChildOf(casterRoot.transform);
+    }
+
+    public static void RegisterWithCaster(
+        GameObject projectileRoot,
+        GameObject casterRoot,
+        float casterIgnoreSeconds = 0.15f)
+    {
+        if (projectileRoot == null ||
+            casterRoot == null)
+            return;
+
+        float until =
+            Time.time + casterIgnoreSeconds;
+
+        Collider2D[] casterCols =
+            casterRoot.GetComponentsInChildren<Collider2D>(true);
+
+        Collider2D[] projCols =
+            projectileRoot.GetComponentsInChildren<Collider2D>(true);
+
+        foreach (SpellProjectile sp in projectileRoot.GetComponentsInChildren<SpellProjectile>())
         {
             sp.caster = casterRoot;
             sp.ignoreCasterUntilTime = until;
@@ -211,16 +243,13 @@ public class SpellProjectile : MonoBehaviour
 
         foreach (Collider2D pc in projCols)
         {
-            if (pc == null) continue;
             foreach (Collider2D cc in casterCols)
             {
-                if (cc == null) continue;
-                Physics2D.IgnoreCollision(pc, cc, true);
+                Physics2D.IgnoreCollision(
+                    pc,
+                    cc,
+                    true);
             }
         }
     }
-
-
-
-    
 }

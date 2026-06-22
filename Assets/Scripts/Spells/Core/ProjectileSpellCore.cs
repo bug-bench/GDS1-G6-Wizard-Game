@@ -5,15 +5,24 @@ public abstract class ProjectileSpellCore : SpellBehavior
     [Header("Projectile")]
     public GameObject projectilePrefab;
 
-    [Header("Projectile Stats")]
+    [Header("Combat")]
     public float damage = 10f;
     public float speed = 10f;
-    public float lifetime = 3f;
-    public float knockbackForce = 10f;
+    public float lifeTime = 3f;
+    public float knockbackForce = 15f;
+
+    [Header("Status Effects")]
+    public int burnDamage;
+    public float burnDuration;
+
+    [Range(0f, 1f)]
+    public float slowPercentage;
+
+    public float slowDuration;
 
     [Header("Spread")]
     public int projectileCount = 1;
-    public float spreadAngle = 0f;
+    public float spreadAngle;
 
     public override void Execute()
     {
@@ -41,36 +50,36 @@ public abstract class ProjectileSpellCore : SpellBehavior
                 firePoint.rotation *
                 Quaternion.Euler(0f, 0f, angle);
 
-            GameObject projectile =
+            GameObject projectileObject =
                 Instantiate(
                     projectilePrefab,
                     firePoint.position,
                     rotation);
 
-            ConfigureProjectile(projectile);
+            SpellProjectile projectile =
+                projectileObject.GetComponent<SpellProjectile>();
+
+            if (projectile != null)
+            {
+                projectile.Initialize(
+                    caster,
+                    damage,
+                    speed,
+                    lifeTime,
+                    knockbackForce,
+                    burnDamage,
+                    burnDuration,
+                    slowPercentage,
+                    slowDuration);
+            }
+
+            SpellProjectile.RegisterWithCaster(
+                projectileObject,
+                caster);
+
+            SpellStatScaling.ApplyProjectileSize(
+                projectileObject,
+                caster);
         }
-    }
-
-    protected virtual void ConfigureProjectile(
-        GameObject projectile)
-    {
-        SpellProjectile sp =
-            projectile.GetComponent<SpellProjectile>();
-
-        if (sp == null)
-            return;
-
-        sp.damage = damage;
-        sp.speed = speed;
-        sp.lifeTime = lifetime;
-        sp.knockbackForce = knockbackForce;
-
-        SpellProjectile.RegisterWithCaster(
-            projectile,
-            caster);
-
-        SpellStatScaling.ApplyProjectileSize(
-            projectile,
-            caster);
     }
 }

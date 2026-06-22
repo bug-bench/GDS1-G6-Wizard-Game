@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class IceSpikeSpell : ProjectileSpellCore
 {
     private void Reset()
