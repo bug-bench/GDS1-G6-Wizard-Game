@@ -98,13 +98,13 @@ public class SpellProjectile : MonoBehaviour
         // 碰撞体在玩家子物体上时 gameObject != caster 根节点，必须用层级判断否则会打到自己 — Colliders may be on child objects; use hierarchy check, not reference equality to root.
         if (IsColliderOnCaster(caster, hitInfo)) return;
 
-        ReflectShieldSpell shield = hitInfo.GetComponent<ReflectShieldSpell>()
-            ?? hitInfo.GetComponentInParent<ReflectShieldSpell>();
-        if (shield != null)
-        {
-            shield.ApplyReflectToProjectile(this);
-            return;
-        }
+        // ReflectShieldSpell shield = hitInfo.GetComponent<ReflectShieldSpell>()
+        //     ?? hitInfo.GetComponentInParent<ReflectShieldSpell>();
+        // if (shield != null)
+        // {
+        //     shield.ApplyReflectToProjectile(this);
+        //     return;
+        // }
 
         float totalDamage = damage;
 
@@ -133,8 +133,8 @@ public class SpellProjectile : MonoBehaviour
             // 双保险：即使 IgnoreCollision 漏了某个碰撞体，也不打施法者本人 — Extra guard: never damage the caster even if IgnoreCollision missed a collider.
             if (target != null && target.gameObject != caster)
             {
-                if (ReflectShieldSpell.HasActiveShieldOn(target))
-                    return;
+                // if (ReflectShieldSpell.HasActiveShieldOn(target))
+                //     return;
 
                 if (target.IsInvincible)
                     return;
