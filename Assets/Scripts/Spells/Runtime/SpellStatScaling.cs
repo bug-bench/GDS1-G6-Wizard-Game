@@ -67,16 +67,16 @@ public static class SpellStatScaling
         ApplyProjectileSize(spellRoot, caster);
     }
 
-    public static void ApplyMeleeHitboxScale(StaffSpell melee, float scale)
-    {
-        if (melee == null || scale <= 1.001f) return;
-        melee.hitRadius *= scale;
-        melee.hitOffset *= scale;
+    // public static void ApplyMeleeHitboxScale(StaffSpell melee, float scale)
+    // {
+    //     if (melee == null || scale <= 1.001f) return;
+    //     melee.hitRadius *= scale;
+    //     melee.hitOffset *= scale;
 
-        SpriteRenderer sr = melee.GetComponentInChildren<SpriteRenderer>();
-        if (sr != null && sr.transform != melee.transform)
-            sr.transform.localScale *= scale;
-    }
+    //     SpriteRenderer sr = melee.GetComponentInChildren<SpriteRenderer>();
+    //     if (sr != null && sr.transform != melee.transform)
+    //         sr.transform.localScale *= scale;
+    // }
 
     public static void ApplyLaserWidth(LineRenderer line, float baseStartWidth, float baseEndWidth, float scale)
     {
