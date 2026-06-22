@@ -229,7 +229,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 8107549014988267602}
   damage: 10
   speed: 10
-  lifeTime: 3
+  lifeTime: 1
   knockbackForce: 10
   burnDamage: 0
   burnDuration: 0
