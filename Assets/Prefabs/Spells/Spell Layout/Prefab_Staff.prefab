@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6461589937716848074}
-  - component: {fileID: 2544175411548816210}
+  - component: {fileID: 4720387547911316633}
   m_Layer: 0
   m_Name: Prefab_Staff
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 4293601842895411219}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2544175411548816210
+--- !u!114 &4720387547911316633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,25 +42,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1882510872929584624}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 107c0a51fba0dfc4d9d66ba3cecfaf86, type: 3}
+  m_Script: {fileID: 11500000, guid: e498567fde4a4f94a83cb30fb71c8d14, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MeleeSwingSpell
+  m_EditorClassIdentifier: Assembly-CSharp::StaffSpell
   maxHoldDuration: 0
   damage: 20
-  swingDuration: 0.25
-  knockbackForce: 20
+  hitRadius: 0.8
+  hitOffset: 1
+  knockbackForce: 40
   hitLayer:
     serializedVersion: 2
     m_Bits: 4294967295
-  hitRadius: 0.8
-  hitOffset: 1
+  swingDuration: 0.25
   startAngle: 100
   endAngle: -90
   slashVisualPrefab: {fileID: 3549229607730413970, guid: b03fdbf9e054e464ba8cf1d5f4502324, type: 3}
-  slashLocalOffset: {x: 0, y: 0.7}
-  slashLocalScale: {x: 0.7, y: 0.7}
-  slashRotationOffset: 90
-  flipSlashWhenFacingLeft: 0
+  slashLocalOffset: {x: 0, y: 1}
+  slashLocalScale: {x: 1, y: 1}
+  slashRotationOffset: 0
 --- !u!1 &2007752607616842079
 GameObject:
   m_ObjectHideFlags: 0
