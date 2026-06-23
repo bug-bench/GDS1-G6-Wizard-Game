@@ -1,6 +1,9 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+//used to announce events for UI
 public enum WorldEventType
 {
     PlayerLocationSwap,
@@ -17,7 +20,10 @@ public class WorldEventManager : MonoBehaviour
     public float FirstEventDelay = 30f;
     public float timebetweenEvents = 60f;
     public System.Action<WorldEventType> WorldEventTriggered;
+
+    //flag for fire hazard
     public bool FireHazardActive { get; private set; }
+    //flag for ice hazard 
     public bool IceHazardActive { get; private set; }
     public float hazardTime = 15f;
     void Start()
@@ -60,11 +66,11 @@ public class WorldEventManager : MonoBehaviour
                     break;
 
                 case WorldEventType.Firehazard:
-                    FirehazardEvent();
+                   StartCoroutine(FirehazardEvent());
                     break;
 
                 case WorldEventType.Icehazard:
-                    IcehazardEvent();
+                   StartCoroutine(IcehazardEvent());
                     break;
 
             
@@ -241,4 +247,7 @@ public class WorldEventManager : MonoBehaviour
         IceHazardActive = false;
 
     }
+
+    
+   
 }
