@@ -10,12 +10,7 @@ public class CollectManager : MonoBehaviour
     protected bool TimerEnded = false;
     private List<GameObject> players = new List<GameObject>();
     private Dictionary<GameObject, int> PlayerCollectTracker = new Dictionary<GameObject, int>();
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    private Dictionary<GameObject, CollectScoreUI> playerScoreUIs = new Dictionary<GameObject, CollectScoreUI>();
 
     public void SetupPlayer(GameObject player)
     {
@@ -70,6 +65,57 @@ public class CollectManager : MonoBehaviour
         return draw ? null : top;
     }
 
+    public void RegisterScoreUI(GameObject player, CollectScoreUI ui)
+    {
+        playerScoreUIs[player] = ui;
+    }
+
+    private void UpdateLeaderCrowns()
+    {
+        foreach (var ui in playerScoreUIs.Values)
+        {
+            ui.SetCrowned(false);
+        }
+
+        if (PlayerCollectTracker.Count == 0) return;
+
+        int highestScore = -1;
+
+        foreach (var score in PlayerCollectTracker.Values)
+        {
+            if (score > highestScore)
+            {
+                highestScore = score;
+            }
+        }
+
+        // Rule 1: Nobody has any coins
+        if ( highestScore <= 0) return;
+
+        List<GameObject> leaders = new List<GameObject>();
+
+        foreach (var pair in PlayerCollectTracker)
+        {
+            if (pair.Value == highestScore)
+            {
+                leaders.Add(pair.Key);
+            }
+        }
+
+        // Rule 2: Everyone has the same amount of coins
+        if (leaders.Count == PlayerCollectTracker.Count) return;
+
+        // Rule 3: there is a highest and lowest player(s)
+        foreach (var leader in leaders)
+        {
+            if (playerScoreUIs.TryGetValue(leader, out CollectScoreUI ui))
+            {
+                ui.SetCrowned(true);
+            }
+        }
+    }
+
+
     public void DropPickup(GameObject player, int amount)
     {
         PlayerCollectTracker[player] -= amount;
@@ -106,6 +152,7 @@ public class CollectManager : MonoBehaviour
                 }
             }
         }
+        UpdateLeaderCrowns();
     }
 
     GameObject DropPickup(Vector2 position)
@@ -130,6 +177,7 @@ public class CollectManager : MonoBehaviour
         {
             PlayerCollectTracker[player]++;
         }
+        UpdateLeaderCrowns();
     }
 
     public int GetPlayerScore(GameObject player)
