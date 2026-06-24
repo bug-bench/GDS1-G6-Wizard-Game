@@ -479,4 +479,9 @@ public class SurvivalScript : MonoBehaviour
 
         EndGame(winner);
     }
+
+    public bool IsManualWinDebugMode()
+    {
+        return manualWinDebugMode;
+    }
 }
