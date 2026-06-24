@@ -161,12 +161,12 @@ MonoBehaviour:
   knockbackForce: 20
   layerMask:
     serializedVersion: 2
-    m_Bits: 257
+    m_Bits: 1
   castStartInset: 0.1
   lineDuration: 2
   showLineRenderer: 1
   beamVFX: {fileID: 6189294275176017214, guid: a0a547e4ca35a224cbd2ea1c0b5239f6, type: 3}
-  beamThickness: 1
+  beamThickness: 0.2
   beamLength: 1
   beamLifetime: 0.5
   beamRotationOffset: 0
