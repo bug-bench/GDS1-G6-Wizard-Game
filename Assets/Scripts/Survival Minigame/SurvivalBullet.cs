@@ -9,6 +9,28 @@ public class SurvivalBullet : MonoBehaviour
     private float lifetime;
 
     private float timer;
+    private static SurvivalScript survivalManager;
+    private static bool searchedForManager = false;
+
+    private void Awake()
+    {
+        CacheManager();
+    }
+
+    private void CacheManager()
+    {
+        // Only search for once
+        if (searchedForManager) return;
+
+        survivalManager = FindFirstObjectByType<SurvivalScript>();
+
+        searchedForManager = true;
+
+        if (survivalManager != null)
+        {
+            Debug.Log("Survival manager cached.");
+        }
+    }
 
     public void Initialize(
         Vector2 direction,
@@ -64,12 +86,12 @@ public class SurvivalBullet : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        PlayerCombat pc = other.GetComponent<PlayerCombat>();
 
-        if (pc != null)
+        if (survivalManager != null)
         {
-            pc.TakeDamage(30);
+            survivalManager.TakeSurvivalHit(other.gameObject);
         }
+        
         ReturnToPool();
     }
 }

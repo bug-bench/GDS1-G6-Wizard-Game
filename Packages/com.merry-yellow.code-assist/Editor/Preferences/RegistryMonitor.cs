@@ -264,8 +264,7 @@ namespace Meryel.UnityCodeAssist.Editor.Preferences
                 if (thread != null)
                 {
                     _eventTerminate.Set();
-                    if (!thread.Join(1000))
-                        throw new TimeoutException("Registry monitor thread did not stop in time.");
+                    thread.Join();
                 }
             }
         }

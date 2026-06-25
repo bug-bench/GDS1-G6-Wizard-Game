@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
-using NUnit.Framework;
 
 
 [System.Serializable]
@@ -31,15 +29,8 @@ public class SurvivalBulletSpawner : MonoBehaviour
         Circle,
         Spin,
         Strafe,
-        Spiral,
-        Shotgun,
-        Flower,
-        DoubleSpiral
+        Spiral
     }
-
-    [Header("Pattern Debug")]
-    [SerializeField] private bool patternDebugMode = false;
-    [SerializeField] private PatternType debugPattern = PatternType.Straight;
 
     [Header("References")]
     [SerializeField] private GameObject bulletPrefab;
@@ -61,49 +52,20 @@ public class SurvivalBulletSpawner : MonoBehaviour
     private float currentRotation;
     private float strafeAngle;
     private float strafeDirection = 1f;
-    private Vector2 fallbackDirection;
     private PatternSettings currentSettings;
     private PatternType lastPattern;
     private PatternType secondLastPattern;
-    private PatternType lastDebugPattern;
 
     private bool hasPatternHistory = false;
 
     private Transform targetPlayer;
 
-    private SurvivalScript survival;
-
     private void Start()
     {
-        fallbackDirection = Random.insideUnitCircle.normalized;
-
-        if (fallbackDirection == Vector2.zero)
-        {
-            fallbackDirection = Vector2.right;
-        }
-
-        survival = FindFirstObjectByType<SurvivalScript>();
-
         ChooseRandomPattern();
 
         StartCoroutine(FireRoutine());
         StartCoroutine(PatternRoutine());
-
-        lastDebugPattern = debugPattern;
-
-        if (IsPatternDebugActive())
-        {
-            ApplyPatternSettings(debugPattern);
-        }
-    }
-
-    void Update()
-    {
-        if (survival != null && survival.IsManualWinDebugMode() && !patternDebugMode)
-        {
-            patternDebugMode = true;
-        }
-        HandlePatternDebug();
     }
 
     // ==================================================
@@ -114,10 +76,7 @@ public class SurvivalBulletSpawner : MonoBehaviour
     {
         while (true)
         {
-            if (!IsPatternDebugActive())
-            {
-                ChooseRandomPattern();
-            }
+            ChooseRandomPattern();
 
             float waitTime =
                 Random.Range(minPatternTime, maxPatternTime);
@@ -163,31 +122,10 @@ public class SurvivalBulletSpawner : MonoBehaviour
 
         hasPatternHistory = true;
 
-        ApplyPatternSettings(chosenPattern.patternType);
-
-        if (targetPlayer == null)
-        {
-            fallbackDirection = Random.insideUnitCircle.normalized;
-
-            if (fallbackDirection == Vector2.zero)
-            {
-                fallbackDirection = Vector2.right;
-            }
-        }
+        currentSettings = chosenPattern;
+        currentPattern = chosenPattern.patternType;
 
         Debug.Log("New Pattern: " + currentPattern);
-    }
-
-    private void HandlePatternDebug()
-    {
-        if (!patternDebugMode) return;
-
-        if (currentPattern != debugPattern)
-        {
-            ApplyPatternSettings(debugPattern);
-
-            Debug.Log($"Debug Pattern: {debugPattern}");
-        }
     }
 
     // ==================================================
@@ -231,15 +169,6 @@ public class SurvivalBulletSpawner : MonoBehaviour
             case PatternType.Spiral:
                 FireSpiral();
                 break;
-            case PatternType.Shotgun:
-                FireShotgun();
-                break;
-            case PatternType.Flower:
-                FireFlower();
-                break;
-            case PatternType.DoubleSpiral:
-                FireDoubleSpiral();
-                break;
         }
     }
 
@@ -248,15 +177,20 @@ public class SurvivalBulletSpawner : MonoBehaviour
     // ==================================================
 
     // ---------- STRAIGHT ----------
-    // Fires in a straight line at the closest player
+    // Targets closest player
 
     private void FireStraight()
     {
-        ShootBullet(GetTargetDirection());
+        if (targetPlayer == null)
+            return;
+
+        Vector2 direction =
+            (targetPlayer.position - transform.position).normalized;
+
+        ShootBullet(direction);
     }
 
     // ---------- CIRCLE ----------
-    // Come on, you know what a circle is...
 
     private void FireCircle()
     {
@@ -295,27 +229,20 @@ public class SurvivalBulletSpawner : MonoBehaviour
     }
 
     // ---------- STRAFE ----------
-    // Sweeps back and forth at the closest player
+    // Sweeps back and forth
 
     private void FireStrafe()
     {
         strafeAngle +=
-            currentSettings.rotationSpeed * 
-            currentSettings.fireRate * 
-            strafeDirection;
+            currentSettings.rotationSpeed * currentSettings.fireRate * strafeDirection;
 
         if (Mathf.Abs(strafeAngle) >= currentSettings.spreadAngle)
         {
             strafeDirection *= -1f;
         }
 
-        Vector2 baseDirection = GetTargetDirection();
-
-        float baseAngle =
-            Mathf.Atan2(baseDirection.y, baseDirection.x) *
-            Mathf.Rad2Deg;
-        
-        Vector2 direction = DirectionFromAngle(baseAngle + strafeAngle);
+        Vector2 direction =
+            DirectionFromAngle(strafeAngle);
 
         ShootBullet(direction);
     }
@@ -331,56 +258,6 @@ public class SurvivalBulletSpawner : MonoBehaviour
             DirectionFromAngle(currentRotation);
 
         ShootBullet(direction);
-    }
-
-    // ---------- SHOTGUN ----------
-    // Fires in a 3 burst at the closest player
-
-    private void FireShotgun()
-    {
-        Vector2 targetDirection = GetTargetDirection();
-
-        float baseAngle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
-
-        float angleStep = currentSettings.spreadAngle / Mathf.Max(1, currentSettings.bulletCount - 1);
-
-        float startAngle = baseAngle - currentSettings.spreadAngle * 0.5f;
-
-        for (int i = 0; i < currentSettings.bulletCount; i++)
-        {
-            float angle = startAngle + angleStep * i;
-
-            ShootBullet(DirectionFromAngle(angle));
-        }
-    }
-
-    // ---------- FLOWER ----------
-    // So pretty, yet so deadly... a rotating circle pattern
-
-    private void FireFlower()
-    {
-        currentRotation += currentSettings.rotationSpeed * currentSettings.fireRate;
-
-        float angleStep = 360f / currentSettings.bulletCount;
-
-        for (int i = 0; i < currentSettings.bulletCount; i++)
-        {
-            float angle = currentRotation + angleStep * i;
-
-            ShootBullet(DirectionFromAngle(angle));
-        }
-    }
-
-    // ---------- DOUBLE SPIRAL ----------
-    // I know, I'm so original... a spiral in 2 different directions
-
-    private void FireDoubleSpiral()
-    {
-        currentRotation += currentSettings.rotationSpeed * currentSettings.fireRate;
-
-        ShootBullet(DirectionFromAngle(currentRotation));
-
-        ShootBullet(DirectionFromAngle(currentRotation + 180f));
     }
 
     // ==================================================
@@ -457,55 +334,5 @@ public class SurvivalBulletSpawner : MonoBehaviour
             Mathf.Cos(radians),
             Mathf.Sin(radians)
         );
-    }
-
-    private Vector2 GetTargetDirection()
-    {
-        if (targetPlayer != null)
-        {
-            return (targetPlayer.position - transform.position).normalized;
-        }
-
-        if (survival != null && survival.IsUsingMouseDebugTarget())
-        {
-            Vector3 mouseScreenPos = Mouse.current.position.ReadValue();
-
-            Camera cam = Camera.main;
-
-            if (cam != null)
-            {
-                Vector3 mouseWorldPos = cam.ScreenToWorldPoint(mouseScreenPos);
-
-                mouseWorldPos.z = transform.position.z;
-
-                Vector2 direction = (mouseWorldPos - transform.position).normalized;
-
-                if (direction != Vector2.zero) return direction;
-            }
-        }
-
-        return fallbackDirection;
-    }
-
-    private void ApplyPatternSettings(PatternType pattern)
-    {
-        currentPattern = pattern;
-
-        foreach (PatternSettings settings in patternSettings)
-        {
-            if (settings.patternType == pattern)
-            {
-                currentSettings = settings;
-                break;
-            }
-        }
-
-        currentRotation = 0f;
-        strafeAngle = 0f;
-    }
-
-    private bool IsPatternDebugActive()
-    {
-        return patternDebugMode || (survival != null && survival.IsManualWinDebugMode());
     }
 }

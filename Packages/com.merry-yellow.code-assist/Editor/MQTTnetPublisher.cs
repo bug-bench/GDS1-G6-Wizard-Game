@@ -5,7 +5,6 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 using System.Threading;
-using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
 using Application = UnityEngine.Application;
 
@@ -35,11 +34,11 @@ namespace Meryel.UnityCodeAssist.Editor
 {
     public class MQTTnetPublisher : Synchronizer.Model.IProcessor
     {
-        MqttServer? _broker;
+        MqttServer? broker;
 
-        CancellationTokenSource? _cancellationTokenSource;
+        CancellationTokenSource? cancellationTokenSource;
 
-        readonly Synchronizer.Model.Manager _syncMngr;
+        readonly Synchronizer.Model.Manager syncMngr;
 
         //public readonly List<Synchronizer.Model.Connect> clients;
         readonly System.Collections.Concurrent.ConcurrentDictionary<string, Synchronizer.Model.Connect> _clients;
@@ -81,14 +80,20 @@ namespace Meryel.UnityCodeAssist.Editor
         }
 
 
+        public static void LogContext()
+        {
+        }
+
         public MQTTnetPublisher()
         {
+            // LogContext();
+
             Serilog.Log.Debug("MQTTnet server initializing, begin");
 
             InitializeSelf();
 
             _clients = new System.Collections.Concurrent.ConcurrentDictionary<string, Synchronizer.Model.Connect>();
-            _syncMngr = new Synchronizer.Model.Manager(this);
+            syncMngr = new Synchronizer.Model.Manager(this);
 
             var port = Synchronizer.Model.Utilities.GetPortForMQTTnet(Self!.ProjectPath);
 
@@ -118,67 +123,33 @@ namespace Meryel.UnityCodeAssist.Editor
             };
             var logger = new MqttNetNullLogger();
 
-            
-            var server = new MqttServer(options.Build(), DefaultServerAdapters, logger);
-            _broker = server;
 
-            server.InterceptingPublishAsync += Broker_InterceptingPublishAsync;
-            server.ClientDisconnectedAsync += Broker_ClientDisconnectedAsync;
 
-            _cancellationTokenSource = new CancellationTokenSource();
+            broker = new MqttServer(options.Build(), DefaultServerAdapters, logger);
+
+            broker.InterceptingPublishAsync += Broker_InterceptingPublishAsync;
+            broker.ClientDisconnectedAsync += Broker_ClientDisconnectedAsync;
 
             Serilog.Log.Debug("MQTTnet server initializing, constructed broker, port: {Port}", port);
 
-            // run without awaiting, on a new thread, otherwise might freeze editor
-            _ = Task.Run(() => StartAndSendAsync(server));
-
-            Serilog.Log.Debug("MQTTnet server initializing, initialized at {port} with {projectPath}", port, Self!.ProjectPath);
-        }
-
-        private async Task StartAndSendAsync(MqttServer server)
-        {
-            int hash = -1;
             try
             {
-                hash = server.GetHashCode();
-                Serilog.Log.Verbose("MQTTnet starting server {Hash}, starting", hash);
+                //broker.StartAsync().GetAwaiter().GetResult();
 
-                var startTask = server.StartAsync();
-                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(5));
-
-                var completed = await Task.WhenAny(startTask, timeoutTask).ConfigureAwait(false);
-
-                if (completed == startTask)
+                var startTask = Task.Run(() => broker.StartAsync());
+                if (!startTask.Wait(TimeSpan.FromSeconds(5)))
                 {
-                    await startTask.ConfigureAwait(false);
-                    Serilog.Log.Verbose("MQTTnet starting server {Hash}, started", hash);
-
-                    // need to sleep here, clients will take some time to start subscribing
-                    // https://github.com/zeromq/netmq/issues/482#issuecomment-182200323
-                    await Task.Delay(1000);
-                    Serilog.Log.Verbose("MQTTnet starting server {Hash}, delayed", hash);
-
-                    SendConnect();
-                    Serilog.Log.Verbose("MQTTnet starting server {Hash}, sent", hash);
-                }
-                else
-                {
-                    Serilog.Log.Error("MQTTnet starting server {Hash}, timed out", hash);
-
-                    _ = startTask.ContinueWith(t =>
-                    {
-                        if (t.Exception != null)
-                        {
-                            Serilog.Log.Error(t.Exception.GetBaseException(),
-                                "MQTTnet starting server {Hash}, failed after timeout", hash);
-                        }
-                    }, TaskScheduler.Default);
+                    Serilog.Log.Error("MQTTnet broker.StartAsync timed out.");
+                    return;
                 }
 
+
+                Serilog.Log.Debug("MQTTnet server initializing, started broker");
             }
             catch (System.Net.Sockets.SocketException socketEx)
             {
                 Serilog.Log.Error(socketEx, "Socket exception");
+                LogContext();
                 //Serilog.Log.Warning("Socket exception disposing pubSocket");
                 //broker.Dispose();
                 //broker = null;
@@ -186,9 +157,29 @@ namespace Meryel.UnityCodeAssist.Editor
             }
             catch (Exception ex)
             {
-                Serilog.Log.Error(ex, "MQTTnet starting server {Hash}, exception", hash);
+                Serilog.Log.Error(ex, "MQTTnet broker.StartAsync failed.");
                 return;
             }
+
+
+            //pubSocket.SendReady += PubSocket_SendReady;
+            //SendConnect();
+
+            cancellationTokenSource = new CancellationTokenSource();
+            //pullThread = new System.Threading.Thread(async () => await PullAsync(conn.pushPull, pullThreadCancellationTokenSource.Token));
+            //pullThread = new System.Threading.Thread(() => InitPull(conn.pushPull, pullTaskCancellationTokenSource.Token));
+            //pullThread.Start();
+            //Task.Run(() => InitPullAsync());
+
+
+            Serilog.Log.Debug("MQTTnet server initializing, initialized");
+
+            // need to sleep here, clients will take some time to start subscribing
+            // https://github.com/zeromq/netmq/issues/482#issuecomment-182200323
+            Thread.Sleep(1000);
+            SendConnect();
+
+            Serilog.Log.Debug("MQTTnet server initializing, initialized at {port} with {projectPath}", port, Self!.ProjectPath);
         }
 
         private Task Broker_ClientDisconnectedAsync(ClientDisconnectedEventArgs arg)
@@ -219,7 +210,7 @@ namespace Meryel.UnityCodeAssist.Editor
                 var header = topic.Substring(3); // for "cs/" prefix
                 var content = arg.ApplicationMessage.ConvertPayloadToString();
 
-                MainThreadDispatcher.Add(() => _syncMngr.ProcessMessage(header, content));
+                MainThreadDispatcher.Add(() => syncMngr.ProcessMessage(header, content));
             }
             catch (Exception ex)
             {
@@ -229,96 +220,52 @@ namespace Meryel.UnityCodeAssist.Editor
             return Task.CompletedTask;
         }
 
-        async Task StopAndDisposeAsync(MqttServer server)
-        {
-            int hash = -1;
-            try
-            {
-                hash = server.GetHashCode();
-                Serilog.Log.Verbose("MQTTnet clearing server {Hash}, begin", hash);
-
-                var stopTask = server.StopAsync();
-                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(5));
-
-                var completed = await Task.WhenAny(stopTask, timeoutTask).ConfigureAwait(false);
-
-                if (completed == stopTask)
-                {
-                    await stopTask.ConfigureAwait(false);
-                    Serilog.Log.Verbose("MQTTnet clearing server {Hash}, stopped", hash);
-
-                    try
-                    {
-                        server.Dispose();
-                    }
-                    catch (ObjectDisposedException)
-                    {
-                        // already disposed, ignore
-                    }
-                    Serilog.Log.Verbose("MQTTnet clearing server {Hash}, disposed", hash);
-                }
-                else
-                {
-                    Serilog.Log.Error("MQTTnet clearing server {Hash}, timed out", hash);
-
-                    _ = stopTask.ContinueWith(t =>
-                    {
-                        try
-                        {
-                            if (t.Exception != null)
-                            {
-                                Serilog.Log.Error(t.Exception.GetBaseException(),
-                                    "MQTTnet clearing server {Hash}, stop failed after timeout", hash);
-                            }
-
-                            try
-                            {
-                                server.Dispose();
-                            }
-                            catch (ObjectDisposedException)
-                            {
-                                // already disposed, ignore
-                            }
-                            Serilog.Log.Verbose("MQTTnet clearing server {Hash}, disposed after timeout", hash);
-                        }
-                        catch (Exception ex)
-                        {
-                            Serilog.Log.Warning(ex, "MQTTnet clearing server {Hash}, dispose failed after timeout", hash);
-                        }
-                    }, TaskScheduler.Default);
-                }
-            }
-            catch (Exception ex)
-            {
-                Serilog.Log.Error(ex, "MQTTnet clearing server {Hash}, exception", hash);
-            }
-        }
-
-
         public void Clear()
         {
-            var server = _broker;
-            Serilog.Log.Verbose("MQTTnet clearing {HasBroker}", (server != null));
+            // LogContext();
 
+            Serilog.Log.Verbose("MQTTnet clearing {HasBroker}", (broker != null));
+
+            var server = broker;
             if (server != null)
             {
                 server.InterceptingPublishAsync -= Broker_InterceptingPublishAsync;
-                server.ClientDisconnectedAsync -= Broker_ClientDisconnectedAsync;
                 Serilog.Log.Verbose("MQTTnet clearing, removed events");
             }
 
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource = null;
+            cancellationTokenSource?.Cancel();
+            cancellationTokenSource = null;
             Serilog.Log.Verbose("MQTTnet clearing, cancelled async token");
 
             if (server == null)
                 return;
 
-            // clear reference before async cleanup
-            _broker = null;
+            // broker?.StopAsync().GetAwaiter().GetResult(); // this line was freezing Unity editor, so calling Task.Run().Wait() instead
+            try
+            {
+                var stopTask = Task.Run(() => server.StopAsync());
+                if (!stopTask.Wait(TimeSpan.FromSeconds(5))) // give it five secs to complete
+                {
+                    Serilog.Log.Error("MQTTnet broker.StopAsync timed out.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Error(ex, "MQTTnet broker.StopAsync failed.");
+            }
 
-            // run without awaiting, on a new thread, otherwise might freeze editor
-            _ = Task.Run(() => StopAndDisposeAsync(server));
+            Serilog.Log.Verbose("MQTTnet clearing, stopped broker");
+            try
+            {
+                server.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Warning(ex, "MQTTnet broker.Dispose failed.");
+            }
+
+            server = null;
+            broker = null;
 
             Serilog.Log.Debug("MQTTnet clearing, cleared");
         }
@@ -361,8 +308,9 @@ namespace Meryel.UnityCodeAssist.Editor
             else
                 Serilog.Log.Debug("Publishing {MessageType}", messageType);
 
-            var publisher = _broker;
-            if (publisher != null && publisher.IsStarted)
+            var publisher = broker;
+            if (publisher != null)
+                //publisher.SendMoreFrame(messageType).SendFrame(SerializeObject(content));
             {
                 var applicationMessage = new MqttApplicationMessageBuilder()
                     .WithTopic("sc/" + messageType) // sc/ => server->client message
@@ -371,9 +319,8 @@ namespace Meryel.UnityCodeAssist.Editor
                     .WithPayload(SerializeObject(content))
                     .Build();
 
-                var token = _cancellationTokenSource?.Token ?? default;
-                // publisher.InjectApplicationMessage(new InjectedMqttApplicationMessage(applicationMessage), cancellationTokenSource?.Token ?? default).GetAwaiter().GetResult();
-                _ = publisher.InjectApplicationMessage(new InjectedMqttApplicationMessage(applicationMessage), token); // fire and forget is okay since order of messages are not important anyway
+                //broker?.InjectApplicationMessage(new InjectedMqttApplicationMessage(applicationMessage), cancellationTokenSource?.Token ?? default).GetAwaiter().GetResult();
+                broker?.InjectApplicationMessage(new InjectedMqttApplicationMessage(applicationMessage), cancellationTokenSource?.Token ?? default);
             }
             else
                 Serilog.Log.Error("Publisher socket is null");
@@ -603,16 +550,6 @@ namespace Meryel.UnityCodeAssist.Editor
             SendStringArrayAux(Synchronizer.Model.Ids.ShaderGlobalKeywords, Shader.globalKeywords.Select(k => k.name).ToArray());
         }
 
-        public void SendNavMeshAreas(string[] navMeshAreas, string[] navMeshAreaIndices, string[] navMeshAgents, string[] navMeshAgentIndices)
-        {
-            SendStringArrayContainerAux(
-                (Synchronizer.Model.Ids.NavMeshAreas, navMeshAreas),
-                (Synchronizer.Model.Ids.NavMeshAreaIndices, navMeshAreaIndices),
-                (Synchronizer.Model.Ids.NavMeshAgents, navMeshAgents),
-                (Synchronizer.Model.Ids.NavMeshAgentIndices, navMeshAgentIndices)
-                );
-        }
-
         public void SendGameObject(GameObject go)
         {
             if (!go)
@@ -771,7 +708,7 @@ namespace Meryel.UnityCodeAssist.Editor
         void Synchronizer.Model.IProcessor.Process(Synchronizer.Model.Disconnect disconnect)
         {
             var removed = _clients.TryRemove(disconnect.ClientId, out var client);
-            Serilog.Log.Debug("Synchronizer.Model.Disconnect {ClientId} {Removed} {Client}", disconnect.ClientId, removed, client);
+            Serilog.Log.Debug("Synchronizer.Model.Disconnect {ClientId} {Removed}", disconnect.ClientId, removed);
         }
         void Synchronizer.Model.IProcessor.Process(Synchronizer.Model.ConnectionInfo connectionInfo)
         {
