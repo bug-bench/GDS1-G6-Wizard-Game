@@ -66,6 +66,8 @@ public class PlayerCombat : MonoBehaviour
     public float invincibilityBlinkHiddenDuration = 0.05f;
     [Tooltip("参与无敌闪烁的精灵（通过 alpha 开关显示）；留空则自动使用根/子物体上的第一个 SpriteRenderer。 — Sprites toggled during i-blink; empty = auto-find one body sprite.")]
     public SpriteRenderer[] invincibilityBlinkSpriteRenderers;
+    [SerializeField]
+    private float survivalInvincibilityDuration = 0.3f;
 
     private float invincibleUntil;
     private float knockbackUntil;
@@ -568,8 +570,14 @@ public class PlayerCombat : MonoBehaviour
         invincibleUntil = Time.time + invincibilityDuration;
 
         if (attackerIndex >= 0)
+        {
             GameData.RecordDamage(attackerIndex, damage);
-
+        }
+        else
+        {
+            invincibleUntil = Time.time + survivalInvincibilityDuration;
+        }
+            
         playerStats.TakeDamage(damage);
 
         // 直接设速度并短暂锁定移动控制，否则 FixedUpdate 的高减速度会立刻把 AddForce 清掉。
@@ -592,7 +600,7 @@ public class PlayerCombat : MonoBehaviour
         {
             if (attackerIndex >= 0)
                 GameData.RecordKill(attackerIndex);
-            if (p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
+            if (p2scr != null && p2scr.GetCurrentMinigame() != null && (p2scr.GetCurrentMinigame() == "Arena" || p2scr.GetCurrentMinigame() == "Survival"))
             {
                 Die();
             }
