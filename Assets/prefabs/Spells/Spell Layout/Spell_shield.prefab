@@ -120,10 +120,10 @@ MonoBehaviour:
   radius: 0.65
   segments: 36
   localCenterOffsetY: 0
-  showLineRenderer: 1
+  showLineRenderer: 0
   lineWidth: 0.08
   shieldColor: {r: 0.35, g: 0.75, b: 1, a: 0.95}
   sortingOrder: 12
   shieldVisualPrefab: {fileID: 5128976107769333880, guid: 82838b58d6e2b4e4d9075ae5a911d527, type: 3}
-  visualScale: 1.25
-  visualLocalOffset: {x: 0, y: 0.25}
+  visualScale: 1.5
+  visualLocalOffset: {x: 0, y: 0.5}
