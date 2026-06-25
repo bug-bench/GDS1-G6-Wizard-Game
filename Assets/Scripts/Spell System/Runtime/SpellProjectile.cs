@@ -4,29 +4,29 @@ using UnityEngine.InputSystem;
 public class SpellProjectile : MonoBehaviour
 {
     [Header("Runtime Data")]
-    private float damage;
-    private float speed;
-    private float lifeTime;
-    private float knockbackForce;
+    [SerializeField] private float speed = 10f;
+    [SerializeField] private float damage = 1f;
+    [SerializeField] private float lifeTime = 3f;
+    [SerializeField] private float knockbackForce = 15f;
 
-    private int burnDamage;
-    private float burnDuration;
+    [Header("Status Effects")]
+    [SerializeField] private int burnDamage = 0;
+    [SerializeField] private float burnDuration = 3f;
 
-    private float slowPercentage;
-    private float slowDuration;
-
-    [HideInInspector]
-    public GameObject caster;
-
-    [HideInInspector]
-    public float ignoreCasterUntilTime;
+    [SerializeField, Range(0f, 1f)] private float slowPercentage = 0f;
+    [SerializeField] private float slowDuration = 2f;
 
     [Header("Hit VFX")]
     public GameObject hitVFXPrefab;
     public float hitVFXLifetime = 0.5f;
+    public bool rotateHitVFXToProjectile = true;
 
-    bool IsUnderSpellPickup =>
-        GetComponentInParent<SpellPickup>() != null;
+    [HideInInspector] public GameObject caster;
+    [HideInInspector] public float ignoreCasterUntilTime;
+
+    bool IsUnderSpellPickup => GetComponentInParent<SpellPickup>() != null;
+
+    bool initialized;
 
     public void Initialize(
         GameObject caster,
@@ -40,17 +40,16 @@ public class SpellProjectile : MonoBehaviour
         float slowDuration)
     {
         this.caster = caster;
-
         this.damage = damage;
         this.speed = speed;
         this.lifeTime = lifeTime;
         this.knockbackForce = knockbackForce;
-
         this.burnDamage = burnDamage;
         this.burnDuration = burnDuration;
-
         this.slowPercentage = slowPercentage;
         this.slowDuration = slowDuration;
+
+        initialized = true;
     }
 
     void Awake()
@@ -61,181 +60,159 @@ public class SpellProjectile : MonoBehaviour
 
     void Start()
     {
-        if (IsUnderSpellPickup)
-            return;
+        if (IsUnderSpellPickup) return;
 
-        Destroy(gameObject, lifeTime);
+        float finalLifetime = lifeTime > 0f ? lifeTime : 3f;
+        Destroy(gameObject, finalLifetime);
     }
 
     void Update()
     {
-        transform.Translate(
-            Vector3.up *
-            speed *
-            Time.deltaTime);
+        if (IsUnderSpellPickup) return;
+
+        transform.Translate(Vector3.up * speed * Time.deltaTime, Space.Self);
     }
 
-    void OnTriggerEnter2D(Collider2D hit)
+    void OnTriggerEnter2D(Collider2D hitInfo)
     {
+        if (IsUnderSpellPickup) return;
+
+        if (!initialized && caster == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         if (caster == null)
+        {
+            if (HasTag(hitInfo, "Player"))
+                Destroy(gameObject);
+            return;
+        }
+
+        if (Time.time < ignoreCasterUntilTime && IsColliderOnCaster(caster, hitInfo))
             return;
 
-        if (Time.time < ignoreCasterUntilTime &&
-            IsColliderOnCaster(caster, hit))
+        if (IsColliderOnCaster(caster, hitInfo))
             return;
 
-        if (IsColliderOnCaster(caster, hit))
-            return;
+        ReflectShieldSpell shield = hitInfo.GetComponent<ReflectShieldSpell>()
+            ?? hitInfo.GetComponentInParent<ReflectShieldSpell>();
 
-        destroyableObject destroyable =
-            hit.GetComponent<destroyableObject>()
-            ?? hit.GetComponentInParent<destroyableObject>();
+        if (shield != null)
+        {
+            shield.ApplyReflectToProjectile(this);
+            return;
+        }
+
+        destroyableObject destroyable = hitInfo.GetComponent<destroyableObject>()
+            ?? hitInfo.GetComponentInParent<destroyableObject>();
 
         if (destroyable != null)
         {
-            destroyable.takeDamage(
-                damage + StrengthBonus());
-
-            SpawnHitVFX();
+            destroyable.takeDamage(GetTotalDamage());
+            SpawnHitVFX(transform.position);
             Destroy(gameObject);
             return;
         }
 
-        if (hit.CompareTag("Player"))
+        if (HasTag(hitInfo, "Player"))
         {
-            HandlePlayerHit(hit);
+            HandlePlayerHit(hitInfo);
             return;
         }
 
-        if (hit.gameObject.layer ==
-            LayerMask.NameToLayer("wall"))
+        if (hitInfo.gameObject.layer == LayerMask.NameToLayer("wall") || HasTag(hitInfo, "Wall"))
         {
-            SpawnHitVFX();
+            SpawnHitVFX(transform.position);
             Destroy(gameObject);
         }
     }
 
-    void HandlePlayerHit(Collider2D hit)
+
+    void HandlePlayerHit(Collider2D hitInfo)
     {
-        PlayerCombat target =
-            hit.GetComponent<PlayerCombat>()
-            ?? hit.GetComponentInParent<PlayerCombat>();
+        PlayerCombat target = hitInfo.GetComponent<PlayerCombat>()
+            ?? hitInfo.GetComponentInParent<PlayerCombat>();
 
-        if (target == null)
+        if (target == null) return;
+        if (target.gameObject == caster) return;
+        if (target.IsInvincible) return;
+
+        if (ReflectShieldSpell.HasActiveShieldOn(target))
             return;
-
-        if (target.gameObject == caster)
-            return;
-
-        if (target.IsInvincible)
-            return;
-
-        float finalDamage =
-            damage + StrengthBonus();
 
         int attackerIndex = -1;
+        var casterInput = caster.GetComponent<PlayerInput>();
+        if (casterInput != null)
+            attackerIndex = casterInput.playerIndex;
 
-        PlayerInput input =
-            caster.GetComponent<PlayerInput>();
-
-        if (input != null)
-            attackerIndex = input.playerIndex;
-
-        Vector2 knockback =
-            (Vector2)transform.up *
-            knockbackForce;
-
+        Vector2 knockDirection = (Vector2)transform.up;
         target.TakeDamage(
-            Mathf.RoundToInt(finalDamage),
+            Mathf.RoundToInt(GetTotalDamage()),
             attackerIndex,
-            knockback);
+            knockDirection.normalized * knockbackForce);
 
-        PlayerStats stats =
-            target.GetComponent<PlayerStats>();
-
-        if (stats != null)
+        PlayerStats targetStats = target.GetComponent<PlayerStats>();
+        if (targetStats != null)
         {
             if (burnDamage > 0)
-            {
-                stats.ApplyBurn(
-                    burnDamage,
-                    burnDuration,
-                    0.5f,
-                    attackerIndex);
-            }
+                targetStats.ApplyBurn(burnDamage, burnDuration, 0.5f, attackerIndex);
 
             if (slowPercentage > 0f)
-            {
-                stats.ApplySpeedMultiplier(
-                    1f - slowPercentage,
-                    slowDuration);
-            }
+                targetStats.ApplySpeedMultiplier(1f - slowPercentage, slowDuration);
         }
 
-        SpawnHitVFX();
-
+        SpawnHitVFX(transform.position);
         Destroy(gameObject);
     }
 
-    float StrengthBonus()
+    float GetTotalDamage()
     {
-        if (caster == null)
-            return 0f;
+        float totalDamage = damage;
 
-        PlayerStats stats =
-            caster.GetComponent<PlayerStats>();
+        if (caster != null)
+        {
+            PlayerStats casterStats = caster.GetComponent<PlayerStats>();
+            if (casterStats != null)
+                totalDamage += casterStats.strength;
+        }
 
-        return stats != null
-            ? stats.strength
-            : 0f;
+        return totalDamage;
     }
 
-    void SpawnHitVFX()
+    void SpawnHitVFX(Vector2 hitPosition)
     {
-        if (hitVFXPrefab == null)
-            return;
+        if (hitVFXPrefab == null) return;
 
-        GameObject vfx =
-            Instantiate(
-                hitVFXPrefab,
-                transform.position,
-                transform.rotation);
+        Quaternion rotation = rotateHitVFXToProjectile
+            ? transform.rotation
+            : Quaternion.identity;
 
+        GameObject vfx = Instantiate(hitVFXPrefab, hitPosition, rotation);
         Destroy(vfx, hitVFXLifetime);
     }
 
-    static bool IsColliderOnCaster(
-        GameObject casterRoot,
-        Collider2D col)
+    public void ReflectToNewCaster(GameObject newCaster, float casterIgnoreSeconds = 0.15f)
     {
-        if (casterRoot == null || col == null)
-            return false;
+        if (newCaster == null) return;
 
-        Transform t = col.transform;
+        caster = newCaster;
+        ignoreCasterUntilTime = Time.time + casterIgnoreSeconds;
 
-        return t == casterRoot.transform ||
-               t.IsChildOf(casterRoot.transform);
+        RegisterWithCaster(gameObject, newCaster, casterIgnoreSeconds);
     }
 
-    public static void RegisterWithCaster(
-        GameObject projectileRoot,
-        GameObject casterRoot,
-        float casterIgnoreSeconds = 0.15f)
+    public static void RegisterWithCaster(GameObject projectileRoot, GameObject casterRoot, float casterIgnoreSeconds = 0.15f)
     {
-        if (projectileRoot == null ||
-            casterRoot == null)
-            return;
+        if (projectileRoot == null || casterRoot == null) return;
 
-        float until =
-            Time.time + casterIgnoreSeconds;
+        float until = Time.time + casterIgnoreSeconds;
 
-        Collider2D[] casterCols =
-            casterRoot.GetComponentsInChildren<Collider2D>(true);
+        Collider2D[] casterCols = casterRoot.GetComponentsInChildren<Collider2D>(true);
+        Collider2D[] projCols = projectileRoot.GetComponentsInChildren<Collider2D>(true);
 
-        Collider2D[] projCols =
-            projectileRoot.GetComponentsInChildren<Collider2D>(true);
-
-        foreach (SpellProjectile sp in projectileRoot.GetComponentsInChildren<SpellProjectile>())
+        foreach (SpellProjectile sp in projectileRoot.GetComponentsInChildren<SpellProjectile>(true))
         {
             sp.caster = casterRoot;
             sp.ignoreCasterUntilTime = until;
@@ -243,13 +220,26 @@ public class SpellProjectile : MonoBehaviour
 
         foreach (Collider2D pc in projCols)
         {
+            if (pc == null) continue;
+
             foreach (Collider2D cc in casterCols)
             {
-                Physics2D.IgnoreCollision(
-                    pc,
-                    cc,
-                    true);
+                if (cc == null) continue;
+                Physics2D.IgnoreCollision(pc, cc, true);
             }
         }
+    }
+
+    static bool IsColliderOnCaster(GameObject casterRoot, Collider2D col)
+    {
+        if (casterRoot == null || col == null) return false;
+
+        Transform t = col.transform;
+        return t == casterRoot.transform || t.IsChildOf(casterRoot.transform);
+    }
+
+    static bool HasTag(Collider2D col, string tagName)
+    {
+        return col != null && col.gameObject.tag == tagName;
     }
 }
