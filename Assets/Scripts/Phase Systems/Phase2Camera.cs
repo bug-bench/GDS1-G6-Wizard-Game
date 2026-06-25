@@ -6,6 +6,7 @@ public class Phase2Camera : MonoBehaviour
 {
     [Header("Settings")]
     public float padding = 3f;
+    public float bottomPadding = 1.5f;
     public float minSize = 5f;
     public float maxSize = 20f;
     public float smoothSpeed = 5f;
@@ -52,6 +53,9 @@ public class Phase2Camera : MonoBehaviour
     private void MoveCamera()
     {
         Vector3 centerPoint = GetCenterPoint();
+
+        centerPoint.y -= bottomPadding * 0.5f;
+    
         centerPoint.z = transform.position.z;
         transform.position = Vector3.Lerp(transform.position, centerPoint, smoothSpeed * Time.deltaTime);
     }
@@ -59,7 +63,7 @@ public class Phase2Camera : MonoBehaviour
     private void ZoomCamera()
     {
         Bounds bounds = GetBounds();
-        float requiredHeight = bounds.size.y * 0.5f + padding;
+        float requiredHeight = bounds.size.y * 0.5f + padding + bottomPadding * 0.5f;
         float requiredWidth = bounds.size.x * 0.5f / cam.aspect + padding;
         float requiredSize = Mathf.Max(requiredHeight, requiredWidth);
         requiredSize = Mathf.Clamp(requiredSize, minSize, maxSize);
