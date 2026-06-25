@@ -387,6 +387,7 @@ GameObject:
   - component: {fileID: 7014073608482475539}
   - component: {fileID: 2667297136540556624}
   - component: {fileID: 8951223101598339105}
+  - component: {fileID: 7154905105016465875}
   m_Layer: 8
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -604,6 +605,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   floatingTextPrefab: {fileID: 2936636656392531779, guid: 20a55a8494e954c13b86a41eddab3244, type: 3}
   spawnOffset: {x: 0, y: 5}
+--- !u!114 &7154905105016465875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2773116537761935081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33e57a4b714ce455cb4db73fcfe9cf5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  postProcessVolume: {fileID: 6076480098594718626}
+  drunkEffect:
+    effectName: Drunk
+    active: 0
+    useLensDistortion: 1
+    lensDistortionStrength: -0.4
+    useChromaticAberration: 1
+    chromaticAberrationStrength: 0.8
+    useVignette: 1
+    vignetteIntensity: 0.3
+    vignetteColor: {r: 0, g: 0, b: 0, a: 1}
+    useColorAdjustments: 0
+    saturation: 0
+    contrast: 0
+    useCameraShake: 0
+    shakeIntensity: 0
+    shakeFrequency: 0
+  knockedEffect:
+    effectName: Knocked
+    active: 0
+    useLensDistortion: 1
+    lensDistortionStrength: -0.1
+    useChromaticAberration: 1
+    chromaticAberrationStrength: 0.1
+    useVignette: 1
+    vignetteIntensity: 0.6
+    vignetteColor: {r: 0.5471698, g: 0.05420078, b: 0.05420078, a: 1}
+    useColorAdjustments: 1
+    saturation: -75
+    contrast: 20
+    useCameraShake: 1
+    shakeIntensity: 0.1
+    shakeFrequency: 8
 --- !u!1 &3056684579064861403
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,6 +778,8 @@ GameObject:
   - component: {fileID: 3754481111748754989}
   - component: {fileID: 1396053370728696818}
   - component: {fileID: 5427044139724920543}
+  - component: {fileID: 6076480098594718626}
+  - component: {fileID: 8746296240487478792}
   m_Layer: 8
   m_Name: Camera
   m_TagString: Untagged
@@ -835,10 +883,10 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4294967295
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -883,6 +931,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b00d82966551480bab5d7d7fbc26f23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SplitScreenCamera
+--- !u!114 &6076480098594718626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3712652026574967776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 0
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 0}
+--- !u!135 &8746296240487478792
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3712652026574967776}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4236164601655165340
 GameObject:
   m_ObjectHideFlags: 0
@@ -1486,7 +1572,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7055239181992181782, guid: b0dc1f625217742208fe976e2ccd1314, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -85.71429
+      value: -85.714294
       objectReference: {fileID: 0}
     - target: {fileID: 7258847750941408482, guid: b0dc1f625217742208fe976e2ccd1314, type: 3}
       propertyPath: m_Name

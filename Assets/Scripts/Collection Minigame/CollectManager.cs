@@ -19,8 +19,14 @@ public class CollectManager : MonoBehaviour
 
     public void SetupPlayer(GameObject player)
     {
-        players.Add(player);
-        PlayerCollectTracker.Add(player, 0);
+        if (!players.Contains(player))
+        {
+            players.Add(player);
+        }
+        if (!PlayerCollectTracker.ContainsKey(player))
+        {
+            PlayerCollectTracker.Add(player, 0);
+        }
     }
 
     // Update is called once per frame
@@ -42,17 +48,26 @@ public class CollectManager : MonoBehaviour
     public GameObject RegisterGameEnd()
     {
         TimerEnded = true;
+
         GameObject top = null;
-        int highest = 0;
+        int highest = -1;
+        bool draw = false;
+
         foreach (var Player in players)
         {
-            if (PlayerCollectTracker[Player] > highest)
+            int score = PlayerCollectTracker[Player];
+            if (score > highest)
             {
-                highest = PlayerCollectTracker[Player];
+                highest = score;
                 top = Player;
+                draw = false;
+            }
+            else if (score == highest)
+            {
+                draw = true;
             }
         }
-        return top;
+        return draw ? null : top;
     }
 
     public void DropPickup(GameObject player, int amount)
@@ -111,7 +126,10 @@ public class CollectManager : MonoBehaviour
 
     public void RegisterPickup(GameObject player)
     {
-        PlayerCollectTracker[player] += 1;
+        if (PlayerCollectTracker.ContainsKey(player))
+        {
+            PlayerCollectTracker[player]++;
+        }
     }
 
     public int GetPlayerScore(GameObject player)
