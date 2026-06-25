@@ -187,10 +187,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7757689962edd574695cf50adf337b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellProjectile
-  caster: {fileID: 0}
-  ignoreCasterUntilTime: 0
+  speed: 10
+  damage: 1
+  lifeTime: 3
+  knockbackForce: 15
+  burnDamage: 0
+  burnDuration: 3
+  slowPercentage: 0
+  slowDuration: 2
   hitVFXPrefab: {fileID: 7930454606148642405, guid: 3c14c387703eaa14ea70978f895eebcc, type: 3}
   hitVFXLifetime: 0.5
+  rotateHitVFXToProjectile: 1
+  caster: {fileID: 0}
+  ignoreCasterUntilTime: 0
 --- !u!95 &3788253860166317034
 Animator:
   serializedVersion: 7
@@ -227,16 +236,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::IceSpikeSpell
   maxHoldDuration: 0
   projectilePrefab: {fileID: 8107549014988267602}
-  damage: 10
+  damage: 2
   speed: 10
   lifeTime: 1
-  knockbackForce: 10
+  knockbackForce: 8
   burnDamage: 0
   burnDuration: 0
-  slowPercentage: 0
+  slowPercentage: 0.022
   slowDuration: 0
-  projectileCount: 5
-  spreadAngle: 45
+  projectileCount: 3
+  spreadAngle: 50
 --- !u!1 &8130909811330774558
 GameObject:
   m_ObjectHideFlags: 0
