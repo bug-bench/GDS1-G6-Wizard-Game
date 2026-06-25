@@ -60,6 +60,17 @@ public class Phase2Script : MonoBehaviour
                 currentMinigame = "Collect";
             }
         }
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Phase2Potato"))
+        {
+            if (phaseChosen == false)
+            {
+                phaseChosen = true;
+            }
+            if (currentMinigame != "Potato")
+            {
+                currentMinigame = "Potato";
+            }
+        }
         if (p1s.GetCurrentPhase() == 2 && !phaseChosen)
         {
             phaseChosen = true;

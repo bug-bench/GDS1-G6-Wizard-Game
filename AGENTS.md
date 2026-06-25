@@ -7,7 +7,7 @@
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Pickup, Water, UI, hazards, wall, player, Spells, Crate
 - Active game object:
-  - Name: PlayerPrefab
-  - Tag: Player
-  - Layer: player
+  - Name: The Potato in Question
+  - Tag: Untagged
+  - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
