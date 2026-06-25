@@ -6,11 +6,19 @@ using UnityEngine.InputSystem;
 
 public class SurvivalScript : MonoBehaviour
 {
+    [Header("Debug")]
+    [SerializeField]
+    private bool manualWinDebugMode = false;
+    [SerializeField]
+    private bool forceDebugWin = false;
+
+    [Header("Win Screen")]
     [SerializeField] private GameObject resultsPanel;
     // [SerializeField] private UnityEngine.UI.Image winnerImage;
     [SerializeField] private TMPro.TextMeshProUGUI winnerText;
     [SerializeField] private Transform podiumContainer;
     [SerializeField] private GameObject resultPrefab;
+
     private GameObject winner = null;
 
 
@@ -60,19 +68,13 @@ public class SurvivalScript : MonoBehaviour
     void Update()
     {
         if (gameEnded) return;
+
+        HandleDebugWin();
+
         if (players.Count > 0)
         {
             TryEndGameAfterElimination();
         }
-
-        #if UNITY_EDITOR
-        if (UnityEngine.InputSystem.Keyboard.current.tKey.wasPressedThisFrame)
-        {
-            StopAllCoroutines();
-            winner = players.Count > 0 ? players[0] : null;
-            EndGame(winner);
-        }
-        #endif
     }
 
     IEnumerator SetupNextFrame()
@@ -83,6 +85,17 @@ public class SurvivalScript : MonoBehaviour
         {
             players.Add(player.playerGameObject);
         }
+
+        if (GameData.players.Count <= 1)
+        {
+            manualWinDebugMode = true;
+
+            Debug.Log(
+                $"Survival: Auto-enabled Manual Win Debug Mode " +
+                $"because only {GameData.players.Count} player(s) were detected."
+            );
+        }
+
         foreach (GameObject p in players)
         {
             playerSurvivalTimes[p] = 0f;
@@ -142,6 +155,11 @@ public class SurvivalScript : MonoBehaviour
             hazards.Add(hazard);
             totalHazards = hazards.Count;
         }
+    }
+
+    public bool IsUsingMouseDebugTarget()
+    {
+        return manualWinDebugMode && GameData.players.Count <= 0;
     }
 
     // ====================
@@ -278,7 +296,7 @@ public class SurvivalScript : MonoBehaviour
         // playersAlive.Remove(player);
         // playersEliminated.Add(player);
 
-        Debug.Log(player.name + " eliminated. Remaining: " + playersAlive.Count);
+        Debug.Log(player.name + " eliminated. Remaining: " + GetAlivePlayers().Count);
 
         TryEndGameAfterElimination();
         // if (playersAlive.Count == 1)
@@ -312,6 +330,9 @@ public class SurvivalScript : MonoBehaviour
 
         if (alivePlayers.Count == 1)
         {
+            bool SuppressAutomaticWin = manualWinDebugMode && GameData.players.Count <= 1;
+            if (SuppressAutomaticWin) return;
+
             gameEnded = true;
             GameObject winner = alivePlayers[0];
             
@@ -440,5 +461,22 @@ public class SurvivalScript : MonoBehaviour
 
             ui.Setup(i + 1, data.playerIndex, data.colorIndex, timeStr, height);
         }
+    }
+
+    private void HandleDebugWin()
+    {
+        if (!manualWinDebugMode) return;
+        if (!forceDebugWin) return;
+
+        forceDebugWin = false;
+        gameEnded = true;
+
+        Debug.Log("Debug win triggered by Main User");
+
+        StopAllCoroutines();
+
+        GameObject winner = players.Count > 0 ? players[0] : null;
+
+        EndGame(winner);
     }
 }

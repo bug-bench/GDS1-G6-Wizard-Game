@@ -9,7 +9,8 @@ public enum WorldEventType
     PlayerLocationSwap,
     SpellSwap,
     Firehazard,
-    Icehazard
+    Icehazard,
+    statStorm
    
 }
 
@@ -29,26 +30,26 @@ public class WorldEventManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(EventLoop());
-       
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     IEnumerator EventLoop()
     {
 
-      
+
         yield return new WaitForSeconds(FirstEventDelay);
-       
+
 
         while (true)
 
         {
-            WorldEventType randomEvent = (WorldEventType)Random.Range(0, 4);
+            WorldEventType randomEvent = (WorldEventType)Random.Range(0, 5);
             WorldEventTriggered?.Invoke(randomEvent);
 
             //delay for text to show up before event
@@ -66,14 +67,18 @@ public class WorldEventManager : MonoBehaviour
                     break;
 
                 case WorldEventType.Firehazard:
-                   StartCoroutine(FirehazardEvent());
+                    StartCoroutine(FirehazardEvent());
                     break;
 
                 case WorldEventType.Icehazard:
-                   StartCoroutine(IcehazardEvent());
+                    StartCoroutine(IcehazardEvent());
                     break;
 
-            
+                case WorldEventType.statStorm:
+                    StartStatStormEvent();
+                    break;
+
+
             }
 
 
@@ -84,12 +89,12 @@ public class WorldEventManager : MonoBehaviour
 
     void PlayerLocationSwap()
     {
-       
+
         List<GameObject> players = new List<GameObject>();
 
-        foreach(var playerData in GameData.players)
+        foreach (var playerData in GameData.players)
         {
-            if(playerData.playerGameObject !=null && playerData.playerGameObject.activeInHierarchy)
+            if (playerData.playerGameObject != null && playerData.playerGameObject.activeInHierarchy)
             {
                 players.Add(playerData.playerGameObject);
             }
@@ -97,33 +102,33 @@ public class WorldEventManager : MonoBehaviour
 
 
         if (players.Count < 2)
-            {
+        {
             return;
         }
 
 
         List<Vector3> Positions = new List<Vector3>();
 
-        foreach(GameObject player in players)
+        foreach (GameObject player in players)
         {
             Positions.Add(player.transform.position);
         }
 
-        
-        for (int i = 0; i < Positions.Count; i ++)
+
+        for (int i = 0; i < Positions.Count; i++)
         {
             int next = (i + 1) % players.Count;
             Rigidbody2D rb = players[i].GetComponent<Rigidbody2D>();
 
-            if(rb != null)
+            if (rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
                 rb.position = Positions[next];
 
             }
-           
+
         }
-       
+
     }
 
     void SpellSwap()
@@ -131,7 +136,7 @@ public class WorldEventManager : MonoBehaviour
         Debug.Log("spell swap happening");
         List<PlayerCombat> players = new List<PlayerCombat>();
 
-        foreach ( var playerdata in GameData.players )
+        foreach (var playerdata in GameData.players)
         {
             if (playerdata.playerGameObject == null) continue;
 
@@ -145,7 +150,7 @@ public class WorldEventManager : MonoBehaviour
 
         }
 
-        if(players.Count <2)
+        if (players.Count < 2)
         {
             return;
         }
@@ -155,17 +160,17 @@ public class WorldEventManager : MonoBehaviour
         List<SpellData> LeftSpell = new List<SpellData>();
         List<SpellData> RightSpell = new List<SpellData>();
 
-        foreach(PlayerCombat player in players)
+        foreach (PlayerCombat player in players)
         {
             LeftSpell.Add(player.currentAttackSpell);
             RightSpell.Add(player.currentMovementSpell);
         }
 
-      
-       
 
-       
-        for (int i = 0; i < players.Count;i++)
+
+
+
+        for (int i = 0; i < players.Count; i++)
         {
             int next = (i + 1) % players.Count;
             players[i].currentAttackSpell = LeftSpell[next];
@@ -180,9 +185,9 @@ public class WorldEventManager : MonoBehaviour
         float timer = 1f;
         float tick = 4f;
 
-        while (timer <hazardTime)
+        while (timer < hazardTime)
         {
-            foreach(var playerData in GameData.players)
+            foreach (var playerData in GameData.players)
             {
                 if (playerData.playerGameObject == null)
                 {
@@ -209,9 +214,9 @@ public class WorldEventManager : MonoBehaviour
     {
         IceHazardActive = true;
 
-        
-            foreach (var playerData in GameData.players)
-            {
+
+        foreach (var playerData in GameData.players)
+        {
             if (playerData.playerGameObject == null)
             {
                 continue;
@@ -219,7 +224,7 @@ public class WorldEventManager : MonoBehaviour
             }
             PlayerController controller = playerData.playerGameObject.GetComponent<PlayerController>();
 
-            if(controller != null)
+            if (controller != null)
             {
                 controller.applyIce();
             }
@@ -249,5 +254,14 @@ public class WorldEventManager : MonoBehaviour
     }
 
     
-   
+
+    void StartStatStormEvent()
+    {
+        StatSpawner spawner = FindFirstObjectByType<StatSpawner>();
+
+        if (spawner != null)
+        {
+            spawner.StartStatStorm(hazardTime);
+        }
+    }
 }

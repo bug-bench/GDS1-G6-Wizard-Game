@@ -43,6 +43,10 @@ public class StatSpawner : MonoBehaviour
 
     private List<WeightedSpawnPoint> validSpawnPoints = new List<WeightedSpawnPoint>();
 
+    public bool statStormActive { get; private set; }
+
+    private GameObject stormStatPrefab;
+
     private class WeightedSpawnPoint
     {
         public Vector3 worldPosition;
@@ -179,7 +183,20 @@ public class StatSpawner : MonoBehaviour
             return;
         }
 
-        GameObject prefabToSpawn = statPrefabs[Random.Range(0, statPrefabs.Length)];
+        //GameObject prefabToSpawn = statPrefabs[Random.Range(0, statPrefabs.Length)];
+
+        GameObject prefabToSpawn;
+
+        if(statStormActive && stormStatPrefab !=null)
+        {
+            prefabToSpawn = stormStatPrefab;
+        }
+        else
+        {
+            prefabToSpawn = statPrefabs[Random.Range(0, statPrefabs.Length)];
+        }
+
+
 
         if (prefabToSpawn == null)
         {
@@ -253,6 +270,62 @@ public class StatSpawner : MonoBehaviour
 
             Vector3 worldPosition = groundTilemap.GetCellCenterWorld(cellPosition);
             Gizmos.DrawWireSphere(worldPosition, 0.1f);
+        }
+    }
+
+    public void StartStatStorm(float duration)
+    {
+
+        StartCoroutine(StatStormRoutine(duration));
+    }
+
+    IEnumerator StatStormRoutine(float duration)
+    {
+        statStormActive = true;
+
+        GameObject[] AllStats =
+    {
+        AttackSprite,HealthSprite,MovementSprite,FocusSprite,SizeSprite,DefenseSprite,FricitonSprite
+
+
+    };
+
+        stormStatPrefab = AllStats[Random.Range(0, AllStats.Length)];
+       
+        Debug.Log(stormStatPrefab.name);
+
+        //clear current stats
+        ClearAllStats();
+
+        //spawn stat storm
+        for (int i = 0; i < numberToSpawn; i++)
+        {
+            SpawnSingleStat();
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        //end the storm
+        statStormActive = false;
+        stormStatPrefab = null;
+
+        //clear storm stat
+        ClearAllStats();
+
+        //respawn new stats mix
+        for (int i = 0; i < numberToSpawn; i++)
+        {
+            SpawnSingleStat();
+        }
+    }
+
+    public void ClearAllStats()
+    {
+        StatPickUp[] stats = FindObjectsByType<StatPickUp>(FindObjectsSortMode.None);
+
+        foreach(StatPickUp stat in stats)
+        {
+            Destroy(stat.gameObject);
         }
     }
 }
