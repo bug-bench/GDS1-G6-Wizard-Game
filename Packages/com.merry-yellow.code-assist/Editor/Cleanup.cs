@@ -119,8 +119,8 @@ namespace Meryel.UnityCodeAssist.Editor
                     throw new Exception(string.Format("Directory {0} does not exist, so permissions cannot be set.", dirName));
 
                 // Get directory access info
-                var dinfo = new DirectoryInfo(dirName);
-                var dSecurity = dinfo.GetAccessControl();
+                DirectoryInfo dinfo = new DirectoryInfo(dirName);
+                DirectorySecurity dSecurity = dinfo.GetAccessControl();
 
                 // Add the FileSystemAccessRule to the security settings. 
                 dSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
@@ -209,7 +209,7 @@ namespace Meryel.UnityCodeAssist.Editor
             // Remove read-only attribute
             File.SetAttributes(filename, File.GetAttributes(filename) & ~FileAttributes.ReadOnly);
 
-            var security = new FileSecurity();
+            FileSecurity security = new FileSecurity();
 
             SecurityIdentifier sid = WindowsIdentity.GetCurrent().User;
             security.SetOwner(sid);

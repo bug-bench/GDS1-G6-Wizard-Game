@@ -49,12 +49,7 @@ namespace Meryel.UnityCodeAssist.Editor
             }
 
             // Attempt to search for type on the loaded assemblies
-#if UNITY_6000_4_OR_NEWER
-            var currentAssemblies = UnityEngine.Assemblies.CurrentAssemblies.GetLoadedAssemblies();
-#else
-            var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-#endif
-
+            Assembly[] currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly assembly in currentAssemblies)
             {
                 type = assembly.GetType(typeName);

@@ -66,6 +66,8 @@ public class PlayerCombat : MonoBehaviour
     public float invincibilityBlinkHiddenDuration = 0.05f;
     [Tooltip("参与无敌闪烁的精灵（通过 alpha 开关显示）；留空则自动使用根/子物体上的第一个 SpriteRenderer。 — Sprites toggled during i-blink; empty = auto-find one body sprite.")]
     public SpriteRenderer[] invincibilityBlinkSpriteRenderers;
+    [SerializeField]
+    private float survivalInvincibilityDuration = 0.3f;
 
     private float invincibleUntil;
     private float knockbackUntil;
@@ -126,8 +128,8 @@ public class PlayerCombat : MonoBehaviour
         }
         else
         {
-            var sr = GetComponent<SpriteRenderer>() ?? GetComponentInChildren<SpriteRenderer>();
-            _invincibilityBlinkTargets = sr != null ? new[] { sr } : System.Array.Empty<SpriteRenderer>();
+            // var sr = GetComponent<SpriteRenderer>() ?? GetComponentsInChildren<SpriteRenderer>(); // fail safe, previously working code just in case the new one somehow breaks.
+            _invincibilityBlinkTargets = GetComponentsInChildren<SpriteRenderer>();
         }
 
         // 初始化 OriginalColors 数组，但此时的颜色可能是白色的预制体默认颜色
@@ -522,7 +524,16 @@ public class PlayerCombat : MonoBehaviour
         if (data == null || data.spellPrefab == null) return null;
 
         Vector3 spawnPos = firePoint.position + firePoint.up * spellSpawnForwardInset;
+        
         GameObject spellObj = Instantiate(data.spellPrefab, spawnPos, firePoint.rotation);
+        // When using Beer System delete line above and uncomment lines below.
+        // Quaternion rot = firePoint.rotation;
+
+        // var beer = GetComponent<DrunkSystem>();
+        // if (beer != null)
+        //     rot = beer.ApplyAimSpread(rot);
+        // GameObject spellObj =
+        //     Instantiate(data.spellPrefab, spawnPos, rot);
 
         SpellProjectile.RegisterWithCaster(spellObj, gameObject);
         SpellStatScaling.ApplyProjectileSizeToTree(spellObj, gameObject);
@@ -559,8 +570,14 @@ public class PlayerCombat : MonoBehaviour
         invincibleUntil = Time.time + invincibilityDuration;
 
         if (attackerIndex >= 0)
+        {
             GameData.RecordDamage(attackerIndex, damage);
-
+        }
+        else
+        {
+            invincibleUntil = Time.time + survivalInvincibilityDuration;
+        }
+            
         playerStats.TakeDamage(damage);
 
         // 直接设速度并短暂锁定移动控制，否则 FixedUpdate 的高减速度会立刻把 AddForce 清掉。
@@ -583,7 +600,7 @@ public class PlayerCombat : MonoBehaviour
         {
             if (attackerIndex >= 0)
                 GameData.RecordKill(attackerIndex);
-            if (p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
+            if (p2scr != null && p2scr.GetCurrentMinigame() != null && (p2scr.GetCurrentMinigame() == "Arena" || p2scr.GetCurrentMinigame() == "Survival"))
             {
                 Die();
             }
@@ -679,6 +696,8 @@ public class PlayerCombat : MonoBehaviour
         isKnockedDown = true;
         layerSync?.SetTrigger("Knocked");
         layerSync?.SetBool("IsKnockedDown", true);
+
+        GetComponent<PlayerEffectsSystem>()?.TriggerShake(0.3f, 0.6f);
 
         CleanupHeldAttackEffects(applyReleaseCooldown: false);
         CleanupHeldMovementEffects(applyReleaseCooldown: false);

@@ -347,6 +347,15 @@ public class PlayerStats : MonoBehaviour
                 AS.PlayerEliminated(gameObject);
             }
         }
+
+        if (p2 != null && p2.GetCurrentMinigame() == "Survival")
+        {
+            SurvivalScript SS = FindFirstObjectByType<SurvivalScript>();
+            if (SS != null)
+            {
+                SS.PlayerEliminated(gameObject);
+            }
+        }
     }
 
     void DropRandomPickups(int dropCount)

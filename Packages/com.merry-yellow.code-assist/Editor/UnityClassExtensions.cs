@@ -182,7 +182,7 @@ namespace Meryel.UnityCodeAssist.Editor
             static string[] ConcatenateListOfArrays(List<string[]> listOfArrays)
             {
                 if (listOfArrays.Count == 0)
-                    return Array.Empty<string>();
+                    return new string[0];
                 else if (listOfArrays.Count == 1)
                     return listOfArrays[0];
 

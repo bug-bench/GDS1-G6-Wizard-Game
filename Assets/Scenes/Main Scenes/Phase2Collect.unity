@@ -39360,7 +39360,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 80, y: 40}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &687569837
@@ -40077,8 +40077,8 @@ MonoBehaviour:
   groundTilemap: {fileID: 283757768}
   Spawncenter: {x: 7, y: 3}
   SpawnSize: {x: 115, y: 82}
-  startingPickups: 10
-  respawnDelay: 3
+  startingPickups: 15
+  respawnDelay: 1
   DistancebetweenStats: 1
   statLayer:
     serializedVersion: 2
@@ -40439,6 +40439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96170e1f99068a74cb4260e5e7819545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  manualWinDebugMode: 0
+  forceDebugWin: 0
   winPanel: {fileID: 746633408}
   podiumContainer: {fileID: 1708113369}
   resultPrefab: {fileID: 2876806264982438450, guid: 77c98d183a823464399ad65a27e955fd, type: 3}
