@@ -54,7 +54,7 @@ namespace Meryel.UnityCodeAssist.Editor.Preferences
 
         private PreferenceEntryHolder? prefEntryHolder;
 
-        private PreferenceStorageAccessor? entryAccessor;
+        private PreferanceStorageAccessor? entryAccessor;
 
 
         private bool updateView = false;
@@ -74,7 +74,6 @@ namespace Meryel.UnityCodeAssist.Editor.Preferences
         {
             this.isPlayerPrefs = isPlayerPrefs;
             OnEnable();
-            EditorApplication.update -= Update;
             EditorApplication.update += Update;
         }
 

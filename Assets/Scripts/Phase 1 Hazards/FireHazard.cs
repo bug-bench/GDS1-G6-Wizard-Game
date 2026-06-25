@@ -25,7 +25,8 @@ public class FireHazard : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log(" inside fire");
-        PlayerStats stats = other.GetComponentInParent<PlayerStats>();
+
+        PlayerStats stats = other.GetComponent<PlayerStats>();
         if (stats == null) return;
         if(!PlayersInside.Contains(stats))
         {
@@ -41,7 +42,7 @@ public class FireHazard : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        PlayerStats stats = other.GetComponentInParent<PlayerStats>();
+        PlayerStats stats = other.GetComponent<PlayerStats>();
         if(stats != null)
         {
             PlayersInside.Remove(stats);
