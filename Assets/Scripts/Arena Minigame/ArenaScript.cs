@@ -3,46 +3,26 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using TMPro;
 
 public class ArenaScript : MonoBehaviour
 {
-    [Header("Debug")]
-    // Can be enabled manually in the Inspector,
-    // or automatically when testing Arena with <= 1 player.
-    [SerializeField] 
-    private bool manualWinDebugMode = false;
-    [SerializeField] 
-    private bool forceDebugWin = false;
-
-    [Header("Win Screen")]
     [SerializeField] private string winScene = "WinScene";
-
-    [Header("Win Panel")]
-    [SerializeField] private GameObject winPanel;
-    [SerializeField] private Image playerWonImg;
-    [SerializeField] private TextMeshProUGUI playerWonTxt;
-    [SerializeField] private TextMeshProUGUI damageDealtTxt;
-    [SerializeField] private TextMeshProUGUI eliminationsTxt;
 
     private List<GameObject> players = new List<GameObject>();
     private List<GameObject> playersEliminated = new List<GameObject>();
 
-    private bool isEnding    = false;
+    private bool isEnding = false;
     private bool playersReady = false;
 
     void Start()
     {
-        if (winPanel != null) winPanel.SetActive(false);
         StartCoroutine(FindPlayersNextFrame());
     }
 
     void Update()
     {
-        HandleDebugWin();
-
         if (isEnding || !playersReady) return;
+
         TryEndGameAfterElimination();
     }
 
@@ -56,26 +36,20 @@ public class ArenaScript : MonoBehaviour
         foreach (var playerData in GameData.players)
         {
             if (playerData.playerGameObject == null) continue;
+
             if (!players.Contains(playerData.playerGameObject))
+            {
                 players.Add(playerData.playerGameObject);
+            }
         }
 
         Debug.Log($"ArenaScript tracking {players.Count} players");
 
-        if (GameData.players.Count <= 1)
-        {
-            manualWinDebugMode = true;
-
-            Debug.Log(
-                $"ArenaScript: Auto-enabled Manual Win Debug Mode " +
-                $"because only {GameData.players.Count} player(s) were detected."
-            );
-        }
-
         GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+
         if (spawnPoints.Length < players.Count)
         {
-            Debug.LogError("Not enough spawn points!");
+            Debug.LogError("Not enough spawn points for all players!");
             yield break;
         }
 
@@ -87,46 +61,38 @@ public class ArenaScript : MonoBehaviour
             players[i].transform.position = spawnPoints[i].transform.position;
             players[i].transform.rotation = spawnPoints[i].transform.rotation;
 
-            var pi = players[i].GetComponent<PlayerInput>();
-            if (pi != null) pi.ActivateInput();
+            PlayerInput pi = players[i].GetComponent<PlayerInput>();
+            if (pi != null)
+            {
+                pi.ActivateInput();
+            }
 
-            var sr = players[i].GetComponentInChildren<SpriteRenderer>();
-            if (sr != null) sr.enabled = true;
+            SpriteRenderer sr = players[i].GetComponentInChildren<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.enabled = true;
+            }
         }
 
         var countdowns = FindObjectsByType<CountdownUI>(
-            FindObjectsInactive.Include, FindObjectsSortMode.None);
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None
+        );
 
         if (countdowns.Length > 0)
         {
             int done = 0;
+
             foreach (var cd in countdowns)
-                cd.Play(() => done++);
+            {
+                cd.Play(() =>
+                {
+                    done++;
+                });
+            }
         }
 
         playersReady = true;
-    }
-
-    // for use when debugging
-    public void HandleDebugWin()
-    {
-        if (!manualWinDebugMode) return;
-        if (!forceDebugWin) return;
-        if (isEnding) return;
-
-        forceDebugWin = false;
-        isEnding = true;
-
-        Debug.Log("Debug win triggered by Main User.");
-
-        if (players.Count > 0)
-        {
-            EndGame(players[0]);
-        }
-        else
-        {
-            EndGame(playersEliminated);
-        }
     }
 
     public void PlayerEliminated(GameObject player)
@@ -135,7 +101,7 @@ public class ArenaScript : MonoBehaviour
 
         if (!players.Contains(player))
         {
-            Debug.LogWarning($"{player.name} not tracked by ArenaScript.");
+            Debug.LogWarning($"{player.name} was eliminated but is not tracked by ArenaScript.");
             return;
         }
 
@@ -145,46 +111,59 @@ public class ArenaScript : MonoBehaviour
             Debug.Log($"{player.name} eliminated.");
         }
 
-        var pi = player.GetComponent<PlayerInput>();
-        if (pi != null) pi.DeactivateInput();
+        PlayerInput pi = player.GetComponent<PlayerInput>();
+        if (pi != null)
+        {
+            pi.DeactivateInput();
+        }
 
-        var sr = player.GetComponentInChildren<SpriteRenderer>();
-        if (sr != null) sr.enabled = false;
+        SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null)
+        {
+            sr.enabled = false;
+        }
 
         TryEndGameAfterElimination();
     }
 
     private List<GameObject> GetAlivePlayers()
     {
-        var alive = new List<GameObject>();
-        foreach (var player in players)
+        List<GameObject> alivePlayers = new List<GameObject>();
+
+        foreach (GameObject player in players)
         {
             if (player == null) continue;
             if (!player.activeInHierarchy) continue;
             if (playersEliminated.Contains(player)) continue;
-            alive.Add(player);
+
+            alivePlayers.Add(player);
         }
-        return alive;
+
+        return alivePlayers;
     }
 
     private void TryEndGameAfterElimination()
     {
-        if (isEnding || players.Count == 0) return;
+        if (isEnding) return;
+        if (players.Count == 0) return;
 
-        var alive = GetAlivePlayers();
+        List<GameObject> alivePlayers = GetAlivePlayers();
 
-        if (alive.Count == 1)
+        if (alivePlayers.Count == 1)
         {
-            bool suppressAutomaticWin = manualWinDebugMode && GameData.players.Count <= 1;
-            if (suppressAutomaticWin) return;
-
             isEnding = true;
-            EndGame(alive[0]);
+
+            GameObject winner = alivePlayers[0];
+            Debug.Log("Winner: " + winner.name);
+
+            EndGame(winner);
         }
-        else if (alive.Count == 0)
+        else if (alivePlayers.Count == 0)
         {
             isEnding = true;
-            EndGame((GameObject)null);
+
+            Debug.Log("Draw!");
+            EndGame(playersEliminated);
         }
     }
 
@@ -192,74 +171,50 @@ public class ArenaScript : MonoBehaviour
     {
         for (int i = 0; i < array.Length; i++)
         {
-            int rand    = Random.Range(i, array.Length);
-            var temp    = array[i];
-            array[i]    = array[rand];
+            int rand = Random.Range(i, array.Length);
+
+            GameObject temp = array[i];
+            array[i] = array[rand];
             array[rand] = temp;
         }
     }
 
     private void EndGame(GameObject winner)
     {
-        Time.timeScale = 0f;
+        PlayerInput playerInput = winner.GetComponent<PlayerInput>();
+        GameData.winnerIndex = playerInput != null ? playerInput.playerIndex : 0;
 
-        // Freeze all players
         foreach (var p in GameData.players)
         {
-            if (p.playerGameObject == null) continue;
-            var pi = p.playerGameObject.GetComponent<PlayerInput>();
-            if (pi != null) pi.DeactivateInput();
-            var rb = p.playerGameObject.GetComponent<Rigidbody2D>();
-            if (rb != null) rb.linearVelocity = Vector2.zero;
+            Debug.Log($"EndGame — Player {p.playerIndex} kills: {p.kills}, damage: {p.damageDealt}");
         }
 
-        if (winner != null)
-        {
-            var pi = winner.GetComponent<PlayerInput>();
-            GameData.winnerIndex = pi != null ? pi.playerIndex : 0;
-        }
-        else
-        {
-            GameData.winnerIndex = -1;
-        }
-
-        ShowWinPanel(winner);
+        SceneManager.LoadScene(winScene);
     }
 
-    private void ShowWinPanel(GameObject winner)
+    private void EndGame(List<GameObject> eliminations)
     {
-        if (winPanel == null) return;
-        winPanel.SetActive(true);
+        GameData.winnerIndex = -1;
 
-        if (winner == null)
+        foreach (GameObject player in players)
         {
-            if (playerWonTxt    != null) playerWonTxt.text    = "DRAW!";
-            if (damageDealtTxt  != null) damageDealtTxt.text  = "";
-            if (eliminationsTxt != null) eliminationsTxt.text = "";
-            if (playerWonImg    != null) playerWonImg.enabled = false;
-            return;
+            if (player == null) continue;
+
+            SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.enabled = false;
+            }
+
+            PersistentObject persistent = player.GetComponent<PersistentObject>();
+            if (persistent != null)
+            {
+                Destroy(persistent);
+            }
+
+            Destroy(player);
         }
 
-        var data = GameData.players.Find(p => p.playerIndex == GameData.winnerIndex);
-        if (data == null)
-        {
-            if (playerWonTxt != null) playerWonTxt.text = "NO DATA";
-            return;
-        }
-
-        if (playerWonImg != null)
-        {
-            playerWonImg.enabled = true;
-            playerWonImg.color   = PlayerData.PlayerColors.GetColor(data.colorIndex);
-            if (data.playerSprite != null)
-                playerWonImg.sprite = data.playerSprite;
-        }
-
-        if (playerWonTxt    != null) playerWonTxt.text    = $"P{data.playerIndex + 1} WINS!";
-        if (damageDealtTxt  != null) damageDealtTxt.text  = $"Damage: {Mathf.RoundToInt(data.damageDealt)}";
-        if (eliminationsTxt != null) eliminationsTxt.text = $"Eliminations: {data.kills}";
-
-        foreach (var p in GameData.players)
-            Debug.Log($"Player {p.playerIndex} — kills: {p.kills}, damage: {p.damageDealt}");
+        SceneManager.LoadScene(winScene);
     }
 }

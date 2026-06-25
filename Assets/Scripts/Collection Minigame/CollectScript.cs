@@ -6,12 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class CollectScript : MonoBehaviour
 {
-    [Header("Debug")]
-    [SerializeField]
-    private bool manualWinDebugMode = false;
-    [SerializeField]
-    private bool forceDebugWin = false;
-    
     [Header("Win Screen")]
     [SerializeField] GameObject winPanel;
     [SerializeField] Transform podiumContainer;
@@ -21,7 +15,6 @@ public class CollectScript : MonoBehaviour
     [SerializeField] GameObject collectScorePrefab;
     [SerializeField] private TimerUI centralTimer;
     [SerializeField] private TMPro.TextMeshProUGUI winnerText;
-    [SerializeField] private float minigameLength = 60f;
 
 
     private List<GameObject> players = new List<GameObject>();
@@ -30,6 +23,7 @@ public class CollectScript : MonoBehaviour
 
     private GameObject winner = null;
 
+    [SerializeField] private float minigameLength = 60f;
     private float timer = 0;
 
     void Start()
@@ -50,16 +44,6 @@ public class CollectScript : MonoBehaviour
         yield return null;
 
         cm = GetComponent<CollectManager>();
-
-        if (GameData.players.Count <= 1)
-        {
-            manualWinDebugMode = true;
-
-            Debug.Log(
-                $"Collect: Auto-enabled Manual Win Debug Mode " +
-                $"because only {GameData.players.Count} player(s) were detected."
-            );
-        }
 
         foreach (var player in GameData.players)
         {
@@ -111,7 +95,22 @@ public class CollectScript : MonoBehaviour
 
     void Update()
     {
-        HandleDebugWin();
+        if (players.Count <= 0)
+        {
+            foreach (var player in GameData.players)
+            {
+                players.Add(player.playerGameObject);
+            }
+        }
+
+        #if UNITY_EDITOR
+        if (UnityEngine.InputSystem.Keyboard.current.tKey.wasPressedThisFrame)
+        {
+            StopAllCoroutines();
+            winner = players.Count > 0 ? players[0] : null;
+            EndGame(winner);
+        }
+        #endif
     }
 
     public int GetTimer()
@@ -121,17 +120,6 @@ public class CollectScript : MonoBehaviour
 
     public void BeginGame()
     {
-        if (manualWinDebugMode)
-        {
-            Debug.Log("Collect running in Manual win Debug Mode.");
-
-            if (centralTimer != null)
-            {
-                centralTimer.Init(0f);
-            }
-
-            return;
-        }
         StartCoroutine(GameTimer());
     }
 
@@ -199,21 +187,5 @@ public class CollectScript : MonoBehaviour
 
             ui.Setup(i + 1, data.playerIndex, data.colorIndex, score.ToString(), height);
         }
-    }
-
-    private void HandleDebugWin()
-    {
-        if (!manualWinDebugMode) return;
-        if (!forceDebugWin) return;
-
-        forceDebugWin = false;
-
-        StopAllCoroutines();
-
-        Debug.Log("Debug win triggered by Main User.");
-
-        winner = players.Count > 0 ? players[0] : null;
-
-        EndGame(winner);
     }
 }

@@ -3844,25 +3844,13 @@ PrefabInstance:
       value: spawn area
       objectReference: {fileID: 0}
     - target: {fileID: 2044771269976841627, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
-      propertyPath: patternSettings.Array.data[0].bulletLifetime
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2044771269976841627, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
-      propertyPath: patternSettings.Array.data[1].bulletLifetime
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2044771269976841627, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
-      propertyPath: patternSettings.Array.data[2].bulletLifetime
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2044771269976841627, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
-      propertyPath: patternSettings.Array.data[3].bulletLifetime
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2044771269976841627, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
-      propertyPath: patternSettings.Array.data[4].bulletLifetime
-      value: 8
-      objectReference: {fileID: 0}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 1485216680615802304, guid: d968089a870a89d498c522a28935580e, type: 3}
+    - target: {fileID: 7122099501705735029, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 1485216680615802304, guid: d968089a870a89d498c522a28935580e, type: 3}
     - target: {fileID: 8128837736014539446, guid: 8a7895e9da03f694f9b6358b3eb71e3f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -23452,8 +23440,6 @@ MonoBehaviour:
   winnerText: {fileID: 1562008678}
   podiumContainer: {fileID: 1328470112}
   resultPrefab: {fileID: 2876806264982438450, guid: 77c98d183a823464399ad65a27e955fd, type: 3}
-  manualWinDebugMode: 0
-  forceDebugWin: 0
   maxHits: 3
   hitInvulnerabilityTime: 0.75
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
