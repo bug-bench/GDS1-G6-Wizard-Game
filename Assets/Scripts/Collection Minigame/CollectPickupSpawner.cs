@@ -13,7 +13,7 @@ public class CollectPickupSpawner : MonoBehaviour
 
     public int startingPickups = 10;
 
-    public float respawnDelay = 3f;
+    public float respawnDelay = 1f;
     private bool spawning = true;
 
     //spawn distance so no overlay

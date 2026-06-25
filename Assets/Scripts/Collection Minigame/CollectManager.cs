@@ -10,17 +10,18 @@ public class CollectManager : MonoBehaviour
     protected bool TimerEnded = false;
     private List<GameObject> players = new List<GameObject>();
     private Dictionary<GameObject, int> PlayerCollectTracker = new Dictionary<GameObject, int>();
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    private Dictionary<GameObject, CollectScoreUI> playerScoreUIs = new Dictionary<GameObject, CollectScoreUI>();
 
     public void SetupPlayer(GameObject player)
     {
-        players.Add(player);
-        PlayerCollectTracker.Add(player, 0);
+        if (!players.Contains(player))
+        {
+            players.Add(player);
+        }
+        if (!PlayerCollectTracker.ContainsKey(player))
+        {
+            PlayerCollectTracker.Add(player, 0);
+        }
     }
 
     // Update is called once per frame
@@ -42,18 +43,78 @@ public class CollectManager : MonoBehaviour
     public GameObject RegisterGameEnd()
     {
         TimerEnded = true;
+
         GameObject top = null;
-        int highest = 0;
+        int highest = -1;
+        bool draw = false;
+
         foreach (var Player in players)
         {
-            if (PlayerCollectTracker[Player] > highest)
+            int score = PlayerCollectTracker[Player];
+            if (score > highest)
             {
-                highest = PlayerCollectTracker[Player];
+                highest = score;
                 top = Player;
+                draw = false;
+            }
+            else if (score == highest)
+            {
+                draw = true;
             }
         }
-        return top;
+        return draw ? null : top;
     }
+
+    public void RegisterScoreUI(GameObject player, CollectScoreUI ui)
+    {
+        playerScoreUIs[player] = ui;
+    }
+
+    private void UpdateLeaderCrowns()
+    {
+        foreach (var ui in playerScoreUIs.Values)
+        {
+            ui.SetCrowned(false);
+        }
+
+        if (PlayerCollectTracker.Count == 0) return;
+
+        int highestScore = -1;
+
+        foreach (var score in PlayerCollectTracker.Values)
+        {
+            if (score > highestScore)
+            {
+                highestScore = score;
+            }
+        }
+
+        // Rule 1: Nobody has any coins
+        if ( highestScore <= 0) return;
+
+        List<GameObject> leaders = new List<GameObject>();
+
+        foreach (var pair in PlayerCollectTracker)
+        {
+            if (pair.Value == highestScore)
+            {
+                leaders.Add(pair.Key);
+            }
+        }
+
+        // Rule 2: Everyone has the same amount of coins
+        if (leaders.Count == PlayerCollectTracker.Count) return;
+
+        // Rule 3: there is a highest and lowest player(s)
+        foreach (var leader in leaders)
+        {
+            if (playerScoreUIs.TryGetValue(leader, out CollectScoreUI ui))
+            {
+                ui.SetCrowned(true);
+            }
+        }
+    }
+
 
     public void DropPickup(GameObject player, int amount)
     {
@@ -91,6 +152,7 @@ public class CollectManager : MonoBehaviour
                 }
             }
         }
+        UpdateLeaderCrowns();
     }
 
     GameObject DropPickup(Vector2 position)
@@ -111,7 +173,11 @@ public class CollectManager : MonoBehaviour
 
     public void RegisterPickup(GameObject player)
     {
-        PlayerCollectTracker[player] += 1;
+        if (PlayerCollectTracker.ContainsKey(player))
+        {
+            PlayerCollectTracker[player]++;
+        }
+        UpdateLeaderCrowns();
     }
 
     public int GetPlayerScore(GameObject player)

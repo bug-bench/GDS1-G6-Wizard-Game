@@ -1,9 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CollectScoreUI : MonoBehaviour
 {
     public TMP_Text scoreText;
+    [Header("Leader Crown")]
+    [SerializeField] private Image crownImage;
 
     private GameObject targetPlayer;
     private CollectManager collectManager;
@@ -12,6 +15,10 @@ public class CollectScoreUI : MonoBehaviour
     {
         targetPlayer = player;
         collectManager = cm;
+        if (crownImage != null)
+        {
+            crownImage.gameObject.SetActive(false);
+        }
     }
 
     void Update()
@@ -26,5 +33,13 @@ public class CollectScoreUI : MonoBehaviour
         scoreText.text = score.ToString();
 
         transform.rotation = Camera.main.transform.rotation;
+    }
+
+    public void SetCrowned(bool crowned)
+    {
+        if (crownImage != null)
+        {
+            crownImage.gameObject.SetActive(crowned);
+        }
     }
 }

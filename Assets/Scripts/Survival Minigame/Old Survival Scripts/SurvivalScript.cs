@@ -6,11 +6,19 @@ using UnityEngine.InputSystem;
 
 public class SurvivalScript : MonoBehaviour
 {
+    [Header("Debug")]
+    [SerializeField]
+    private bool manualWinDebugMode = false;
+    [SerializeField]
+    private bool forceDebugWin = false;
+
+    [Header("Win Screen")]
     [SerializeField] private GameObject resultsPanel;
     // [SerializeField] private UnityEngine.UI.Image winnerImage;
     [SerializeField] private TMPro.TextMeshProUGUI winnerText;
     [SerializeField] private Transform podiumContainer;
     [SerializeField] private GameObject resultPrefab;
+
     private GameObject winner = null;
 
 
@@ -29,27 +37,6 @@ public class SurvivalScript : MonoBehaviour
 
     private int loopCount = 0;
 
-    [Header("Survival Settings")]
-    [SerializeField] private int maxHits = 3;
-
-    private Dictionary<GameObject, int> playerHits = new Dictionary<GameObject, int>();
-
-    [SerializeField]
-    private float hitInvulnerabilityTime = 0.75f;
-
-    [Header("Hit Feedback")]
-    [SerializeField] 
-    private Color hitFlashColor = Color.white;
-    [SerializeField] 
-    private int hitFlashBlinkCount = 2;
-    [SerializeField] 
-    private float hitFlashHalfDuration = 0.04f;
-    [SerializeField] 
-    private float invulnerabilityBlinkInterval = 0.12f;
-
-    private Dictionary<GameObject, float> playerInvulnerabilityTimers = new Dictionary<GameObject, float>();
-    private Dictionary<GameObject, Coroutine> playerFlashCoroutines = new Dictionary<GameObject, Coroutine>();
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -60,19 +47,13 @@ public class SurvivalScript : MonoBehaviour
     void Update()
     {
         if (gameEnded) return;
+
+        HandleDebugWin();
+
         if (players.Count > 0)
         {
             TryEndGameAfterElimination();
         }
-
-        #if UNITY_EDITOR
-        if (UnityEngine.InputSystem.Keyboard.current.tKey.wasPressedThisFrame)
-        {
-            StopAllCoroutines();
-            winner = players.Count > 0 ? players[0] : null;
-            EndGame(winner);
-        }
-        #endif
     }
 
     IEnumerator SetupNextFrame()
@@ -83,12 +64,21 @@ public class SurvivalScript : MonoBehaviour
         {
             players.Add(player.playerGameObject);
         }
+
+        if (GameData.players.Count <= 1)
+        {
+            manualWinDebugMode = true;
+
+            Debug.Log(
+                $"Survival: Auto-enabled Manual Win Debug Mode " +
+                $"because only {GameData.players.Count} player(s) were detected."
+            );
+        }
+
         foreach (GameObject p in players)
         {
             playerSurvivalTimes[p] = 0f;
             playersAlive.Add(p);
-            playerHits[p] = 0;
-            playerInvulnerabilityTimers[p] = 0f;
         }
 
         hazards.Clear();
@@ -144,111 +134,14 @@ public class SurvivalScript : MonoBehaviour
         }
     }
 
+    public bool IsUsingMouseDebugTarget()
+    {
+        return manualWinDebugMode && GameData.players.Count <= 0;
+    }
+
     // ====================
     // PLAYER ELIMINATION
     // ====================
-
-    public void TakeSurvivalHit(GameObject player)
-    {
-        if (player == null) return;
-
-        if (!playerHits.ContainsKey(player)) return;
-
-        if (Time.time < playerInvulnerabilityTimers[player]) return;
-
-        playerInvulnerabilityTimers[player] = Time.time + hitInvulnerabilityTime;
-
-        playerHits[player]++;
-        if (playerFlashCoroutines.ContainsKey(player))
-        {
-            if (playerFlashCoroutines[player] != null)
-            {
-                StopCoroutine(playerFlashCoroutines[player]);
-            }
-        }
-
-        playerFlashCoroutines[player] = StartCoroutine(SurvivalHitFlashRoutine(player));
-
-        Debug.Log($"{player.name} took hit " + $"{playerHits[player]}/{maxHits}");
-
-        if (playerHits[player] >= maxHits)
-        {
-            PlayerEliminated(player);
-            player.SetActive(false);
-        }
-    }
-
-    //feedback on player hit by object
-    private IEnumerator SurvivalHitFlashRoutine(GameObject player)
-    {
-        if (player == null) yield break;
-
-        SpriteRenderer[] renderers = player.GetComponentsInChildren<SpriteRenderer>();
-
-        if (renderers.Length == 0) yield break;
-
-        Color[] originalColors = new Color[renderers.Length];
-
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            originalColors[i] = renderers[i].color;
-        }
-
-        for (int flash = 0; flash < hitFlashBlinkCount; flash++)
-        {
-            foreach (var sr in renderers)
-            {
-                if (sr != null)
-                {
-                    sr.color = hitFlashColor;
-                }
-            }
-
-            yield return new WaitForSeconds(hitFlashHalfDuration);
-
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                if (renderers[i] != null)
-                {
-                    renderers[i].color = originalColors[i];
-                }
-            }
-
-            yield return new WaitForSeconds(hitFlashHalfDuration);
-        }
-        while (player != null && playerInvulnerabilityTimers.ContainsKey(player) && Time.time < playerInvulnerabilityTimers[player])
-        {
-            foreach (var sr in renderers)
-            {
-                if (sr != null)
-                {
-                    Color c = sr.color;
-                    c.a = 0f;
-                    sr.color = c;
-                }
-            }
-
-            yield return new WaitForSeconds(invulnerabilityBlinkInterval);
-
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                if (renderers[i] != null)
-                {
-                    renderers[i].color = originalColors[i];
-                }
-            }
-
-            yield return new WaitForSeconds(invulnerabilityBlinkInterval);
-        }
-
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            if (renderers[i] != null)
-            {
-                renderers[i].color = originalColors[i];
-            }
-        }
-    }
 
     public void PlayerEliminated(GameObject player)
     {
@@ -260,6 +153,10 @@ public class SurvivalScript : MonoBehaviour
             playerSurvivalTimes[player] = Time.time - survivalStartTime;
             playersEliminated.Add(player);
             Debug.Log($"{player.name} eliminated at {survivalTime}s (survivalStartTime: {survivalStartTime}, Time.time: {Time.time})");
+            if (player.activeInHierarchy)
+            {
+                player.SetActive(false);
+            }
         }
 
 
@@ -278,7 +175,7 @@ public class SurvivalScript : MonoBehaviour
         // playersAlive.Remove(player);
         // playersEliminated.Add(player);
 
-        Debug.Log(player.name + " eliminated. Remaining: " + playersAlive.Count);
+        Debug.Log(player.name + " eliminated. Remaining: " + GetAlivePlayers().Count);
 
         TryEndGameAfterElimination();
         // if (playersAlive.Count == 1)
@@ -312,6 +209,9 @@ public class SurvivalScript : MonoBehaviour
 
         if (alivePlayers.Count == 1)
         {
+            bool SuppressAutomaticWin = manualWinDebugMode && GameData.players.Count <= 1;
+            if (SuppressAutomaticWin) return;
+
             gameEnded = true;
             GameObject winner = alivePlayers[0];
             
@@ -440,5 +340,27 @@ public class SurvivalScript : MonoBehaviour
 
             ui.Setup(i + 1, data.playerIndex, data.colorIndex, timeStr, height);
         }
+    }
+
+    private void HandleDebugWin()
+    {
+        if (!manualWinDebugMode) return;
+        if (!forceDebugWin) return;
+
+        forceDebugWin = false;
+        gameEnded = true;
+
+        Debug.Log("Debug win triggered by Main User");
+
+        StopAllCoroutines();
+
+        GameObject winner = players.Count > 0 ? players[0] : null;
+
+        EndGame(winner);
+    }
+
+    public bool IsManualWinDebugMode()
+    {
+        return manualWinDebugMode;
     }
 }

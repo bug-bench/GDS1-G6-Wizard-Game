@@ -7,7 +7,7 @@
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Pickup, Water, UI, hazards, wall, player, Spells, Crate
 - Active game object:
-  - Name: Prefab_laserRay
-  - Tag: Untagged
-  - Layer: Default
+  - Name: PlayerPrefab
+  - Tag: Player
+  - Layer: player
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

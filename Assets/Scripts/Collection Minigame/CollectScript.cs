@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework.Internal.Filters;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CollectScript : MonoBehaviour
 {
@@ -56,6 +54,7 @@ public class CollectScript : MonoBehaviour
             CollectScoreUI scoreUI = ui.GetComponent<CollectScoreUI>();
 
             scoreUI.Setup(player.playerGameObject, cm);
+            cm.RegisterScoreUI(player.playerGameObject, scoreUI);
         }
 
         GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
