@@ -39088,8 +39088,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dfb3619c197b3f41968e39c24996b03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  potatoPickup: {fileID: 0}
-  potatoTimerPrefab: {fileID: 0}
+  potatoPickup: {fileID: 7350712895680411430, guid: ad445aa98bb2cb146b5aac9fb25abf4d, type: 3}
+  potatoTimerPrefab: {fileID: 6542224714898544934, guid: 3066f54e1a247e24f95a83cb8d5ba24c, type: 3}
   respawnDelay: 5
 --- !u!114 &412437362
 MonoBehaviour:
