@@ -2,12 +2,29 @@ using UnityEngine;
 
 public class InteractableUI : MonoBehaviour
 {
-    public GameObject interactPrompt;  // the world space canvas
+    public GameObject interactPrompt;
     public float interactRadius = 2f;
+
+    private SpellSwapIcon swapIcon;
+    private SpellPickupHUDReceiver currentReceiver;
+
+    void Awake()
+    {
+        swapIcon = GetComponentInChildren<SpellSwapIcon>();
+        if (swapIcon != null)
+            swapIcon.onSwap += OnIconSwapped;
+    }
+
+    void OnDestroy()
+    {
+        if (swapIcon != null)
+            swapIcon.onSwap -= OnIconSwapped;
+    }
 
     void Update()
     {
-        bool playerNearby = false;
+        float closestDist  = float.MaxValue;
+        SpellPickupHUDReceiver closestReceiver = null;
 
         foreach (var player in GameData.players)
         {
@@ -16,15 +33,41 @@ public class InteractableUI : MonoBehaviour
                 transform.position,
                 player.playerGameObject.transform.position
             );
-            if (dist <= interactRadius)
+            if (dist < closestDist)
             {
-                playerNearby = true;
-                break;
+                closestDist    = dist;
+                closestReceiver = player.playerGameObject
+                    .GetComponentInChildren<SpellPickupHUDReceiver>();
             }
         }
 
-        if (interactPrompt != null)
-            interactPrompt.SetActive(playerNearby);
+        bool anyNearby = closestDist <= interactRadius;
+
+        if (anyNearby)
+        {
+            if (interactPrompt != null) interactPrompt.SetActive(true);
+
+            // Switch receiver if player changed
+            if (closestReceiver != currentReceiver)
+            {
+                currentReceiver?.HidePrompt();
+                currentReceiver = closestReceiver;
+            }
+
+            // Sync highlight with current icon state
+            currentReceiver?.ShowSlotHighlight(swapIcon != null && swapIcon.IsShowingA());
+        }
+        else
+        {
+            if (interactPrompt != null) interactPrompt.SetActive(false);
+            currentReceiver?.HidePrompt();
+            currentReceiver = null;
+        }
+    }
+
+    void OnIconSwapped(bool showingA)
+    {
+        currentReceiver?.ShowSlotHighlight(showingA);
     }
 
     void OnDrawGizmosSelected()
