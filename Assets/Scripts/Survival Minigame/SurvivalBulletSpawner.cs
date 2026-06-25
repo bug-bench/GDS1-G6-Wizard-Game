@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
 
 
 [System.Serializable]
@@ -53,7 +52,6 @@ public class SurvivalBulletSpawner : MonoBehaviour
     private float currentRotation;
     private float strafeAngle;
     private float strafeDirection = 1f;
-    private Vector2 fallbackDirection;
     private PatternSettings currentSettings;
     private PatternType lastPattern;
     private PatternType secondLastPattern;
@@ -62,19 +60,8 @@ public class SurvivalBulletSpawner : MonoBehaviour
 
     private Transform targetPlayer;
 
-    private SurvivalScript survival;
-
     private void Start()
     {
-        fallbackDirection = Random.insideUnitCircle.normalized;
-
-        if (fallbackDirection == Vector2.zero)
-        {
-            fallbackDirection = Vector2.right;
-        }
-
-        survival = FindFirstObjectByType<SurvivalScript>();
-
         ChooseRandomPattern();
 
         StartCoroutine(FireRoutine());
@@ -138,16 +125,6 @@ public class SurvivalBulletSpawner : MonoBehaviour
         currentSettings = chosenPattern;
         currentPattern = chosenPattern.patternType;
 
-        if (targetPlayer == null)
-        {
-            fallbackDirection = Random.insideUnitCircle.normalized;
-
-            if (fallbackDirection == Vector2.zero)
-            {
-                fallbackDirection = Vector2.right;
-            }
-        }
-
         Debug.Log("New Pattern: " + currentPattern);
     }
 
@@ -204,7 +181,13 @@ public class SurvivalBulletSpawner : MonoBehaviour
 
     private void FireStraight()
     {
-        ShootBullet(GetTargetDirection());
+        if (targetPlayer == null)
+            return;
+
+        Vector2 direction =
+            (targetPlayer.position - transform.position).normalized;
+
+        ShootBullet(direction);
     }
 
     // ---------- CIRCLE ----------
@@ -251,22 +234,15 @@ public class SurvivalBulletSpawner : MonoBehaviour
     private void FireStrafe()
     {
         strafeAngle +=
-            currentSettings.rotationSpeed * 
-            currentSettings.fireRate * 
-            strafeDirection;
+            currentSettings.rotationSpeed * currentSettings.fireRate * strafeDirection;
 
         if (Mathf.Abs(strafeAngle) >= currentSettings.spreadAngle)
         {
             strafeDirection *= -1f;
         }
 
-        Vector2 baseDirection = GetTargetDirection();
-
-        float baseAngle =
-            Mathf.Atan2(baseDirection.y, baseDirection.x) *
-            Mathf.Rad2Deg;
-        
-        Vector2 direction = DirectionFromAngle(baseAngle + strafeAngle);
+        Vector2 direction =
+            DirectionFromAngle(strafeAngle);
 
         ShootBullet(direction);
     }
@@ -358,33 +334,5 @@ public class SurvivalBulletSpawner : MonoBehaviour
             Mathf.Cos(radians),
             Mathf.Sin(radians)
         );
-    }
-
-    private Vector2 GetTargetDirection()
-    {
-        if (targetPlayer != null)
-        {
-            return (targetPlayer.position - transform.position).normalized;
-        }
-
-        if (survival != null && survival.IsUsingMouseDebugTarget())
-        {
-            Vector3 mouseScreenPos = Mouse.current.position.ReadValue();
-
-            Camera cam = Camera.main;
-
-            if (cam != null)
-            {
-                Vector3 mouseWorldPos = cam.ScreenToWorldPoint(mouseScreenPos);
-
-                mouseWorldPos.z = transform.position.z;
-
-                Vector2 direction = (mouseWorldPos - transform.position).normalized;
-
-                if (direction != Vector2.zero) return direction;
-            }
-        }
-
-        return fallbackDirection;
     }
 }
