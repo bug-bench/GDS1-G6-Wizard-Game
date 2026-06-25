@@ -125,7 +125,7 @@ public class ArenaScript : MonoBehaviour
         }
         else
         {
-            EndGame(playersEliminated);
+            EndGame(null);
         }
     }
 
