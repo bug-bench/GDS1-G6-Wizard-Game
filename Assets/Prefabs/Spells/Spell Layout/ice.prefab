@@ -84,7 +84,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2937912103407283272, guid: 9442638d4efd42b46a4dd6565424a0d6, type: 3}
@@ -188,12 +188,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellProjectile
   speed: 10
-  damage: 1
-  lifeTime: 3
+  damage: 2
+  lifeTime: 1
   knockbackForce: 15
   burnDamage: 0
-  burnDuration: 3
-  slowPercentage: 0
+  burnDuration: 0
+  slowPercentage: 0.026
   slowDuration: 2
   hitVFXPrefab: {fileID: 7930454606148642405, guid: 3c14c387703eaa14ea70978f895eebcc, type: 3}
   hitVFXLifetime: 0.5
@@ -347,7 +347,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2937912103407283272, guid: 9442638d4efd42b46a4dd6565424a0d6, type: 3}

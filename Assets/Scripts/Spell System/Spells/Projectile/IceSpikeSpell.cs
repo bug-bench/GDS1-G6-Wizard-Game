@@ -4,7 +4,7 @@ public class IceSpikeSpell : ProjectileSpellCore
 {
     private void Reset()
     {
-        projectileCount = 5;
+        projectileCount = 3;
         spreadAngle = 45f;
     }
 }

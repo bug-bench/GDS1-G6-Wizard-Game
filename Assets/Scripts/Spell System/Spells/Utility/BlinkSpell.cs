@@ -12,6 +12,7 @@ public class BlinkSpell : UtilitySpellCore
     public float wallBuffer = 0.35f;
 
     public float selfStunDuration = 0.06f;
+
     [Header("After Image")]
     public GameObject afterImagePrefab;
     public int afterImageCount = 5;
@@ -26,6 +27,7 @@ public class BlinkSpell : UtilitySpellCore
         Vector2 direction =
             firePoint.up.normalized;
 
+        // Store the player's original position BEFORE teleporting
         Vector2 start =
             caster.transform.position;
 
@@ -35,9 +37,10 @@ public class BlinkSpell : UtilitySpellCore
                 direction,
                 finalDistance);
 
-        Teleport(target);
+        // Spawn after images BEFORE teleporting
+        SpawnAfterImages(start, target);
 
-        SpawnAfterImages(caster.transform.position, target);
+        Teleport(target);
 
         Destroy(gameObject);
     }
@@ -46,23 +49,18 @@ public class BlinkSpell : UtilitySpellCore
     {
         if (RB != null)
         {
-            RB.linearVelocity =
-                Vector2.zero;
-
-            RB.position =
-                target;
+            RB.linearVelocity = Vector2.zero;
+            RB.position = target;
         }
         else
         {
-            caster.transform.position =
-                target;
+            caster.transform.position = target;
         }
 
         if (Stats != null &&
             selfStunDuration > 0f)
         {
-            Stats.ApplyStun(
-                selfStunDuration);
+            Stats.ApplyStun(selfStunDuration);
         }
     }
 
@@ -99,22 +97,29 @@ public class BlinkSpell : UtilitySpellCore
         if (afterImagePrefab == null)
             return;
 
-        SpriteRenderer casterSR = caster.GetComponentInChildren<SpriteRenderer>();
+        SpriteRenderer casterSR =
+            caster.GetComponentInChildren<SpriteRenderer>();
+
         if (casterSR == null)
             return;
 
         for (int i = 1; i <= afterImageCount; i++)
         {
             float t = i / (float)(afterImageCount + 1);
-            Vector2 pos = Vector2.Lerp(start, end, t);
 
-            GameObject img = Instantiate(
-                afterImagePrefab,
-                pos,
-                caster.transform.rotation
-            );
+            Vector2 pos =
+                Vector2.Lerp(start, end, t);
 
-            SpriteRenderer imgSR = img.GetComponent<SpriteRenderer>();
+            GameObject img =
+                Instantiate(
+                    afterImagePrefab,
+                    pos,
+                    caster.transform.rotation);
+
+            // Copy the player's sprite
+            SpriteRenderer imgSR =
+                img.GetComponent<SpriteRenderer>();
+
             if (imgSR != null)
             {
                 imgSR.sprite = casterSR.sprite;
@@ -128,9 +133,21 @@ public class BlinkSpell : UtilitySpellCore
                 imgSR.color = c;
             }
 
-            AfterImage fade = img.GetComponent<AfterImage>();
+            // Existing fade behaviour
+            AfterImage fade =
+                img.GetComponent<AfterImage>();
+
             if (fade != null)
                 fade.fadeTime = afterImageFadeTime;
+
+            // NEW: Initialize damaging flame behaviour (if present)
+            FlameAfterImage flame =
+                img.GetComponent<FlameAfterImage>();
+
+            if (flame != null)
+            {
+                flame.Initialize(caster);
+            }
         }
     }
 }

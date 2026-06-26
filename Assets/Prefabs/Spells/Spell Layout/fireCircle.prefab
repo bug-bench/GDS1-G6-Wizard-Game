@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8834641057461201742}
   - component: {fileID: 7034259206329102540}
   - component: {fileID: 1038727000603300396}
-  - component: {fileID: 3832640253897900667}
+  - component: {fileID: 7425086847011665994}
   m_Layer: 0
   m_Name: fireCircle
   m_TagString: Untagged
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
@@ -130,7 +130,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &3832640253897900667
+--- !u!114 &7425086847011665994
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,19 +139,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4985203713322938708}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dc232de85f5b1c4982c5d419ca8b1ac, type: 3}
+  m_Script: {fileID: 11500000, guid: ce3da1ce96f392b428f091ca03875f70, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HazardArea
-  damagePerSecond: 0
-  instantDamageOnEnter: 0
-  applyBurnDamage: 5
-  burnDuration: 3
-  applyStunDuration: 0
-  applyRootDuration: 0
-  speedReductionPercentage: 0
-  lifetime: 2
-  ignoreCaster: 1
-  caster: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::FlameAfterImage
+  damage: 4
+  knockbackForce: 0
+  burnDamage: 3
+  burnDuration: 2
+  lifetime: 0.6
+  damageInterval: 0.25
 --- !u!1001 &6516624318865409017
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -202,7 +198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7173513299662925785, guid: 2998194511d4e3d4dbb75f0c1840c6e0, type: 3}
       propertyPath: m_SortingLayer
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7173513299662925785, guid: 2998194511d4e3d4dbb75f0c1840c6e0, type: 3}
       propertyPath: m_SortingLayerID
