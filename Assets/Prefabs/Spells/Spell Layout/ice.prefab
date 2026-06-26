@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 632585271899818400}
   - component: {fileID: 4037014463865585039}
   - component: {fileID: 4323834174473380076}
-  - component: {fileID: -6386644846695811109}
   - component: {fileID: 3788253860166317034}
+  - component: {fileID: 8444643453425579098}
   m_Layer: 0
   m_Name: ice
   m_TagString: Untagged
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2937912103407283272, guid: 9442638d4efd42b46a4dd6565424a0d6, type: 3}
@@ -187,35 +187,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7757689962edd574695cf50adf337b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellProjectile
-  speed: 15
-  damage: 10
+  speed: 10
+  damage: 1
   lifeTime: 3
   knockbackForce: 15
-  applyBurnDamage: 0
-  burnDuration: 0
-  applySlowPercentage: 0.5
-  slowDuration: 1
-  caster: {fileID: 0}
-  ignoreCasterUntilTime: 0
+  burnDamage: 0
+  burnDuration: 3
+  slowPercentage: 0
+  slowDuration: 2
   hitVFXPrefab: {fileID: 7930454606148642405, guid: 3c14c387703eaa14ea70978f895eebcc, type: 3}
   hitVFXLifetime: 0.5
   rotateHitVFXToProjectile: 1
---- !u!114 &-6386644846695811109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8107549014988267602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cbb0ed5b63afd44bb54807d47d3f65c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShotgunSpell
-  pelletPrefab: {fileID: 8107549014988267602}
-  pelletCount: 3
-  spreadAngle: 45
-  spawnForwardInset: 0.12
+  caster: {fileID: 0}
+  ignoreCasterUntilTime: 0
 --- !u!95 &3788253860166317034
 Animator:
   serializedVersion: 7
@@ -238,6 +222,30 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8444643453425579098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8107549014988267602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ea52cf486d6dea4d92f4c2bb969a871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IceSpikeSpell
+  maxHoldDuration: 0
+  projectilePrefab: {fileID: 8107549014988267602}
+  damage: 2
+  speed: 10
+  lifeTime: 1
+  knockbackForce: 8
+  burnDamage: 0
+  burnDuration: 0
+  slowPercentage: 0.022
+  slowDuration: 0
+  projectileCount: 3
+  spreadAngle: 50
 --- !u!1 &8130909811330774558
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,7 +347,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2937912103407283272, guid: 9442638d4efd42b46a4dd6565424a0d6, type: 3}
