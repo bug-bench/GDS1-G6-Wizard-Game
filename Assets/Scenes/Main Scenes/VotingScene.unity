@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VotingLogic
   availableMinigames: []
-  votingDuration: 15
+  votingDuration: 8
   timerText: {fileID: 878758568}
 --- !u!114 &104901606
 MonoBehaviour:
