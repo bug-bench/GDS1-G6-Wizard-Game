@@ -17,3 +17,4 @@ MonoBehaviour:
   portrait: {fileID: -5433228492384612149, guid: dd75b8539f8a642a1a402cb7f29c3651, type: 3}
   skins:
   - {fileID: 11400000, guid: 6f97466ec26bc4144a75bd89f9afeeaa, type: 2}
+  - {fileID: 11400000, guid: 4c936a14a0adb4db8a1f9bbc1adc54a8, type: 2}

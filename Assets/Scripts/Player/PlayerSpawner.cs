@@ -71,22 +71,26 @@ public class PlayerSpawner : MonoBehaviour
             // Color all SpriteRenderers in children
             var renderers = playerInput.GetComponentsInChildren<SpriteRenderer>();
             Color playerColor = colors[data.colorIndex];
-            SpriteRenderer firstRenderer = null;
+            SpriteRenderer bodyRenderer = null;
 
             foreach (var sr in renderers)
             {
-                // Only tint clothing layers, not the body
                 bool isClothing = sr.CompareTag("Clothing");
                 if (isClothing && data.skin != null && data.skin.usesColorTint)
                     sr.color = playerColor;
                 else if (!isClothing)
-                    sr.color = Color.white; // body stays untinted
+                    sr.color = Color.white;
 
-                if (firstRenderer == null) firstRenderer = sr;
+                // Save the body renderer specifically (not clothing)
+                if (!isClothing && bodyRenderer == null)
+                    bodyRenderer = sr;
             }
 
-            if (firstRenderer != null)
-                data.playerSprite = firstRenderer.sprite;
+            if (bodyRenderer != null)
+            {
+                data.playerSprite = bodyRenderer.sprite;
+                data.playerSpriteColor = bodyRenderer.color;
+            }
 
             var combat = playerInput.GetComponent<PlayerCombat>();
             if (combat != null)
