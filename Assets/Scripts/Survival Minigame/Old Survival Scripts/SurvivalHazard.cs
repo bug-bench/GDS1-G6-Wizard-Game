@@ -127,13 +127,12 @@ public class SurvivalHazard : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            PlayerCombat pc = other.GetComponent<PlayerCombat>();
 
-            SurvivalScript ss = FindFirstObjectByType<SurvivalScript>();
-            if (ss != null)
+            if (pc != null)
             {
-                ss.TakeSurvivalHit(other.gameObject);
+                pc.TakeDamage(30);
             }
-            
         }
     }
 }

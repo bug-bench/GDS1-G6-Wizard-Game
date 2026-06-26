@@ -53,7 +53,20 @@ public class PlayerSpawner : MonoBehaviour
                 pairWithDevice: data.device
             );
 
+            Debug.Log($"Player {data.playerIndex} — character: {data.character?.characterId}, skin: {data.skin?.skinName}");
+
             playerInput.transform.position = spawnPos;
+
+            var characterLayerSync = playerInput.GetComponentInChildren<CharacterLayerSync>();
+            Debug.Log($"CharacterLayerSync found: {characterLayerSync != null}");
+
+            if (characterLayerSync != null && data.skin != null)
+            {
+                characterLayerSync.ApplySkin(data.skin);
+                foreach (var anim in characterLayerSync.GetComponentsInChildren<Animator>())
+                    anim.Rebind();
+                Debug.Log($"body: {data.skin.bodyController?.name}, head: {data.skin.headwearController?.name}, body wear: {data.skin.bodywearController?.name}");
+            }
 
             // Color all SpriteRenderers in children
             var renderers = playerInput.GetComponentsInChildren<SpriteRenderer>();
@@ -62,7 +75,13 @@ public class PlayerSpawner : MonoBehaviour
 
             foreach (var sr in renderers)
             {
-                sr.color = playerColor;
+                // Only tint clothing layers, not the body
+                bool isClothing = sr.CompareTag("Clothing");
+                if (isClothing && data.skin != null && data.skin.usesColorTint)
+                    sr.color = playerColor;
+                else if (!isClothing)
+                    sr.color = Color.white; // body stays untinted
+
                 if (firstRenderer == null) firstRenderer = sr;
             }
 

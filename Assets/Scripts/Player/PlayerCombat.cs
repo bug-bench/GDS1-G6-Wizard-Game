@@ -66,6 +66,8 @@ public class PlayerCombat : MonoBehaviour
     public float invincibilityBlinkHiddenDuration = 0.05f;
     [Tooltip("参与无敌闪烁的精灵（通过 alpha 开关显示）；留空则自动使用根/子物体上的第一个 SpriteRenderer。 — Sprites toggled during i-blink; empty = auto-find one body sprite.")]
     public SpriteRenderer[] invincibilityBlinkSpriteRenderers;
+    [SerializeField]
+    private float survivalInvincibilityDuration = 0.3f;
 
     private float invincibleUntil;
     private float knockbackUntil;
@@ -299,12 +301,12 @@ public class PlayerCombat : MonoBehaviour
         if (controller != null)
             controller.ClearSprintMultiplier();
 
-        foreach (var s in GetComponentsInChildren<SprintSpell>(true))
-        {
-            if (s != null) Destroy(s.gameObject);
-        }
+        // foreach (var s in GetComponentsInChildren<SprintSpell>(true))
+        // {
+        //     if (s != null) Destroy(s.gameObject);
+        // }
 
-        DestroyAllReflectShieldsUnderRoot();
+        // DestroyAllReflectShieldsUnderRoot();
 
         if (hadTracked && currentMovementSpell != null)
             spellAudio?.PlayRelease(currentMovementSpell, firePoint);
@@ -328,7 +330,7 @@ public class PlayerCombat : MonoBehaviour
         if (isKnockedDown || attackCDTimer > 0f) return;
         if (playerStats != null && playerStats.isStunned) return;
 
-        DestroyAllReflectShieldsUnderRoot();
+        // DestroyAllReflectShieldsUnderRoot();
         activeMainSpell = ExecuteAndReturnSpell(currentAttackSpell, ref attackCDTimer);
         if (currentAttackSpell.cooldownStartsOnRelease)
             pendingMainReleaseCooldown = true;
@@ -357,19 +359,19 @@ public class PlayerCombat : MonoBehaviour
         CleanupHeldMovementEffects(applyReleaseCooldown: true);
     }
 
-    void DestroyAllReflectShieldsUnderRoot()
-    {
-        Transform root = transform.root;
-        foreach (ReflectShieldSpell sh in root.GetComponentsInChildren<ReflectShieldSpell>(true))
-        {
-            if (sh == null) continue;
-            if ((Object)activeSubSpell == (Object)sh)
-                activeSubSpell = null;
-            if ((Object)activeMainSpell == (Object)sh)
-                activeMainSpell = null;
-            Destroy(sh.gameObject);
-        }
-    }
+    // void DestroyAllReflectShieldsUnderRoot()
+    // {
+    //     Transform root = transform.root;
+    //     foreach (ReflectShieldSpell sh in root.GetComponentsInChildren<ReflectShieldSpell>(true))
+    //     {
+    //         if (sh == null) continue;
+    //         if ((Object)activeSubSpell == (Object)sh)
+    //             activeSubSpell = null;
+    //         if ((Object)activeMainSpell == (Object)sh)
+    //             activeMainSpell = null;
+    //         Destroy(sh.gameObject);
+    //     }
+    // }
 
     public bool EquipSpell(SpellData newSpell)
     {
@@ -539,7 +541,11 @@ public class PlayerCombat : MonoBehaviour
         SpellBehavior behavior = spellObj.GetComponentInChildren<SpellBehavior>(true);
         if (behavior != null)
         {
-            behavior.Execute(gameObject, firePoint);
+            behavior.Initialize(
+                gameObject,
+                firePoint);
+
+            behavior.Execute();
             if (behavior.maxHoldDuration > 0f)
                 behavior.BeginHoldDurationTracking();
         }
@@ -568,8 +574,14 @@ public class PlayerCombat : MonoBehaviour
         invincibleUntil = Time.time + invincibilityDuration;
 
         if (attackerIndex >= 0)
+        {
             GameData.RecordDamage(attackerIndex, damage);
-
+        }
+        else
+        {
+            invincibleUntil = Time.time + survivalInvincibilityDuration;
+        }
+            
         playerStats.TakeDamage(damage);
 
         // 直接设速度并短暂锁定移动控制，否则 FixedUpdate 的高减速度会立刻把 AddForce 清掉。
@@ -592,7 +604,7 @@ public class PlayerCombat : MonoBehaviour
         {
             if (attackerIndex >= 0)
                 GameData.RecordKill(attackerIndex);
-            if (p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Arena")
+            if (p2scr != null && p2scr.GetCurrentMinigame() != null && (p2scr.GetCurrentMinigame() == "Arena" || p2scr.GetCurrentMinigame() == "Survival"))
             {
                 Die();
             }

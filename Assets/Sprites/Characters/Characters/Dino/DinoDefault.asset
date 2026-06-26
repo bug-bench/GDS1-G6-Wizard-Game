@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588bcb3b245a84f9a9f8faa2bf905a34, type: 3}
+  m_Name: DinoDefault
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterSkin
+  skinName: DinoDefault
+  bodyController: {fileID: 9100000, guid: d43d67564841f4c30a885a375102be8f, type: 2}
+  headwearController: {fileID: 9100000, guid: a6ddd61920a60450bbd53c2bf81ec622, type: 2}
+  bodywearController: {fileID: 9100000, guid: dadf97368bc8644439bb312a1dd81984, type: 2}
+  facewearController: {fileID: 9100000, guid: 80af95ff19c584c0fb8e94e280036918, type: 2}
+  usesColorTint: 1
+  lobbySprite: {fileID: -1674876197721821866, guid: e974e2697bb2a44bc91ef53435bf784b, type: 3}

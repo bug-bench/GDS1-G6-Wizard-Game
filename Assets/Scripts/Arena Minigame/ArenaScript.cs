@@ -8,6 +8,15 @@ using TMPro;
 
 public class ArenaScript : MonoBehaviour
 {
+    [Header("Debug")]
+    // Can be enabled manually in the Inspector,
+    // or automatically when testing Arena with <= 1 player.
+    [SerializeField] 
+    private bool manualWinDebugMode = false;
+    [SerializeField] 
+    private bool forceDebugWin = false;
+
+    [Header("Win Screen")]
     [SerializeField] private string winScene = "WinScene";
 
     [Header("Win Panel")]
@@ -31,6 +40,8 @@ public class ArenaScript : MonoBehaviour
 
     void Update()
     {
+        HandleDebugWin();
+
         if (isEnding || !playersReady) return;
         TryEndGameAfterElimination();
     }
@@ -50,6 +61,16 @@ public class ArenaScript : MonoBehaviour
         }
 
         Debug.Log($"ArenaScript tracking {players.Count} players");
+
+        if (GameData.players.Count <= 1)
+        {
+            manualWinDebugMode = true;
+
+            Debug.Log(
+                $"ArenaScript: Auto-enabled Manual Win Debug Mode " +
+                $"because only {GameData.players.Count} player(s) were detected."
+            );
+        }
 
         GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
         if (spawnPoints.Length < players.Count)
@@ -84,6 +105,28 @@ public class ArenaScript : MonoBehaviour
         }
 
         playersReady = true;
+    }
+
+    // for use when debugging
+    public void HandleDebugWin()
+    {
+        if (!manualWinDebugMode) return;
+        if (!forceDebugWin) return;
+        if (isEnding) return;
+
+        forceDebugWin = false;
+        isEnding = true;
+
+        Debug.Log("Debug win triggered by Main User.");
+
+        if (players.Count > 0)
+        {
+            EndGame(players[0]);
+        }
+        else
+        {
+            EndGame(null);
+        }
     }
 
     public void PlayerEliminated(GameObject player)
@@ -132,6 +175,9 @@ public class ArenaScript : MonoBehaviour
 
         if (alive.Count == 1)
         {
+            bool suppressAutomaticWin = manualWinDebugMode && GameData.players.Count <= 1;
+            if (suppressAutomaticWin) return;
+
             isEnding = true;
             EndGame(alive[0]);
         }
