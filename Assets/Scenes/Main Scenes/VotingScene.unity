@@ -192,10 +192,6 @@ MonoBehaviour:
     sceneName: Phase2Survival
     useSplitScreen: 0
     description: Dodge and Survive
-  - minigameName: Wizard Staff
-    sceneName: Phase2Collect
-    useSplitScreen: 1
-    description: Collect the most gold!
   numberOfOptions: 2
   votingLogic: {fileID: 104901605}
   selectionAnimator: {fileID: 104901607}

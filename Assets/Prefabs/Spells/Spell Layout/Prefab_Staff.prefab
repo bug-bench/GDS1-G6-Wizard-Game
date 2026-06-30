@@ -49,7 +49,7 @@ MonoBehaviour:
   damage: 5
   hitRadius: 0.8
   hitOffset: 1
-  knockbackForce: 40
+  knockbackForce: 15
   hitLayer:
     serializedVersion: 2
     m_Bits: 4294967295
