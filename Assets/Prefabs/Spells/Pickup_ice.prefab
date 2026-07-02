@@ -243,8 +243,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellPickup
   pickupCooldown: 1
-  fixLineRendererIfNeeded: 1
   spellData: {fileID: 11400000, guid: 4792d4e0864f855478ad51f270e1377c, type: 2}
+  fixLineRendererIfNeeded: 1
 --- !u!82 &-1261723942810757769
 AudioSource:
   m_ObjectHideFlags: 0
@@ -465,6 +465,22 @@ PrefabInstance:
     - target: {fileID: 1153389977279182303, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1737278519768225745, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 4.457
+      objectReference: {fileID: 0}
+    - target: {fileID: 1737278519768225745, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 5.572
+      objectReference: {fileID: 0}
+    - target: {fileID: 1737278519768225745, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 1737278519768225745, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -3.286
       objectReference: {fileID: 0}
     - target: {fileID: 1785841473864684055, guid: a9b73608c1eef49a5be87114613f18e1, type: 3}
       propertyPath: m_Sprite
