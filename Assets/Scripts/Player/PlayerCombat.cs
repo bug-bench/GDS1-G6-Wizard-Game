@@ -414,10 +414,6 @@ public class PlayerCombat : MonoBehaviour
 
         GameObject dropObj = Instantiate(dataToDrop.pickupPrefab, transform.position, Quaternion.identity);
 
-        SpellProjectile[] strayProjectiles = dropObj.GetComponentsInChildren<SpellProjectile>(true);
-        for (int i = 0; i < strayProjectiles.Length; i++)
-            Object.DestroyImmediate(strayProjectiles[i]);
-
         SpellPickup pickup = dropObj.GetComponentInChildren<SpellPickup>(true);
         if (pickup == null)
         {
@@ -535,8 +531,7 @@ public class PlayerCombat : MonoBehaviour
         // GameObject spellObj =
         //     Instantiate(data.spellPrefab, spawnPos, rot);
 
-        SpellProjectile.RegisterWithCaster(spellObj, gameObject);
-        SpellStatScaling.ApplyProjectileSizeToTree(spellObj, gameObject);
+        SpellStatScaling.ApplySpellScale(spellObj, gameObject);
 
         SpellBehavior behavior = spellObj.GetComponentInChildren<SpellBehavior>(true);
         if (behavior != null)
