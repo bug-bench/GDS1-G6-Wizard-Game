@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3526696377543989448}
   - component: {fileID: 7497431719811164817}
   - component: {fileID: 5535021414633785882}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Spell_shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
