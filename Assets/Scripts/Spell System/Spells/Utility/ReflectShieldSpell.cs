@@ -207,16 +207,12 @@ public class ReflectShieldSpell : UtilitySpellCore
 
     public void ApplyReflectToProjectile(ProjectileSpellCore projectile)
     {
-        Debug.Log("Projectile hit shield!");
-
         if (projectile == null)
             return;
 
-        Transform playerRoot = transform.parent;
-
-        if (playerRoot == null)
+        if (CurrentCaster == null)
             return;
 
-        projectile.Reflect(playerRoot.gameObject);
+        projectile.Reflect(CurrentCaster);
     }
 }

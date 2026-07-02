@@ -30,6 +30,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
 
     [Tooltip("Destroy immediately after hitting something.")]
     public bool destroyOnHit = true;
+    private GameObject ignoredCaster;
 
     #endregion
 
@@ -383,26 +384,51 @@ public abstract class ProjectileSpellCore : SpellBehavior
         if (caster == null)
             return;
 
+        // Restore collisions with the previous owner.
+        if (ignoredCaster != null)
+        {
+            SetCollisionWithCaster(
+                ignoredCaster,
+                false);
+        }
+
         IgnoreCasterUntil = Time.time + ignoreTime;
+
+        // Ignore collisions with the new owner.
+        SetCollisionWithCaster(
+            caster,
+            true);
+
+        ignoredCaster = caster;
+    }
+    
+    private void SetCollisionWithCaster(
+        GameObject targetCaster,
+        bool ignore)
+    {
+        if (targetCaster == null)
+            return;
 
         Collider2D[] projectileColliders =
             GetComponentsInChildren<Collider2D>(true);
 
         Collider2D[] casterColliders =
-            caster.GetComponentsInChildren<Collider2D>(true);
+            targetCaster.GetComponentsInChildren<Collider2D>(true);
 
         foreach (Collider2D projectileCollider in projectileColliders)
         {
+            if (projectileCollider == null)
+                continue;
+
             foreach (Collider2D casterCollider in casterColliders)
             {
-                if (projectileCollider == null ||
-                    casterCollider == null)
+                if (casterCollider == null)
                     continue;
 
                 Physics2D.IgnoreCollision(
                     projectileCollider,
                     casterCollider,
-                    true);
+                    ignore);
             }
         }
     }
