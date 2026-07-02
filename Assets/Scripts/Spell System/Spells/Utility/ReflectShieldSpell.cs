@@ -205,17 +205,18 @@ public class ReflectShieldSpell : UtilitySpellCore
         }
     }
 
-
-    public void ApplyReflectToProjectile(SpellProjectile incomingProjectile)
+    public void ApplyReflectToProjectile(ProjectileSpellCore projectile)
     {
-        if (incomingProjectile == null)
+        Debug.Log("Projectile hit shield!");
+
+        if (projectile == null)
             return;
 
-        if (caster == null)
+        Transform playerRoot = transform.parent;
+
+        if (playerRoot == null)
             return;
 
-        incomingProjectile.transform.Rotate(0f, 0f, 180f);
-
-        incomingProjectile.ReflectToNewCaster(caster);
+        projectile.Reflect(playerRoot.gameObject);
     }
 }
