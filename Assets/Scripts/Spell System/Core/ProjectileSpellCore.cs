@@ -1,21 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// Base class for every projectile spell in Wisest Wizardry.
-///
-/// This class contains all shared projectile functionality:
-/// - Movement
-/// - Lifetime
-/// - Collision
-/// - Damage
-/// - Reflection
-/// - Status Effects
-/// - Hit VFX
-///
-/// Individual projectile spells should inherit from this class and only
-/// override behaviour that is unique to that spell.
-/// </summary>
+// <summary>
+// Base class for all projectile-based spells.
+
+// Contains the shared functionality used by every projectile including:
+// movement, collision, damage, status effects, reflection and lifetime.
+
+// Individual projectile spells should inherit from this class and only
+// override behaviour that is unique to that spell.
+// </summary>
 public abstract class ProjectileSpellCore : SpellBehavior
 {
     #region Projectile
@@ -180,10 +174,8 @@ public abstract class ProjectileSpellCore : SpellBehavior
 
     #region Movement
 
-    /// <summary>
-    /// Default straight-line movement.
-    /// Override for homing, boomerangs, orbiting projectiles, etc.
-    /// </summary>
+    // Default straight-line movement.
+    // Override for homing, boomerangs, orbiting projectiles, etc.
     protected virtual void MoveProjectile()
     {
         transform.position +=
@@ -241,9 +233,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
         HandleCollision(other);
     }
 
-    /// <summary>
-    /// Determines whether this collision should be processed.
-    /// </summary>
+    // Determines whether this collision should be processed.
     protected virtual bool CanCollide(Collider2D other)
     {
         if (other == null)
@@ -270,9 +260,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
         return true;
     }
 
-    /// <summary>
-    /// Routes the collision to the correct handler.
-    /// </summary>
+    // Routes the collision to the correct handler.
     protected virtual void HandleCollision(Collider2D other)
     {
         if (TryHandleShield(other))
@@ -361,9 +349,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
 
     #region Utility
 
-    /// <summary>
-    /// Returns true if the collider belongs to the caster.
-    /// </summary>
+    // Returns true if the collider belongs to the caster.
     protected bool IsCaster(Collider2D col)
     {
         if (caster == null || col == null)
@@ -375,10 +361,8 @@ public abstract class ProjectileSpellCore : SpellBehavior
                t.IsChildOf(caster.transform);
     }
 
-    /// <summary>
-    /// Registers this projectile with its caster so they
-    /// cannot immediately collide with each other.
-    /// </summary>
+    // Registers this projectile with its caster so they
+    // cannot immediately collide with each other.
     public virtual void RegisterWithCaster(float ignoreTime = 0.15f)
     {
         if (caster == null)
@@ -401,7 +385,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
 
         ignoredCaster = caster;
     }
-    
+
     private void SetCollisionWithCaster(
         GameObject targetCaster,
         bool ignore)
@@ -436,10 +420,8 @@ public abstract class ProjectileSpellCore : SpellBehavior
     #endregion
     #region Combat
 
-    /// <summary>
-    /// Handles hitting a player.
-    /// Override this if a projectile has unique behaviour.
-    /// </summary>
+    // Handles hitting a player.
+    // Override this if a projectile has unique behaviour.
     protected virtual void OnPlayerHit(PlayerCombat player)
     {
         if (player == null)
@@ -463,9 +445,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
         DestroyIfRequired();
     }
 
-    /// <summary>
-    /// Handles hitting a destroyable object.
-    /// </summary>
+    // Handles hitting a destroyable object.
     protected virtual void OnDestroyableHit(destroyableObject destroyable)
     {
         if (destroyable == null)
@@ -478,9 +458,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
         DestroyIfRequired();
     }
 
-    /// <summary>
-    /// Handles hitting a wall.
-    /// </summary>
+    // Handles hitting a wall.
     protected virtual void OnWallHit(Collider2D wall)
     {
         SpawnHitVFX(transform.position);
@@ -488,9 +466,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
         DestroyIfRequired();
     }
 
-    /// <summary>
-    /// Called whenever the projectile collides with a shield.
-    /// </summary>
+    // Called whenever the projectile collides with a shield.
     protected virtual void OnShieldHit(ReflectShieldSpell shield)
     {
         Debug.Log("Projectile hit shield!");
@@ -500,9 +476,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
         shield.ApplyReflectToProjectile(this);
     }
 
-    /// <summary>
-    /// Generic collision callback.
-    /// </summary>
+    // Generic collision callback.
     protected virtual void OnProjectileHit(Collider2D other)
     {
 
@@ -570,10 +544,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
 
     #region Reflection
 
-    /// <summary>
-    /// Called by ReflectShieldSpell when the projectile
-    /// is reflected.
-    /// </summary>
+    // Called by ReflectShieldSpell when the projectile is reflected.
     public virtual void Reflect(GameObject newCaster)
     {
 
@@ -625,19 +596,15 @@ public abstract class ProjectileSpellCore : SpellBehavior
     #endregion
     #region Utilities
 
-    /// <summary>
-    /// Returns the world position a given distance in front of the projectile.
-    /// Useful for explosions, trails and spawning effects.
-    /// </summary>
+    // Returns the world position a given distance in front of the projectile.
+    // Useful for explosions, trails and spawning effects.
     protected Vector2 ForwardPosition(float distance)
     {
         return (Vector2)transform.position +
                Direction * distance;
     }
 
-    /// <summary>
-    /// Instantiates an object using the projectile's position and rotation.
-    /// </summary>
+    // Instantiates an object using the projectile's position and rotation.
     protected GameObject Spawn(GameObject prefab)
     {
         if (prefab == null)
@@ -649,9 +616,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
             transform.rotation);
     }
 
-    /// <summary>
-    /// Instantiates an object at a custom position.
-    /// </summary>
+    // Instantiates an object at a custom position.
     protected GameObject Spawn(GameObject prefab, Vector3 position)
     {
         if (prefab == null)
@@ -663,9 +628,7 @@ public abstract class ProjectileSpellCore : SpellBehavior
             transform.rotation);
     }
 
-    /// <summary>
-    /// Instantiates an object at a custom position and rotation.
-    /// </summary>
+    // Instantiates an object at a custom position and rotation.
     protected GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
     {
         if (prefab == null)
@@ -682,25 +645,19 @@ public abstract class ProjectileSpellCore : SpellBehavior
 
     #region Virtual Hooks
 
-    /// <summary>
-    /// Called once immediately after Execute().
-    /// </summary>
+    // Called once immediately after Execute().
     protected virtual void OnProjectileSpawned()
     {
 
     }
 
-    /// <summary>
-    /// Called every frame after movement.
-    /// </summary>
+    // Called every frame after movement.
     protected virtual void OnProjectileUpdated()
     {
 
     }
 
-    /// <summary>
-    /// Called immediately before Destroy(gameObject).
-    /// </summary>
+    // Called immediately before Destroy(gameObject).
     protected virtual void OnProjectileDestroyed()
     {
 
