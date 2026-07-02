@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2005467981868931737}
   - component: {fileID: 632585271899818400}
   - component: {fileID: 4037014463865585039}
-  - component: {fileID: 4323834174473380076}
   - component: {fileID: 3788253860166317034}
   - component: {fileID: 8444643453425579098}
   m_Layer: 0
@@ -122,7 +121,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!60 &4037014463865585039
 PolygonCollider2D:
@@ -175,31 +174,6 @@ PolygonCollider2D:
       - {x: 0.00018423796, y: -0.7989646}
       - {x: 0.6275745, y: -0.28866667}
   m_UseDelaunayMesh: 1
---- !u!114 &4323834174473380076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8107549014988267602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7757689962edd574695cf50adf337b01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpellProjectile
-  speed: 10
-  damage: 2
-  lifeTime: 1
-  knockbackForce: 15
-  burnDamage: 0
-  burnDuration: 0
-  slowPercentage: 0.026
-  slowDuration: 2
-  hitVFXPrefab: {fileID: 7930454606148642405, guid: 3c14c387703eaa14ea70978f895eebcc, type: 3}
-  hitVFXLifetime: 0.5
-  rotateHitVFXToProjectile: 1
-  caster: {fileID: 0}
-  ignoreCasterUntilTime: 0
 --- !u!95 &3788253860166317034
 Animator:
   serializedVersion: 7
@@ -235,17 +209,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IceSpikeSpell
   maxHoldDuration: 0
-  projectilePrefab: {fileID: 8107549014988267602}
-  damage: 2
   speed: 10
-  lifeTime: 1
+  lifetime: 3
+  destroyOnHit: 1
+  damage: 2
   knockbackForce: 8
   burnDamage: 0
   burnDuration: 0
   slowPercentage: 0.022
   slowDuration: 0
+  hitVFXPrefab: {fileID: 7930454606148642405, guid: 3c14c387703eaa14ea70978f895eebcc, type: 3}
+  hitVFXLifetime: 0.5
+  rotateHitVFX: 1
   projectileCount: 3
-  spreadAngle: 50
+  spreadAngle: 25
 --- !u!1 &8130909811330774558
 GameObject:
   m_ObjectHideFlags: 0
