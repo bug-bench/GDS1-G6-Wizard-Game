@@ -2,8 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// <summary>
+// Base class for all hit scan spells.
+
+// Handles the shared functionality for instant-hit spells including
+// raycasting, damage, knockback and collision handling.
+// Override virtual methods to customise individual hit scan spells.
+// </summary>
 public abstract class HitScanSpellCore : SpellBehavior
 {
+    #region Inspector
+
     [Header("Damage")]
     public float damage = 25f;
 
@@ -16,10 +25,21 @@ public abstract class HitScanSpellCore : SpellBehavior
     [Header("Raycast")]
     public LayerMask layerMask;
 
+    [Tooltip("Moves the raycast slightly forward to prevent hitting the caster.")]
     public float castStartInset = 0.1f;
 
+    #endregion
+
+    #region Runtime
+
+    // Stores every point the ray travels through.
+    // Used for visual effects such as lasers or beam renderers.
     protected readonly List<Vector3> hitPoints =
         new List<Vector3>();
+
+    #endregion
+
+    #region Execution
 
     public override void Execute()
     {
@@ -32,6 +52,12 @@ public abstract class HitScanSpellCore : SpellBehavior
         Destroy(gameObject);
     }
 
+    #endregion
+
+    #region Hit Scan
+
+    // Performs the raycast and records every point hit.
+    // Override this to support bouncing or piercing lasers.
     protected virtual void PerformHitScan()
     {
         Vector2 direction =
@@ -66,6 +92,11 @@ public abstract class HitScanSpellCore : SpellBehavior
         ProcessHit(hit, direction);
     }
 
+    #endregion
+
+    #region Hit Processing
+
+    // Routes the hit to the appropriate handler.
     protected virtual void ProcessHit(
         RaycastHit2D hit,
         Vector2 direction)
@@ -75,6 +106,7 @@ public abstract class HitScanSpellCore : SpellBehavior
         HandlePlayer(hit, direction);
     }
 
+    // Applies damage to destroyable world objects.
     protected virtual void HandleDestroyable(
         RaycastHit2D hit)
     {
@@ -89,6 +121,7 @@ public abstract class HitScanSpellCore : SpellBehavior
             damage + Strength);
     }
 
+    // Applies damage and knockback to players.
     protected virtual void HandlePlayer(
         RaycastHit2D hit,
         Vector2 direction)
@@ -120,6 +153,14 @@ public abstract class HitScanSpellCore : SpellBehavior
             direction * knockbackForce);
     }
 
+    #endregion
+
+    #region Virtual Methods
+
+    // Called after the hit scan completes.
+    // Used for visuals such as lasers, trails or beam effects.
     protected abstract void OnHitScanFinished(
         List<Vector3> hitPoints);
+
+    #endregion
 }

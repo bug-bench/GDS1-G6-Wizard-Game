@@ -205,17 +205,14 @@ public class ReflectShieldSpell : UtilitySpellCore
         }
     }
 
-
-    public void ApplyReflectToProjectile(SpellProjectile incomingProjectile)
+    public void ApplyReflectToProjectile(ProjectileSpellCore projectile)
     {
-        if (incomingProjectile == null)
+        if (projectile == null)
             return;
 
-        if (caster == null)
+        if (CurrentCaster == null)
             return;
 
-        incomingProjectile.transform.Rotate(0f, 0f, 180f);
-
-        incomingProjectile.ReflectToNewCaster(caster);
+        projectile.Reflect(CurrentCaster);
     }
 }
