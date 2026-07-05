@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3695687674715017439}
-  - component: {fileID: 6298193087139566963}
+  - component: {fileID: 4206967365619199879}
   m_Layer: 0
   m_Name: Spell_Blink
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6298193087139566963
+--- !u!114 &4206967365619199879
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7895179520453860780}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bf0899691d5ceb41a2f5c2cec556746, type: 3}
+  m_Script: {fileID: 11500000, guid: ef124729bfa283846bf966bdc80b534a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlinkSpell
   maxHoldDuration: 0
@@ -49,12 +49,11 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1152
-  blinkCastRadius: 0.35
-  wallBuffer: 0.25
-  castInset: 0.05
-  selfStunDuration: 0.5
+  blinkCastRadius: 0.4
+  wallBuffer: 0.35
+  selfStunDuration: 0.06
   safetyPullbackSteps: 12
-  safetyPullbackAmount: 0.2
+  safetyPullbackAmount: 0.1
   afterImagePrefab: {fileID: 3504796317370007493, guid: 09c239ef0960db04d90356750096afea, type: 3}
   afterImageCount: 5
   afterImageFadeTime: 0.25

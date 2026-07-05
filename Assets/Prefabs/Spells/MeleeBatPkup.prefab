@@ -154,7 +154,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1508063980079421817, guid: 061e3882b25844577b3078134e6e0746, type: 3}
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2ef8ad86dc10f6469e76ce0491e07a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellPickup
-  pickupCooldown: 1
+  pickupCooldown: 0
   fixLineRendererIfNeeded: 1
   spellData: {fileID: 11400000, guid: 926ef706055d98e4fad18626844e0f07, type: 2}
 --- !u!82 &-8340363054373902278

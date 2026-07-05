@@ -82,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2140086693
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6087321858152567894, guid: d384c84067f39406cab17133166a5de6, type: 3}
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatPickUp
   statName: Focus
-  amount: 0.1
+  amount: 0.05
 --- !u!82 &-8982298130053556738
 AudioSource:
   m_ObjectHideFlags: 0

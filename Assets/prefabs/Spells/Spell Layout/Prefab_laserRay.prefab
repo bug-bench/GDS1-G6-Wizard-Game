@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5599801871418713474}
   - component: {fileID: 6890175534639945953}
-  - component: {fileID: 6950217938804383005}
+  - component: {fileID: 6382305893517774059}
   m_Layer: 0
   m_Name: Prefab_laserRay
   m_TagString: Untagged
@@ -79,7 +79,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Positions:
@@ -143,7 +143,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &6950217938804383005
+--- !u!114 &6382305893517774059
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,22 +152,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 2571084152254884725}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3417f418aa9fee4792a81b361e8edc2, type: 3}
+  m_Script: {fileID: 11500000, guid: f86782741e4ac684dad8ecf2360d891c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RaycastSniperSpell
+  m_EditorClassIdentifier: Assembly-CSharp::LaserSpell
   maxHoldDuration: 0
-  damage: 25
-  range: 10
-  knockbackForce: 25
-  layerToHit:
+  damage: 10
+  range: 20
+  knockbackForce: 5
+  layerMask:
     serializedVersion: 2
-    m_Bits: 0
-  castStartInset: 0.12
-  lineVisualDuration: 0.1
+    m_Bits: 257
+  castStartInset: 0.1
+  lineDuration: 1.5
   showLineRenderer: 0
-  VFXPrefab: {fileID: 6189294275176017214, guid: a0a547e4ca35a224cbd2ea1c0b5239f6, type: 3}
-  VFXLifetime: 0.6
-  VFXThickness: 0.5
-  VFXRotationOffset: 270
-  VFXLength: 0.5
-  startOffset: 0.8
+  beamVFX: {fileID: 6189294275176017214, guid: a0a547e4ca35a224cbd2ea1c0b5239f6, type: 3}
+  beamThickness: 0.2
+  beamLength: 1
+  beamLifetime: 0.5
+  beamRotationOffset: 0
+  maxReflections: 8
+  reflectionSurfaceOffset: 0.02
+  lineStartOffset: 0.6
