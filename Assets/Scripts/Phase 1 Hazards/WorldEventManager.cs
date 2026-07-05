@@ -6,7 +6,8 @@ public enum WorldEventType
     PlayerLocationSwap,
     SpellSwap,
     Firehazard,
-    Icehazard
+    Icehazard,
+    StatStorm
    
 }
 
@@ -78,7 +79,7 @@ public class WorldEventManager : MonoBehaviour
 
     void PlayerLocationSwap()
     {
-       
+       Debug.Log("player location swap happening");
         List<GameObject> players = new List<GameObject>();
 
         foreach(var playerData in GameData.players)
@@ -170,6 +171,7 @@ public class WorldEventManager : MonoBehaviour
     IEnumerator FirehazardEvent()
     {
         FireHazardActive = true;
+        Debug.Log("fire hazard happening");
 
         float timer = 3f;
         float tick = 2f;
@@ -202,7 +204,7 @@ public class WorldEventManager : MonoBehaviour
     IEnumerator IcehazardEvent()
     {
         IceHazardActive = true;
-
+        Debug.Log("ice hazard happening");
         
             foreach (var playerData in GameData.players)
             {
@@ -240,5 +242,16 @@ public class WorldEventManager : MonoBehaviour
 
         IceHazardActive = false;
 
+    }
+
+    void StartStatStormEvent()
+    {
+        Debug.Log("STAT STORM EVENT TRIGGERED");
+        StatSpawner spawner = FindFirstObjectByType<StatSpawner>();
+
+        if (spawner != null)
+        {
+            spawner.StartStatStorm(FirstEventDelay);
+        }
     }
 }
