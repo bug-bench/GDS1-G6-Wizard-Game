@@ -8,9 +8,6 @@ public class Phase2StatCard : MonoBehaviour
     [Header("UI References")]
     public TextMeshProUGUI playerLabel;
     public TextMeshProUGUI healthText;
-    
-    [Header("Card")]
-    public Image cardBackground; 
 
     [Header("Player Portrait")]
     public Image playerPortrait;
@@ -42,6 +39,13 @@ public class Phase2StatCard : MonoBehaviour
     private Vector2 barOriginalPos;
     private bool barPosInitialized = false;
 
+    private Color[] colors = {
+        UseHexColor.HexColor("C2453A"),
+        UseHexColor.HexColor("3A6FBF"),
+        UseHexColor.HexColor("3DA65A"),
+        UseHexColor.HexColor("D4A83A"),
+    };
+
     void Awake()
     {
         if (healthBarOuter != null)
@@ -70,14 +74,13 @@ public class Phase2StatCard : MonoBehaviour
 
         if (data != null)
         {
-            if (cardBackground != null)
-                cardBackground.color = PlayerData.PlayerColors.GetColor(data.colorIndex);
+            GetComponent<Image>().color = colors[data.colorIndex];
             playerLabel.text = $"P{data.playerIndex + 1}";
 
             if (playerPortrait != null && data.playerSprite != null)
             {
                 playerPortrait.sprite = data.playerSprite;
-                playerPortrait.color = PlayerData.PlayerColors.GetColor(data.colorIndex);
+                playerPortrait.color  = colors[data.colorIndex];
             }
         }
 
