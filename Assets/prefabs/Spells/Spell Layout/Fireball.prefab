@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 1485216680615802304}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.24, y: 0.06056, z: 0}
-  m_LocalScale: {x: 0.39307, y: 0.39307, z: 0.39307}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3284813084880841503}
@@ -156,8 +156,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Offset: {x: 0, y: 0.3099643}
+  m_Radius: 0.38012207
 --- !u!114 &5964737456705836626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +180,7 @@ MonoBehaviour:
   burnDuration: 0
   slowPercentage: 0
   slowDuration: 0
-  hitVFXPrefab: {fileID: 8763047975685687804, guid: efe4abc7e09ed4d47ba801a1716b9be2, type: 3}
+  hitVFXPrefab: {fileID: 8029765496142597023, guid: cc496d156e5bf0a41bbe0262337031f5, type: 3}
   hitVFXLifetime: 0.5
   rotateHitVFX: 1
 --- !u!1 &2597219893205522265
@@ -265,12 +265,12 @@ SpriteRenderer:
   m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1847394199649331469, guid: 2341727cdf501f7408da2184fd27338e, type: 3}
+  m_Sprite: {fileID: 3976053442724705609, guid: 8f128edbcee470440a860233fc317356, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.125, y: 0.8125}
+  m_Size: {x: 1.4375, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
