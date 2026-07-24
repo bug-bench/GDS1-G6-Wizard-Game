@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3695687674715017439}
-  - component: {fileID: -7601187507632740243}
   - component: {fileID: 3526696377543989448}
+  - component: {fileID: 7497431719811164817}
+  - component: {fileID: 5535021414633785882}
   m_Layer: 0
   m_Name: Spell_shield
   m_TagString: Untagged
@@ -33,29 +34,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-7601187507632740243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7895179520453860780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a037d9ef77ae64c87abd2b460fb8ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ReflectShieldSpell
-  maxHoldDuration: 0
-  radius: 1
-  segments: 36
-  localCenterOffsetY: 0.5
-  lineWidth: 0.08
-  arcColor: {r: 0.4264151, g: 0.15367034, b: 0.36974564, a: 0.95}
-  sortingOrder: 12
-  shieldVisualPrefab: {fileID: 5128976107769333880, guid: 82838b58d6e2b4e4d9075ae5a911d527, type: 3}
-  visualScale: 1.1
-  visualLocalOffset: {x: 0, y: 0.25}
-  showLineRenderer: 0
 --- !u!50 &3526696377543989448
 Rigidbody2D:
   serializedVersion: 5
@@ -64,7 +42,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7895179520453860780}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -83,3 +61,69 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!68 &7497431719811164817
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7895179520453860780}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.5, y: 0}
+  - {x: 0.5, y: 0}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
+--- !u!114 &5535021414633785882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7895179520453860780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43e2d2cc593123c42ac7a1b7d40c0da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReflectShieldSpell
+  maxHoldDuration: 0
+  radius: 0.65
+  segments: 36
+  localCenterOffsetY: 0
+  showLineRenderer: 0
+  lineWidth: 0.08
+  shieldColor: {r: 0.35, g: 0.75, b: 1, a: 0.95}
+  sortingOrder: 12
+  shieldVisualPrefab: {fileID: 5128976107769333880, guid: 82838b58d6e2b4e4d9075ae5a911d527, type: 3}
+  visualScale: 1.5
+  visualLocalOffset: {x: 0, y: 0.5}
