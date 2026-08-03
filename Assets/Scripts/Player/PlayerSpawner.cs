@@ -53,21 +53,44 @@ public class PlayerSpawner : MonoBehaviour
                 pairWithDevice: data.device
             );
 
+            Debug.Log($"Player {data.playerIndex} — character: {data.character?.characterId}, skin: {data.skin?.skinName}");
+
             playerInput.transform.position = spawnPos;
+
+            var characterLayerSync = playerInput.GetComponentInChildren<CharacterLayerSync>();
+            Debug.Log($"CharacterLayerSync found: {characterLayerSync != null}");
+
+            if (characterLayerSync != null && data.skin != null)
+            {
+                characterLayerSync.ApplySkin(data.skin);
+                foreach (var anim in characterLayerSync.GetComponentsInChildren<Animator>())
+                    anim.Rebind();
+                Debug.Log($"body: {data.skin.bodyController?.name}, head: {data.skin.headwearController?.name}, body wear: {data.skin.bodywearController?.name}");
+            }
 
             // Color all SpriteRenderers in children
             var renderers = playerInput.GetComponentsInChildren<SpriteRenderer>();
             Color playerColor = colors[data.colorIndex];
-            SpriteRenderer firstRenderer = null;
+            SpriteRenderer bodyRenderer = null;
 
             foreach (var sr in renderers)
             {
-                sr.color = playerColor;
-                if (firstRenderer == null) firstRenderer = sr;
+                bool isClothing = sr.CompareTag("Clothing");
+                if (isClothing && data.skin != null && data.skin.usesColorTint)
+                    sr.color = playerColor;
+                else if (!isClothing)
+                    sr.color = Color.white;
+
+                // Save the body renderer specifically (not clothing)
+                if (!isClothing && bodyRenderer == null)
+                    bodyRenderer = sr;
             }
 
-            if (firstRenderer != null)
-                data.playerSprite = firstRenderer.sprite;
+            if (bodyRenderer != null)
+            {
+                data.playerSprite = bodyRenderer.sprite;
+                data.playerSpriteColor = bodyRenderer.color;
+            }
 
             var combat = playerInput.GetComponent<PlayerCombat>();
             if (combat != null)

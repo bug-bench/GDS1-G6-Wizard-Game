@@ -57,4 +57,13 @@ public class CharacterLayerSync : MonoBehaviour
         if (facewearAnimator != null && skin.facewearController != null)
             facewearAnimator.runtimeAnimatorController = skin.facewearController;
     }
+
+    public void ApplyClothingColor(Color color)
+    {
+        if (bodywearAnimator != null)
+            bodywearAnimator.GetComponent<SpriteRenderer>().color = color;
+        if (headwearAnimator != null)
+            headwearAnimator.GetComponent<SpriteRenderer>().color = color;
+        // body renderer intentionally excluded — skin color, not clothing
+    }
 }
