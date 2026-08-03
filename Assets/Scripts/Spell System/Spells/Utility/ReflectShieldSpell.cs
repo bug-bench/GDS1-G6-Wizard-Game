@@ -88,8 +88,6 @@ public class ReflectShieldSpell : UtilitySpellCore
 
         EnsureComponents();
 
-        // Parent to the caster root so the shield wraps around the player,
-        // not around the fire point or the spell spawn position.
         transform.SetParent(caster.transform, worldPositionStays: false);
         transform.localPosition = Vector3.up * localCenterOffsetY;
         transform.localRotation = Quaternion.identity;
@@ -154,7 +152,6 @@ public class ReflectShieldSpell : UtilitySpellCore
         {
             float a = i * step;
 
-            // Match your original orientation
             float x = Mathf.Sin(a) * radius;
             float y = Mathf.Cos(a) * radius;
 
@@ -181,7 +178,6 @@ public class ReflectShieldSpell : UtilitySpellCore
             points[i] = new Vector2(x, y);
         }
 
-        // Close the ring
         points[segments] = points[0];
         edgeCollider.points = points;
     }
@@ -209,23 +205,14 @@ public class ReflectShieldSpell : UtilitySpellCore
         }
     }
 
-    /// <summary>
-    /// Called by SpellProjectile when it hits this shield.
-    /// The projectile is rotated 180 degrees and ownership is transferred
-    /// to the player holding the shield.
-    /// </summary>
-    public void ApplyReflectToProjectile(SpellProjectile incomingProjectile)
+    public void ApplyReflectToProjectile(ProjectileSpellCore projectile)
     {
-        if (incomingProjectile == null)
+        if (projectile == null)
             return;
 
-        if (caster == null)
+        if (CurrentCaster == null)
             return;
 
-        // Flip projectile direction
-        incomingProjectile.transform.Rotate(0f, 0f, 180f);
-
-        // Transfer ownership to shield owner and re-register collision ignores
-        incomingProjectile.ReflectToNewCaster(caster);
+        projectile.Reflect(CurrentCaster);
     }
 }

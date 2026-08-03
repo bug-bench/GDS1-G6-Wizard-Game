@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatPickUp
   statName: Mana
-  amount: 0.1
+  amount: 0.05
 --- !u!82 &-8982298130053556738
 AudioSource:
   m_ObjectHideFlags: 0

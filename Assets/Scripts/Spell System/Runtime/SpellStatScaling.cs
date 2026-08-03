@@ -48,23 +48,17 @@ public static class SpellStatScaling
     }
 
     /// <summary>火球 / 冰球等弹道：整体缩放 transform（碰撞体随比例变大）。</summary>
-    public static void ApplyProjectileSize(GameObject projectileRoot, GameObject caster)
+    public static void ApplySpellScale(GameObject spellObject, GameObject caster)
     {
-        if (projectileRoot == null) return;
+        if (spellObject == null)
+            return;
+
         float scale = GetSizeScale(caster);
-        if (scale <= 1.001f) return;
 
-        foreach (SpellProjectile sp in projectileRoot.GetComponentsInChildren<SpellProjectile>(true))
-        {
-            if (sp == null) continue;
-            sp.transform.localScale *= scale;
-        }
-    }
+        if (scale <= 1.001f)
+            return;
 
-    public static void ApplyProjectileSizeToTree(GameObject spellRoot, GameObject caster)
-    {
-        if (spellRoot == null) return;
-        ApplyProjectileSize(spellRoot, caster);
+        spellObject.transform.localScale *= scale;
     }
 
     public static void ApplyMeleeHitboxScale(

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
   spellName: fireball
   spellType: 0
-  cooldownTime: 0.5
+  cooldownTime: 2
   spellPrefab: {fileID: 1485216680615802304, guid: d968089a870a89d498c522a28935580e, type: 3}
   icon: {fileID: 0}
   cooldownStartsOnRelease: 0

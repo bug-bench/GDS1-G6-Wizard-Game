@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
   spellName: firedash
   spellType: 1
-  cooldownTime: 5
-  spellPrefab: {fileID: 5384852898878877633, guid: 134464da9bd708447b3a9494ef2643d8, type: 3}
+  cooldownTime: 3
+  spellPrefab: {fileID: 7895179520453860780, guid: 7c753edb665d48e4da1a0e776d6326a3, type: 3}
   icon: {fileID: 0}
   cooldownStartsOnRelease: 0
   castAudio:

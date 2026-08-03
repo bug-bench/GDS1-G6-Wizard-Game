@@ -79,7 +79,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -439740341
-  m_SortingLayer: 6
+  m_SortingLayer: 5
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Positions:
@@ -158,10 +158,10 @@ MonoBehaviour:
   maxHoldDuration: 0
   damage: 10
   range: 20
-  knockbackForce: 20
+  knockbackForce: 5
   layerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 257
   castStartInset: 0.1
   lineDuration: 1.5
   showLineRenderer: 0

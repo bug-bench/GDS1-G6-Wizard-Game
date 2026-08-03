@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
   spellName: ice
   spellType: 0
-  cooldownTime: 1
+  cooldownTime: 2
   spellPrefab: {fileID: 8107549014988267602, guid: 3b929f5cb7171d5419471a663e008d54, type: 3}
   icon: {fileID: 0}
   cooldownStartsOnRelease: 0
