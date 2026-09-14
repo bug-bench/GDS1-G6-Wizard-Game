@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
 
@@ -50,3 +52,5 @@ public class CharacterSkinEditor : Editor
         return null;
     }
 }
+
+#endif

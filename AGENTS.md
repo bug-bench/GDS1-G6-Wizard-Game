@@ -2,13 +2,13 @@
 - Project name: GDS1-G6-Wizard-Game
 - Unity version: Unity 6000.3.8f1
 - Active scene:
-  - Name: Phase2Potato
+  - Name: Phase2Arena
   - Tags:
-    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, SpawnPoint, wall
+    - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController, SpawnPoint, wall, Clothing
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Pickup, Water, UI, hazards, wall, player, Spells, Crate
 - Active game object:
-  - Name: The Potato in Question
+  - Name: WinScreen
   - Tag: Untagged
-  - Layer: Default
+  - Layer: UI
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

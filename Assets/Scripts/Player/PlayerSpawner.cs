@@ -89,7 +89,7 @@ public class PlayerSpawner : MonoBehaviour
             if (bodyRenderer != null)
             {
                 data.playerSprite = bodyRenderer.sprite;
-                data.playerSpriteColor = bodyRenderer.color;
+                // data.playerSpriteColor = bodyRenderer.color;
             }
 
             var combat = playerInput.GetComponent<PlayerCombat>();

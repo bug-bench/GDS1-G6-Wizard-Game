@@ -261,26 +261,19 @@ public class PlayerCard : MonoBehaviour
     {
         var skin = availableCharacters[characterIndex].skins[skinIndex];
 
-        // Pull the first sprite from the body controller's default state
-        if (skin.bodyController != null)
+        if (skin.lobbySprite != null)
         {
-            var clips = skin.bodyController.animationClips;
-            if (clips.Length > 0)
-            {
-                // Get first frame of first clip
-                var bindings = UnityEditor.AnimationUtility.GetObjectReferenceCurveBindings(clips[0]);
-                if (bindings.Length > 0)
-                {
-                    var frames = UnityEditor.AnimationUtility.GetObjectReferenceCurve(clips[0], bindings[0]);
-                    if (frames.Length > 0)
-                        characterImage.sprite = frames[0].value as Sprite;
-                }
-            }
+            characterImage.sprite = skin.lobbySprite;
+        }
+        else
+        {
+            Debug.LogWarning($"Character skin '{skin.name}' does not have a lobby sprite assigned.");
         }
 
         characterImage.color = Color.white;
 
         Color clothingColor = skin.usesColorTint ? clothingColors[colorIndex] : Color.white;
+
         if (headwearImage != null) headwearImage.color = clothingColor;
         if (bodywearImage != null) bodywearImage.color = clothingColor;
         if (characterNameText != null) characterNameText.text = availableCharacters[characterIndex].displayName;
