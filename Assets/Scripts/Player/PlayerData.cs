@@ -10,6 +10,8 @@ public class PlayerData
     public InputDevice device;
     public Sprite playerSprite; // saves sprite at spawn 
     public GameObject playerGameObject;
+    public CharacterDefinition character;
+    public CharacterSkin skin;
 
 
     // Combat stats

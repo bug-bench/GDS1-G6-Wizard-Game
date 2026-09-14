@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588bcb3b245a84f9a9f8faa2bf905a34, type: 3}
+  m_Name: DinoBW
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterSkin
+  skinName: NoInternet
+  bodyController: {fileID: 9100000, guid: ab86364efb89a4f93a7bf837d089c86e, type: 2}
+  headwearController: {fileID: 9100000, guid: a6ddd61920a60450bbd53c2bf81ec622, type: 2}
+  bodywearController: {fileID: 9100000, guid: dadf97368bc8644439bb312a1dd81984, type: 2}
+  facewearController: {fileID: 9100000, guid: 80af95ff19c584c0fb8e94e280036918, type: 2}
+  usesColorTint: 1
+  lobbySprite: {fileID: -7065403969085675765, guid: 5db0aef02ad2e45f7bf4e028b8989d07, type: 3}

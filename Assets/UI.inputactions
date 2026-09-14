@@ -23,6 +23,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Customize",
+                    "type": "Button",
+                    "id": "f4dbfb5e-6432-4306-a34f-127f28a50c88",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -94,6 +103,17 @@
                 },
                 {
                     "name": "",
+                    "id": "8e699d54-ac09-4aa3-8f79-c821418c7a6d",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "46a6d61d-0600-4a1e-b72c-302e3004a9e8",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -111,6 +131,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d959ddb0-c8d4-46bf-bc1e-32924239c542",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Customize",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "64915861-ba40-4401-af94-701078faf9b0",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Customize",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
