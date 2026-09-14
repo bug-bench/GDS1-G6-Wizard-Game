@@ -341,7 +341,7 @@ public class PlayerStats : MonoBehaviour
             IsAliveArena = false;
 
             ArenaScript AS = FindFirstObjectByType<ArenaScript>();
-            Debug.Log($"ArenaScript found: {AS != null}"); // ADD THIS
+            Debug.Log($"ArenaScript found: {AS != null}");
             if (AS != null) 
             {
                 AS.PlayerEliminated(gameObject);
@@ -354,6 +354,15 @@ public class PlayerStats : MonoBehaviour
             if (SS != null)
             {
                 SS.PlayerEliminated(gameObject);
+            }
+        }
+
+        if (p2 != null && p2.GetCurrentMinigame() == "Potato")
+        {
+            PotatoManager PM = FindAnyObjectByType<PotatoManager>();
+            if (PM != null)
+            {
+                PM.PlayerEliminated(gameObject);
             }
         }
     }

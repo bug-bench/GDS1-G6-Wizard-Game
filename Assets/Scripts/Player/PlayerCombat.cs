@@ -552,6 +552,28 @@ public class PlayerCombat : MonoBehaviour
         return behavior;
     }
 
+    public void TakeDamage(int damage, GameObject attacker)
+    {
+        if (attacker.CompareTag("Player")) return;
+        if (playerStats == null)
+        {
+            Debug.LogWarning($"{name}: TakeDamage ignored — no PlayerStats.");
+            return;
+        }
+
+        playerStats.TakeDamage(damage);
+
+        Phase2Script p2scr = FindFirstObjectByType<Phase2Script>();
+
+        if (playerStats.health <= 0)
+        {
+            if (p2scr != null && p2scr.GetCurrentMinigame() != null && p2scr.GetCurrentMinigame() == "Potato")
+            {
+                Die();
+            }
+        }
+    }
+
     /// <param name="knockbackWorldDir">击退方向（世界空间），零向量则只做闪白不做冲量。 — World-space push direction; zero = flash only.</param>
     public void TakeDamage(int damage, int attackerIndex = -1, Vector2 knockbackWorldDir = default)
     {
@@ -593,7 +615,6 @@ public class PlayerCombat : MonoBehaviour
                 StopCoroutine(hitFeedbackRoutine);
             hitFeedbackRoutine = StartCoroutine(HitInvincibilityVisualRoutine());
         }
-        Phase1Script p1s = FindFirstObjectByType<Phase1Script>();
         Phase2Script p2scr = FindFirstObjectByType<Phase2Script>();
         if (playerStats.health <= 0)
         {
