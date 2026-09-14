@@ -112,7 +112,9 @@ public class PlayerJoinManager : MonoBehaviour
             {
                 playerIndex = player.playerIndex,
                 colorIndex = card.GetColorIndex(),
-                device = player.devices[0] // save actual device reference
+                device = player.devices[0], // save actual device reference
+                character = card.GetCharacter(),   // add
+                skin = card.GetSkin(),  
             });
         }
 

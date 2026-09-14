@@ -1,19 +1,16 @@
 fileFormatVersion: 2
-guid: 8b57ad7b8893f412c9f645e004709a92
+guid: 602f38f55c6e54bc5ae61920f067477e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4479420693404878192
-    second: switch_buttons_up_outline_0
+      213: 4168759327119049609
+    second: WisestWizardryTitle_Colored_0
   - first:
-      213: 5603020681395610243
-    second: switch_buttons_up_outline_1
+      213: 9095407268140100636
+    second: WisestWizardryTitle_Colored_1
   - first:
-      213: -9098580007927482745
-    second: switch_buttons_up_outline_2
-  - first:
-      213: 1530030861063382808
-    second: switch_buttons_up_outline_3
+      213: -4994800442808144092
+    second: WisestWizardryTitle_Colored_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -60,7 +57,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -122,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: switch_buttons_up_outline_0
+      name: WisestWizardryTitle_Colored_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 7
-        width: 50
-        height: 50
+        x: 205
+        y: 119
+        width: 1155
+        height: 732
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,20 +134,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 09a7112cc96e5d1c0800000000000000
-      internalID: -4479420693404878192
+      spriteID: 983070f55886ad930800000000000000
+      internalID: 4168759327119049609
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: switch_buttons_up_outline_1
+      name: WisestWizardryTitle_Colored_1
       rect:
         serializedVersion: 2
-        x: 23
-        y: 39
-        width: 18
-        height: 18
+        x: 394
+        y: 848
+        width: 8
+        height: 6
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,20 +156,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 382a0c7af9de1cd40800000000000000
-      internalID: 5603020681395610243
+      spriteID: c1c2ff888b0693e70800000000000000
+      internalID: 9095407268140100636
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: switch_buttons_up_outline_2
+      name: WisestWizardryTitle_Colored_2
       rect:
         serializedVersion: 2
-        x: 39
-        y: 23
-        width: 18
-        height: 18
+        x: 207
+        y: 119
+        width: 1153
+        height: 456
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,30 +178,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 786f20b60b95bb180800000000000000
-      internalID: -9098580007927482745
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: switch_buttons_up_outline_3
-      rect:
-        serializedVersion: 2
-        x: 23
-        y: 7
-        width: 18
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 817611136f2cb3510800000000000000
-      internalID: 1530030861063382808
+      spriteID: 42fe47af577eeaab0800000000000000
+      internalID: -4994800442808144092
       vertices: []
       indices: 
       edges: []
@@ -213,7 +188,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0e2c002d2ff0c4e5cb27b723f0f67b37
+    spriteID: a3d710e64c1e742ceb63903ac65611de
     internalID: 0
     vertices: []
     indices: 
@@ -223,10 +198,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      switch_buttons_up_outline_0: -4479420693404878192
-      switch_buttons_up_outline_1: 5603020681395610243
-      switch_buttons_up_outline_2: -9098580007927482745
-      switch_buttons_up_outline_3: 1530030861063382808
+      WisestWizardryTitle_Colored_0: 4168759327119049609
+      WisestWizardryTitle_Colored_1: 9095407268140100636
+      WisestWizardryTitle_Colored_2: -4994800442808144092
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
